@@ -1,0 +1,112 @@
+[
+    {
+        "course": "BIO120H1",
+        "section": "PRA0102",
+        "time": {
+            "day": 2,
+            "start": 48600000,
+            "end": 59400000,
+            "location": ""
+        }
+    },
+    {
+        "course": "BIO120H1",
+        "section": "LEC0101",
+        "time": {
+            "day": 1,
+            "start": 36000000,
+            "end": 39600000,
+            "location": "CH"
+        }
+    },
+    {
+        "course": "CHM135H1",
+        "section": "LEC5101",
+        "time": {
+            "day": 1,
+            "start": 68400000,
+            "end": 73800000,
+            "location": ""
+        }
+    },
+    {
+        "course": "CHM135H1",
+        "section": "PRA0502",
+        "time": {
+            "day": 5,
+            "start": 50400000,
+            "end": 61200000,
+            "location": ""
+        }
+    },
+    {
+        "course": "CHM135H1",
+        "section": "TUT1302",
+        "time": {
+            "day": 5,
+            "start": 46800000,
+            "end": 50400000,
+            "location": "UC"
+        }
+    },
+    {
+        "course": "CSC108H5",
+        "section": "PRA0103",
+        "time": {
+            "day": 1,
+            "start": 46800000,
+            "end": 54000000,
+            "location": "DH"
+        }
+    },
+    {
+        "course": "CSC108H5",
+        "section": "LEC0104",
+        "time": {
+            "day": 1,
+            "start": 43200000,
+            "end": 46800000,
+            "location": "MN"
+        }
+    },
+    {
+        "course": "MAT135H1",
+        "section": "LEC5101",
+        "time": {
+            "day": 2,
+            "start": 61200000,
+            "end": 68400000,
+            "location": "MP"
+        }
+    },
+    {
+        "course": "MAT135H1",
+        "section": "TUT0505",
+        "time": {
+            "day": 5,
+            "start": 32400000,
+            "end": 36000000,
+            "location": "FE"
+        }
+    },
+    {
+        "course": "MAT135H5",
+        "section": "TUT0108",
+        "time": {
+            "day": 1,
+            "start": 64800000,
+            "end": 68400000,
+            "location": "DH"
+        }
+    },
+    {
+        "course": "MAT135H5",
+        "section": "LEC0107",
+        "time": {
+            "day": 1,
+            "start": 32400000,
+            "end": 36000000,
+            "location": "CC"
+        }
+    }
+]
