@@ -1,1 +1,1 @@
-# UofT-Timetable_Build
+# UofT-Timetable-Builder
