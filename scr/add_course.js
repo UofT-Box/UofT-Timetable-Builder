@@ -4,56 +4,66 @@ fetch("./lib/test.json").then(function (response) {
 
 }).then(function (products) {
     var timetable = {};
-    for (var i = 9; i <= 21; i++) {
-        let dayTemplate = {
-            1:" ",
-            2:" ",
-            3:" ",
-            4:" ",
-            5:" ",
-            6:" ",
-            7:" "
-        }    
+    var isDisplay = {};
+    let dayTemplate = {
+        1:true,
+        2:true,
+        3:true,
+        4:true,
+        5:true,
+        6:true,
+        7:true
+    }; 
+    for (var i = 9; i <= 21; i++) { 
         if (i < 10) {
-            timetable["0" + i + ":00"] = dayTemplate;
+            timetable["0" + i + ":00"] = Object.assign({},dayTemplate);
+            isDisplay["0" + i + ":00"] = Object.assign({},dayTemplate);
         } else {
-            timetable["" + i + ":00"] = dayTemplate;
+            timetable["" + i + ":00"] = Object.assign({},dayTemplate);
+            isDisplay["" + i + ":00"] = Object.assign({},dayTemplate);
         }
     }
-
+    
     for (let product of products) {
-        let dayTemplate = {
-            1:" ",
-            2:" ",
-            3:" ",
-            4:" ",
-            5:" ",
-            6:" ",
-            7:" "
-        }    
         let day = product.time.day;
         let timeStart = convertMillisecondsToHM(product.time.start);
         let timeEnd = convertMillisecondsToHM(product.time.end);
-        
+        let counter = 1;
+        let lastTime = null;
+        if (!(timeStart in timetable)) {
+            timetable[timeStart] = Object.assign({},dayTemplate);
+            isDisplay[timeStart] = Object.assign({},dayTemplate);
+            counter++;
+        }
         for (var i = product.time.start; i < product.time.end; i += 6000) {
             let tempTime = convertMillisecondsToHM(i);
-            if (tempTime in timetable) {
-                timetable[tempTime][day] = product.course + "\n" + product.section;
+            if ((tempTime != timeStart) && (tempTime in timetable) && (tempTime != lastTime)) {
+                console.log(isDisplay[tempTime][day]);
+                isDisplay[tempTime][day] = false;
+                lastTime = tempTime;
+                counter++;
             }
         }
-        if (!(timeStart in timetable)) {
-            timetable[timeStart] = dayTemplate;
-            timetable[timeStart][day] = product.course+ "\n" + product.section;
+        if (!(timeEnd in timetable)) {
+            timetable[timeEnd] = Object.assign({},dayTemplate);
+            isDisplay[timeEnd] = Object.assign({},dayTemplate);
         }
+        timetable[timeStart][day] = `<td rowspan="${counter}">${product.course + product.section}</td>`;
     }
-
     let p = document.querySelector("#output");
     let output = "";
     let times = Object.keys(timetable).sort();
     for(let time of times){
         output += `<tr><th>${time}</th>`;
         for(let j = 1; j <= 7; j++){
-            output += `<td>${timetable[time][j]}</td>`;
+            if(isDisplay[time][j] == true){
+                if (timetable[time][j] != true){
+                    output += timetable[time][j];
+
+                }else{
+                    output += `<td></td>`;
+                }
+            }
         }
         output += `</tr>`;
     }
