@@ -18,9 +18,15 @@ fetch("./lib/test.json").then(function (response) {
         if (i < 10) {
             timetable["0" + i + ":00"] = Object.assign({},dayTemplate);
             isDisplay["0" + i + ":00"] = Object.assign({},dayTemplate);
+
+            timetable["0" + i + ":30"] = Object.assign({},dayTemplate);
+            isDisplay["0" + i + ":30"] = Object.assign({},dayTemplate);
         } else {
             timetable["" + i + ":00"] = Object.assign({},dayTemplate);
             isDisplay["" + i + ":00"] = Object.assign({},dayTemplate);
+
+            timetable["" + i + ":30"] = Object.assign({},dayTemplate);
+            isDisplay["" + i + ":30"] = Object.assign({},dayTemplate);
         }
     }
     
@@ -30,26 +36,31 @@ fetch("./lib/test.json").then(function (response) {
         let timeEnd = convertMillisecondsToHM(product.time.end);
         let counter = 1;
         let lastTime = null;
-        if (!(timeStart in timetable)) {
-            timetable[timeStart] = Object.assign({},dayTemplate);
-            isDisplay[timeStart] = Object.assign({},dayTemplate);
-            counter++;
-        }
-        for (var i = product.time.start; i < product.time.end; i += 6000) {
+        // if (!(timeStart in timetable)) {
+        //     timetable[timeStart] = Object.assign({},dayTemplate);
+        //     isDisplay[timeStart] = Object.assign({},dayTemplate);
+        // }
+        for (var i = product.time.start; i < product.time.end; i += 1800000) {
             let tempTime = convertMillisecondsToHM(i);
             if ((tempTime != timeStart) && (tempTime in timetable) && (tempTime != lastTime)) {
-                console.log(isDisplay[tempTime][day]);
+                // if (tempTime == "19:00" && day == 4){
+                //     console.log(`<td rowspan="${counter}">${product.course + product.section}</td>`);
+                // }
                 isDisplay[tempTime][day] = false;
                 lastTime = tempTime;
                 counter++;
             }
         }
-        if (!(timeEnd in timetable)) {
-            timetable[timeEnd] = Object.assign({},dayTemplate);
-            isDisplay[timeEnd] = Object.assign({},dayTemplate);
-        }
+        // if (!(timeEnd in timetable)) {
+        //     timetable[timeEnd] = Object.assign({},dayTemplate);
+        //     isDisplay[timeEnd] = Object.assign({},dayTemplate);
+        // }
         timetable[timeStart][day] = `<td rowspan="${counter}">${product.course + product.section}</td>`;
+        // if (day == 5){
+        //     console.log(`<td rowspan="${counter}">${product.course + product.section}</td>`);
+        // }
     }
+    console.log(isDisplay)
     let p = document.querySelector("#output");
     let output = "";
     let times = Object.keys(timetable).sort();
