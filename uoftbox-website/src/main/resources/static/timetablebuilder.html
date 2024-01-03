@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable Builder</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/timetablebuilder.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- CSS --> 
+    <!-- selectize stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+    <!-- bootstrap stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- JavaScript -->
+    <!-- selectize script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <!-- bootstrap script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+    <!-- templet -->
+    <!-- Button trigger modal -->
+    <button type="button" id="displayDetaillCourseInfo" data-bs-toggle="modal" data-bs-target="#detaillInfo" style="display: none; height: 0px; width: 0px;"></button>
+    <!-- detaill info Modal -->
+    <div class="modal fade" id="detaillInfo" tabindex="-1" aria-labelledby="detaillInfoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="detaillInfoLabel">Detailed Information</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="courseDetaillInfo">
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- Real body start here -->
+    <div class="topnav">
+        <a href="./index.html">Home</a>
+        <a class="active" href="./timetablebuilder.html">Timetable Builder</a>
+    </div>
+    <br>
+    <div class="timetable">
+        <div class="input">
+            <select class="relevantCourses" id="select-state" placeholder="Enter the course code/name...">
+                <option value="">Enter the course code/name...</option>
+            </select>
+        </div>
+        <br>
+        <div style="width: 60%; display: inline-block;">
+            <!-- <button style="border: none; background-color: white;"> -->
+                <table class="table table-bordered" id="test" style="text-align: center;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                        </tr>
+                    </thead>
+                    <tbody id="output"></tbody>
+                </table>
+            <!-- </button> -->
+        </div>
+        <div style="width: 300px; display: inline-block;  vertical-align:top;">
+            <h4>Fall</h4>
+            <br>
+            <ol id="course-list-fall">
+            </ol>
+            <h4>Winter</h4>
+            <br>
+            <ol id="course-list-winter">
+            </ol>
+        </div>
+    </div>
+    <script type="text/javascript" src="./scr/timetablebuilder.js"></script>
+</body>
+</body>
+</html>
