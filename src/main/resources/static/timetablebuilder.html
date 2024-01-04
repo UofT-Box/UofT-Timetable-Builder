@@ -47,44 +47,93 @@
     <div class="topnav">
         <a href="./index.html">Home</a>
         <a class="active" href="./timetablebuilder.html">Timetable Builder</a>
+        <!-- <button type="button" id="saveButton">Save</button> -->
     </div>
     <br>
-    <div class="timetable">
-        <div class="input">
-            <select class="relevantCourses" id="select-state" placeholder="Enter the course code/name...">
-                <option value="">Enter the course code/name...</option>
-            </select>
-        </div>
-        <br>
-        <div style="width: 60%; display: inline-block;">
-            <!-- <button style="border: none; background-color: white;"> -->
+    <div class="input">
+        <select class="relevantCourses" id="select-state" placeholder="Enter the course code/name...">
+            <option value="">Enter the course code/name...</option>
+        </select>
+    </div>
+    <div class="container">
+        <div class="timetable">
+            <br>
+            <div style="width: 60%; display: inline-block;">
                 <table class="table table-bordered" id="test" style="text-align: center;">
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Monday</th>
-                            <th>Tuesday</th>
-                            <th>Wednesday</th>
-                            <th>Thursday</th>
-                            <th>Friday</th>
+                            <th>MON</th>
+                            <th>TUE</th>
+                            <th>WED</th>
+                            <th>THU</th>
+                            <th>FRI</th>
                         </tr>
                     </thead>
                     <tbody id="output"></tbody>
                 </table>
-            <!-- </button> -->
+            </div>
         </div>
-        <div style="width: 300px; display: inline-block;  vertical-align:top;">
-            <h4>Fall</h4>
-            <br>
-            <ol id="course-list-fall">
-            </ol>
-            <h4>Winter</h4>
-            <br>
-            <ol id="course-list-winter">
-            </ol>
+
+        <div class="sidebar">
+            <!-- 学期切换按钮 -->
+        
+            <!-- 用户选择的课程列表 -->
+            <div class="courses-section" id="courses">
+                <div class="courses-section-title">
+                    <div class="term-toggle">
+                        <button type="button" class="term-btn" onclick="switchTerm('fall')">Fall</button>
+                        <button type="button" class="term-btn active" onclick="switchTerm('winter')">Winter</button>
+                    </div>
+                </div>
+                <h4> Courses</h4>
+                <!-- 秋季课程列表 -->
+                <div class="courses-section-content" id="fall-courses">
+                    <!-- 秋季课程内容 -->
+                </div>
+
+                <!-- 冬季课程列表 -->
+                <div class="courses-section-content" id="winter-courses" style="display: none;">
+                    <!-- 冬季课程内容 -->
+                </div>
+                
+            </div>
+            <!-- 偏好设置 -->
+            <div id="preferences-section">
+                <h4>Preferences:</h4>
+                <div class="preference" draggable="true">
+                    <span>Start time</span>
+                    <div class="options">
+                        <input type="radio" id="start-early" name="start-time" value="early"><label for="start-early">Early</label>
+                        <input type="radio" id="start-mid" name="start-time" value="mid" checked><label for="start-mid">Mid</label>
+                        <input type="radio" id="start-late" name="start-time" value="late"><label for="start-late">Late</label>
+                    </div>
+                </div>
+                <div class="preference" draggable="true">
+                    <span>Class Interval</span>
+                    <div class="options">
+                        <input type="radio" id="interval-short" name="class-interval" value="sort"><label for="interval-short">Short</label>
+                        <input type="radio" id="interval-long" name="class-interval" value="long" checked><label for="interval-long">Long</label>
+                    </div>
+                </div>
+                <div class="preference" draggable="true">
+                    <span>Days Spent</span>
+                    <div class="options">
+                        <input type="radio" id="spent-min" name="days-spent" value="min"><label for="spent-min">Min</label>
+                        <input type="radio" id="spent-max" name="days-spent" value="max" checked><label for="spent-max">Max</label>
+                    </div>
+                </div>
+                <div class="preference" draggable="true">
+                    <span>Reasonable Walking Time</span>
+                </div>
+            </div>
+    
+            <div class="generate-button-section">
+                <button type="button" class="generate-schedule" onclick="addCourseToTimetable()">GENERATE SCHEDULE</button>
+            </div>
         </div>
     </div>
-    <button type="button" onclick="addCourseToTimetable()">Test display timetable function</button>
+
     <script type="text/javascript" src="./scr/timetablebuilder.js"></script>
 </body>
 </body>

@@ -3,33 +3,33 @@ package com.uoftbox.uofttimetablebuilder.model.frontend;
 import java.util.List;
 
 public class UserInput {
-    private List<String> courseList;
-    private String sectionCode;
-    
-    public UserInput(){
+    private List<String> winterCourseList;
+    private List<String> fallCourseList;
+
+    public UserInput() {
 
     }
 
-    public UserInput(List<String> courseList, String sectionCode) {
-        this.courseList = courseList;
-        this.sectionCode = sectionCode;
+    public UserInput(List<String> winterCourseList, List<String> fallCourseList) {
+        this.winterCourseList = winterCourseList;
+        this.fallCourseList = fallCourseList;
     }
 
-    public List<String> getCourseList() {
-        return courseList;
+    public List<String> getWinterCourseList() {
+        return winterCourseList;
     }
 
-    public void setCourseList(List<String> courseList) {
-        this.courseList = courseList;
+    public List<String> getFallCourseList() {
+        return fallCourseList;
     }
 
-    public String getSectionCode() {
-        return sectionCode;
+    public void setWinterCourseList(List<String> winterCourseList) {
+        this.winterCourseList = winterCourseList;
     }
 
-    public void setSectionCode(String sectionCode) {
-        this.sectionCode = sectionCode;
+    public void setFallCourseList(List<String> fallCourseList) {
+        this.fallCourseList = fallCourseList;
     }
-    
+
     
 }
