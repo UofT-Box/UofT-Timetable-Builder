@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uoftbox.uofttimetablebuilder.repository.courses.RelevantCourse;
-import com.uoftbox.uofttimetablebuilder.service.SearchBarService;
+import com.uoftbox.uofttimetablebuilder.service.dbservice.SearchBarService;
 
 
 @RestController

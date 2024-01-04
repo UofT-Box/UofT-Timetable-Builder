@@ -144,7 +144,7 @@ function addCourseToTimetable() {
             displayTimetable(data);
         },
         error: function () {
-            alert("Error, something went wrong pleace contact admin!");
+            alert("Error, something went wrong pleace contact admin!" );
         }
     });
 }
