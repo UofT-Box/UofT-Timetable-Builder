@@ -1,4 +1,4 @@
-package com.uoftbox.uofttimetablebuilder.service;
+package com.uoftbox.uofttimetablebuilder.service.dbservice;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ public class CourseDataService {
 
     @Autowired
     private CoursesRepository coursesRepository;
+    
     @Autowired
     private MeetingSectionsRepository meetingSectionsRepository;
 
@@ -41,6 +42,7 @@ public class CourseDataService {
     }
 
     public Map<String, List<CourseInfo>> fetchAllTuts(String courseCode, int day, int start){
+        
         Map<String, List<CourseInfo>> allTuts = new HashMap<>();
 
         // 构建 LIKE 操作符的模式，匹配包含指定 day 和 start 的 JSON 字符串
@@ -62,7 +64,13 @@ public class CourseDataService {
             List<TimeAndPlace> timeAndPlaceList = gson.fromJson(timesJsonString, listType);
 
             CourseInfo courseInfo = new CourseInfo(courseCode, sectionCode, prof, timeAndPlaceList);
-            allTuts.computeIfAbsent(sectionCode, k -> new ArrayList<>()).add(courseInfo);
+
+            if (allTuts.containsKey(sectionCode)){
+                // List<CourseInfo> temp = new ArrayList<>();
+                // temp.add(courseInfo);
+                // allTuts.put(sectionCode,temp);
+                allTuts.computeIfAbsent(sectionCode, k -> new ArrayList<>()).add(courseInfo);
+            }
         }
         return allTuts;
     }
@@ -88,7 +96,7 @@ public class CourseDataService {
             if (timeAndPlaceList.size() == 0){
                 continue;
             }
-
+            
             if (courseType.equals("TUT")){
                 for (int element : time_list) {
                     if (element == timeAndPlaceList.get(0).getStart()) {

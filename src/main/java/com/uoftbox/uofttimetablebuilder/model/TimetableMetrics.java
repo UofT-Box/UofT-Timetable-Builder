@@ -1,18 +1,15 @@
-package com.uoftbox.uofttimetablebuilder.service;
+package com.uoftbox.uofttimetablebuilder.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimeAndPlace;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 
-@Service
-public class TimetableMetricsService {
+public class TimetableMetrics {
     private int[] timeDistribution; // 存储早中晚的课程分布
     private List<Integer> dailyCourseCounts; // 每天的课程量
 
@@ -20,7 +17,7 @@ public class TimetableMetricsService {
     private List<Integer> dailyEarliestStartTimes; // 每天的最早开始时间
     private List<Integer> dailyLatestEndTimes; // 每天的最晚结束时间
 
-    public TimetableMetricsService() {
+    public TimetableMetrics() {
         // 假设一周有5个工作日
         this.dailyBreakTimes = new ArrayList<>(Collections.nCopies(5, 0));
         this.dailyEarliestStartTimes = new ArrayList<>(Collections.nCopies(5, Integer.MAX_VALUE));
@@ -112,7 +109,7 @@ public class TimetableMetricsService {
     }
 
     // Copy constructor for saving the state
-    public TimetableMetricsService(TimetableMetricsService other) {
+    public TimetableMetrics(TimetableMetrics other) {
         this.timeDistribution = other.timeDistribution.clone();
         this.dailyBreakTimes = new ArrayList<>(other.dailyBreakTimes);
         this.dailyCourseCounts = new ArrayList<>(other.dailyCourseCounts);
@@ -120,7 +117,7 @@ public class TimetableMetricsService {
         this.dailyLatestEndTimes = new ArrayList<>(other.dailyLatestEndTimes);
     }
 
-    public void restore(TimetableMetricsService savedMetrics) {
+    public void restore(TimetableMetrics savedMetrics) {
         this.timeDistribution = savedMetrics.timeDistribution.clone();
         this.dailyBreakTimes = new ArrayList<>(savedMetrics.dailyBreakTimes);
         this.dailyCourseCounts = new ArrayList<>(savedMetrics.dailyCourseCounts);

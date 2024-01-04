@@ -13,6 +13,6 @@ public interface MeetingSectionsRepository extends JpaRepository<MeetingSections
     @Query("SELECT m FROM MeetingSections m WHERE m.courseId = ?1")
     List<MeetingSections> findMeetingSectionsByCourseId(String CourseId);
     
-    @Query("SELECT m FROM MeetingSections m WHERE m.courseCode = %?1% AND m.times LIKE %?2%")
+    @Query("SELECT m FROM MeetingSections m WHERE m.courseCode = ?1 AND m.times LIKE %?2%")
     List<MeetingSections> findSameTimeTUTForCourse(String CourseCode, String timePattern);
 }

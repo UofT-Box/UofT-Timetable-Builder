@@ -1,4 +1,4 @@
-package com.uoftbox.uofttimetablebuilder.service;
+package com.uoftbox.uofttimetablebuilder.service.dbservice;
 
 import java.util.List;
 

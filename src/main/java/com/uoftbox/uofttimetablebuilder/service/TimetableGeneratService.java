@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uoftbox.uofttimetablebuilder.model.TimetableMetrics;
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimeAndPlace;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimetableWithScore;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
+import com.uoftbox.uofttimetablebuilder.service.dbservice.CourseDataService;
+import com.uoftbox.uofttimetablebuilder.service.dbservice.DistanceService;
 
 @Service
 public class TimetableGeneratService {
@@ -19,25 +23,19 @@ public class TimetableGeneratService {
     @Autowired
     private CourseDataService courseDataService;
     @Autowired
-    private TimetableMetricsService metrics;
-    @Autowired
     private DistanceService distanceService;
     
-    PriorityQueue<TimetableWithScore> queue = new PriorityQueue<>();
-
-    public TimetableGeneratService() {
-
-    }
-
     public List<List<CourseInfo>> generateAllTimetables(Map<String, Map<String, Map<String, List<CourseInfo>>>> courses) {
-
+        Queue<TimetableWithScore> queue = new PriorityQueue<>();
+        TimetableMetrics metrics = new TimetableMetrics();
+        
         List<List<CourseInfo>> allTimetables = new ArrayList<>();
         List<CourseInfo> currentTimetable = new ArrayList<>();
         
         //TODO: 这里需要跟前端做交互
         UserPreferences userPreferences = new UserPreferences(2,1,2,3,0);
 
-        generateTimetables(courses, currentTimetable, allTimetables, userPreferences, 0, 0);
+        generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, 0, 0);
 
         // 创建最终的课程表列表
         List<List<CourseInfo>> topTimetables = new ArrayList<>();
@@ -49,11 +47,10 @@ public class TimetableGeneratService {
             selectOptimalTuts(ttb);
             topTimetables.add(ttb);
         }
-
         return topTimetables;
     }
 
-    private void generateTimetables(Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, List<CourseInfo> currentTimetable, List<List<CourseInfo>> allTimetables, UserPreferences userPreferences, int courseIndex, int typeIndex) {
+    private void generateTimetables(Queue<TimetableWithScore> queue, TimetableMetrics metrics, Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, List<CourseInfo> currentTimetable, List<List<CourseInfo>> allTimetables, UserPreferences userPreferences, int courseIndex, int typeIndex) {
 
     if (courseIndex == courses.size()) {
         double score = metrics.calculateScore(userPreferences);
@@ -79,7 +76,7 @@ public class TimetableGeneratService {
     List<String> courseTypes = new ArrayList<>(courseInfo.keySet());
 
     if (typeIndex == courseTypes.size()) {
-        generateTimetables(courses, currentTimetable, allTimetables, userPreferences, courseIndex + 1, 0);
+        generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, courseIndex + 1, 0);
         return;
     }
 
@@ -93,7 +90,8 @@ public class TimetableGeneratService {
                 .anyMatch(classInfo -> isConflict(classInfo, currentTimetable));
 
         if (!conflict) {
-            TimetableMetricsService savedMetrics = new TimetableMetricsService(metrics); // 保存当前状态
+            //TODO: conflict
+            TimetableMetrics savedMetrics = new TimetableMetrics(metrics); // 保存当前状态
 
             for (CourseInfo course : sectionInfo) {
                 for (TimeAndPlace tap : course.getTimeAndPlaceList()) {
@@ -104,7 +102,7 @@ public class TimetableGeneratService {
             }
 
             currentTimetable.addAll(sectionInfo);
-            generateTimetables(courses, currentTimetable, allTimetables, userPreferences, courseIndex, typeIndex + 1);
+            generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, courseIndex, typeIndex + 1);
 
             metrics.restore(savedMetrics); // 回溯，还原状态
             currentTimetable.removeAll(sectionInfo);
@@ -169,7 +167,7 @@ public class TimetableGeneratService {
         return false;
     }
 
-    public void selectOptimalTuts(List<CourseInfo> timetable) {
+    private void selectOptimalTuts(List<CourseInfo> timetable) {
         for (int i = 0; i < timetable.size(); i++) {
             CourseInfo currentCourse = timetable.get(i);
             if (currentCourse.getSection().startsWith("TUT")) {
@@ -206,6 +204,5 @@ public class TimetableGeneratService {
 
         return optimalTut;
     }
-
     
 }
