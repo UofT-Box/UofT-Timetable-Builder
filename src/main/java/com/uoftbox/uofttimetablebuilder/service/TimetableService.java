@@ -23,7 +23,7 @@ public class TimetableService {
     private TimetableGeneratService timetableGeneratService;
     
     @Async("taskExecutor")
-    public CompletableFuture<List<CourseInfo>> getTopOneTimetableAsync(String[] courseCode, String sectionCode){
+    public CompletableFuture<List<CourseInfo>> getTopTimetable(List<String> courseCode, String sectionCode){
         
         Map<String, Map<String, Map<String, List<CourseInfo>>>> meetingSections = new HashMap<>();
         
@@ -36,20 +36,5 @@ public class TimetableService {
         List<CourseInfo> timetable = allTimetables.get(0);
         
         return CompletableFuture.completedFuture(timetable);
-    }
-
-    public List<CourseInfo> getTopOneTimetable(String[] courseCode, String sectionCode){
-        
-        Map<String, Map<String, Map<String, List<CourseInfo>>>> meetingSections = new HashMap<>();
-        
-        List<List<CourseInfo>> allTimetables;
-        meetingSections = courseDataService.fetchSpecialSections(courseCode, sectionCode);
-        allTimetables = timetableGeneratService.generateAllTimetables(meetingSections);
-        
-        if (allTimetables.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        
-        List<CourseInfo> timetable = allTimetables.get(0);
-        
-        return timetable;
     }
 }

@@ -28,7 +28,7 @@ public class CourseDataService {
     @Autowired
     private MeetingSectionsRepository meetingSectionsRepository;
 
-    public Map<String, Map<String, Map<String, List<CourseInfo>>>> fetchSpecialSections(String[] courseCodeList, String sectionCode){
+    public Map<String, Map<String, Map<String, List<CourseInfo>>>> fetchSpecialSections(List<String> courseCodeList, String sectionCode){
         Map<String, Map<String, Map<String, List<CourseInfo>>>> courseSchedule = new HashMap<>();
         for (String courseCode : courseCodeList) {
             String courseId = coursesRepository.findMatchCourseId(courseCode, sectionCode);
