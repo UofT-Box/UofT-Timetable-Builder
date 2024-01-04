@@ -1,0 +1,118 @@
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.timetable {
+    flex: 2;
+    width: 67%;
+}
+
+.sidebar {
+    width: 33%;
+    /* 其他样式保持不变 */
+}
+
+.courses-section, .preferences-section {
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.generate-button-section {
+    text-align: center; /* 按钮居中 */
+}
+
+.generate-schedule {
+    width: 100%; /* 按钮宽度与侧边栏相同 */
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.generate-schedule:hover {
+    background-color: #45a049;
+}
+
+.term-toggle {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.term-btn {
+    background-color: #e7e7e7;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+    /* 可以根据需要调整样式 */
+}
+
+.term-btn.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.courses-section-title {
+    display: flex;
+}
+
+.course-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* 为每个课程项添加一些间隔 */
+}
+
+.color-indicator {
+    width: 20px;
+    height: 20px;
+    background-color: rgb(193, 84, 7); /* 课程的颜色 */
+    margin-right: 10px;
+}
+
+.course-name {
+    flex-grow: 1; /* 确保课程名字占据大部分的空间 */
+}
+
+.edit-btn,
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px; /* 在按钮之间添加一些空间 */
+}
+
+/* 您可能还需要为按钮添加hover效果 */
+.edit-btn:hover,
+.delete-btn:hover {
+    background-color: #f2f2f2;
+}
+
+
+.preference {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    cursor: grab; /* 鼠标样式表明这个元素是可以拖动的 */
+}
+
+.options {
+    float: right;
+}
+
+/* 样式化radio按钮和标签 */
+.options input[type="radio"] {
+    margin-left: 10px;
+}
+
+.options label {
+    margin-left: 5px;
+}
