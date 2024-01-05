@@ -46,7 +46,7 @@ public class TimetableContoller {
         
         List<List<CourseInfo>> fallTimetableResult = fallTimetable.get();
         List<List<CourseInfo>> winterTimetableResult = winterTimetable.get();
-        
+
         return getResult(fallTimetableResult, winterTimetableResult);
     }
     
