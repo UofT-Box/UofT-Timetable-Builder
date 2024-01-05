@@ -1,5 +1,6 @@
 package com.uoftbox.uofttimetablebuilder.service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class TimetableService {
     private TimetableGeneratService timetableGeneratService;
     
     @Async("taskExecutor")
-    public CompletableFuture<List<CourseInfo>> getTopTimetable(List<String> courseCode, String sectionCode){
+    public CompletableFuture<List<List<CourseInfo>>> getTopTimetable(List<String> courseCode, String sectionCode){
         
         Map<String, Map<String, Map<String, List<CourseInfo>>>> meetingSections = new HashMap<>();
         
@@ -32,9 +33,9 @@ public class TimetableService {
         allTimetables = timetableGeneratService.generateAllTimetables(meetingSections);
         
         if (allTimetables.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        Collections.shuffle(allTimetables);
         
-        List<CourseInfo> timetable = allTimetables.get(0);
-        
-        return CompletableFuture.completedFuture(timetable);
+        return CompletableFuture.completedFuture(allTimetables);
     }
 }
