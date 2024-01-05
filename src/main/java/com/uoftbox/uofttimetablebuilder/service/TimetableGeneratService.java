@@ -52,104 +52,130 @@ public class TimetableGeneratService {
 
     private void generateTimetables(Queue<TimetableWithScore> queue, TimetableMetrics metrics, Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, List<CourseInfo> currentTimetable, List<List<CourseInfo>> allTimetables, UserPreferences userPreferences, int courseIndex, int typeIndex) {
 
-    if (courseIndex == courses.size()) {
-        double score = metrics.calculateScore(userPreferences);
-        if (score > userPreferences.getScoreThreshold()) {
-            queue.add(new TimetableWithScore(new ArrayList<>(currentTimetable), score));
-            allTimetables.add(new ArrayList<>(currentTimetable));
+        if (courseIndex == courses.size()) {
+            double score = metrics.calculateScore(userPreferences);
+            if (score > userPreferences.getScoreThreshold()) {
+                queue.add(new TimetableWithScore(new ArrayList<>(currentTimetable), score));
+                allTimetables.add(new ArrayList<>(currentTimetable));
 
-            // 保持队列大小最多为50
-            while (queue.size() > 50) {
-                queue.poll();
-            }
-        }
-        return;
-    }
-
-    if (allTimetables.size() >= 100000){
-        return;
-    }
-
-    List<String> courseKeys = new ArrayList<>(courses.keySet());
-    String courseKey = courseKeys.get(courseIndex);
-    Map<String, Map<String, List<CourseInfo>>> courseInfo = courses.get(courseKey);
-    List<String> courseTypes = new ArrayList<>(courseInfo.keySet());
-
-    if (typeIndex == courseTypes.size()) {
-        generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, courseIndex + 1, 0);
-        return;
-    }
-
-    String courseType = courseTypes.get(typeIndex);
-    Map<String, List<CourseInfo>> sections = courseInfo.get(courseType);
-
-    for (Map.Entry<String, List<CourseInfo>> entry : sections.entrySet()) {
-        List<CourseInfo> sectionInfo = entry.getValue();
-
-        boolean conflict = sectionInfo.stream()
-                .anyMatch(classInfo -> isConflict(classInfo, currentTimetable));
-
-        if (!conflict) {
-            //TODO: conflict
-            TimetableMetrics savedMetrics = new TimetableMetrics(metrics); // 保存当前状态
-
-            for (CourseInfo course : sectionInfo) {
-                for (TimeAndPlace tap : course.getTimeAndPlaceList()) {
-                    metrics.updateTimeDistribution(tap);
-                    metrics.updateDailyCourseCounts(course);
-                    metrics.updateDailyBreakTimes(course); // 更新课间时间
+                // 保持队列大小最多为50
+                while (queue.size() > 50) {
+                    queue.poll();
                 }
             }
+            return;
+        }
 
-            currentTimetable.addAll(sectionInfo);
-            generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, courseIndex, typeIndex + 1);
+        if (allTimetables.size() >= 100000){
+            return;
+        }
 
-            metrics.restore(savedMetrics); // 回溯，还原状态
-            currentTimetable.removeAll(sectionInfo);
+        List<String> courseKeys = new ArrayList<>(courses.keySet());
+        String courseKey = courseKeys.get(courseIndex);
+        Map<String, Map<String, List<CourseInfo>>> courseInfo = courses.get(courseKey);
+        List<String> courseTypes = new ArrayList<>(courseInfo.keySet());
+
+        if (typeIndex == courseTypes.size()) {
+            generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, courseIndex + 1, 0);
+            return;
+        }
+
+        String courseType = courseTypes.get(typeIndex);
+        Map<String, List<CourseInfo>> sections = courseInfo.get(courseType);
+
+        for (Map.Entry<String, List<CourseInfo>> entry : sections.entrySet()) {
+            List<CourseInfo> sectionInfo = entry.getValue();
+
+            boolean conflict = sectionInfo.stream().anyMatch(classInfo -> isConflict(classInfo, currentTimetable));
+
+            if (!conflict) {
+                //TODO: conflict
+                TimetableMetrics savedMetrics = new TimetableMetrics(metrics); // 保存当前状态
+
+                for (CourseInfo course : sectionInfo) {
+                    for (TimeAndPlace tap : course.getTimeAndPlaceList()) {
+                        metrics.updateTimeDistribution(tap);
+                        metrics.updateDailyCourseCounts(course);
+                        metrics.updateDailyBreakTimes(course); // 更新课间时间
+                    }
+                }
+
+                currentTimetable.addAll(sectionInfo);
+                generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, courseIndex, typeIndex + 1);
+
+                metrics.restore(savedMetrics); // 回溯，还原状态
+                currentTimetable.removeAll(sectionInfo);
+            }
         }
     }
-}
 
     private boolean isConflict(CourseInfo newCourse, List<CourseInfo> timetable) {
         for (CourseInfo existingCourse : timetable) {
-            if (!areCampusesDifferent(newCourse, existingCourse)) {
-                List<TimeAndPlace> newCourseTimeSlots = newCourse.getTimeAndPlaceList();
-                List<TimeAndPlace> existingCourseTimeSlots = existingCourse.getTimeAndPlaceList();
 
-                for (TimeAndPlace newTimeSlot : newCourseTimeSlots) {
-                    for (TimeAndPlace existingTimeSlot : existingCourseTimeSlots) {
-                        if (newTimeSlot.getDay() == existingTimeSlot.getDay() &&
-                                !(newTimeSlot.getEnd() <= existingTimeSlot.getStart() ||
-                                        newTimeSlot.getStart() >= existingTimeSlot.getEnd())) {
-                            return true;
-                        }
-                    }
+            String newCourseCode = newCourse.getCourse();
+            String existingCourseCode = existingCourse.getCourse();
+            int campusesCode = Character.getNumericValue(newCourseCode.charAt(newCourseCode.length() - 1));
+            int campusesExistingCode = Character.getNumericValue(existingCourseCode.charAt(existingCourseCode.length() - 1));
+
+            if (campusesCode != campusesExistingCode){
+                if (checkDifferentCompusesConflict(newCourse, existingCourse)) {
+                    return true;
+                }
+            }else{
+                if (checkSameCompusesConflict(newCourse, existingCourse, campusesCode)){
+                    return true;
                 }
             }
         }
         return false;
     }
 
-    private boolean areCampusesDifferent(CourseInfo course1, CourseInfo course2) {
-        String courseCode1 = course1.getCourse();
-        String courseCode2 = course2.getCourse();
-
-        // 获取课程代码的最后一个数字
-        int lastDigit1 = Character.getNumericValue(courseCode1.charAt(courseCode1.length() - 1));
-        int lastDigit2 = Character.getNumericValue(courseCode2.charAt(courseCode2.length() - 1));
-
-        // 如果最后一个数字不一样且时间间隔不足1小时，返回 true
-        if (lastDigit1 != lastDigit2 && !isHourInterval(course1, course2)) {
+    private boolean canAdd(TimeAndPlace newTimeSlot, TimeAndPlace existingTimeSlot){
+        if ((existingTimeSlot.getStart() < newTimeSlot.getEnd() && newTimeSlot.getEnd() < existingTimeSlot.getEnd()) || 
+            (existingTimeSlot.getStart() < newTimeSlot.getStart() && newTimeSlot.getStart() < existingTimeSlot.getEnd()) ||
+            (newTimeSlot.getStart() < existingTimeSlot.getEnd() && existingTimeSlot.getEnd() < newTimeSlot.getEnd()) || 
+            (newTimeSlot.getStart() < existingTimeSlot.getStart() && existingTimeSlot.getStart() < newTimeSlot.getEnd())){
+                return false;
+            }
+        return true;
+    }
+    
+    private boolean enoughWalkingTimeUTSG(TimeAndPlace newTimeSlot, TimeAndPlace existingTimeSlot){
+        String newLocation = newTimeSlot.getLocation();
+        String exisitingLocation = existingTimeSlot.getLocation();
+        if (exisitingLocation.equals("") || newLocation.equals("") || newLocation.equals(exisitingLocation)){
             return true;
         }
+        if (existingTimeSlot.getEnd() == newTimeSlot.getStart()){
+            Integer timeTake = distanceService.getDuration(existingTimeSlot.getLocation(), newTimeSlot.getLocation());
+            if (timeTake > 10){
+                return false;
+            }
+        }
+        return true;
+    }
 
+    private boolean checkSameCompusesConflict(CourseInfo newCourse, CourseInfo existingCourse, int campusesCode){
+        List<TimeAndPlace> newCourseTimeSlots = newCourse.getTimeAndPlaceList();
+        List<TimeAndPlace> existingCourseTimeSlots = existingCourse.getTimeAndPlaceList();
+
+        for (TimeAndPlace newTimeSlot : newCourseTimeSlots) {
+            for (TimeAndPlace existingTimeSlot : existingCourseTimeSlots) {
+                if (newTimeSlot.getDay() == existingTimeSlot.getDay() && !canAdd(newTimeSlot, existingTimeSlot)) {
+                    return true;
+                }
+                if(campusesCode == 1 && !enoughWalkingTimeUTSG(newTimeSlot, existingTimeSlot)){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
-    private boolean isHourInterval(CourseInfo course1, CourseInfo course2) {
+    private boolean checkDifferentCompusesConflict(CourseInfo course1, CourseInfo course2) {
         List<TimeAndPlace> timeSlots1 = course1.getTimeAndPlaceList();
         List<TimeAndPlace> timeSlots2 = course2.getTimeAndPlaceList();
-
+        
         for (TimeAndPlace timeSlot1 : timeSlots1) {
             for (TimeAndPlace timeSlot2 : timeSlots2) {
                 if (timeSlot1.getDay() == timeSlot2.getDay()) {
@@ -158,7 +184,8 @@ public class TimetableGeneratService {
                     int startTime2 = timeSlot2.getStart();
                     int endTime2 = timeSlot2.getEnd();
 
-                    if (Math.abs(startTime1 - endTime2) < 3600000 || Math.abs(startTime2 - endTime1) < 3600000) {
+                    if (canAdd(timeSlot1, timeSlot2) || 
+                    Math.abs(startTime1 - endTime2) < 3600000 || Math.abs(startTime2 - endTime1) < 3600000) {
                         return true;
                     }
                 }
