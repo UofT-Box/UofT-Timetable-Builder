@@ -1,9 +1,6 @@
 // var allTimeTable = [[timetableFall,timetableWinter]];
-var timetableFall = {};
-var isDisplayFall = {};
-var timetableWinter = {};
-var isDisplayWinter = {};
-var allTimeTables = [];
+
+var allTimeTables = {};
 var timeTableIndex = 0;
 var fallCourseChoose = [];
 var winterCourseChoose = [];
@@ -16,11 +13,25 @@ var lastInput = "";
 var $select = $('.relevantCourses').selectize(); // 输入-下滑选择框生成
 var selectControl = $select[0].selectize;
 $(document).ready(function () { 
-    initTimetableTemplat();
-    displayTimetable ("F");
     document.getElementById('large-view').classList.add('active');
 });
-
+var times = [];
+$(document).ready(function (){
+    for (var i = 9; i <= 21; i++) {
+        if (i < 10) {
+            
+            times.push("0" + i + ":00");
+            times.push("0" + i + ":30");
+        } else {
+            times.push("" + i + ":00");
+            times.push("" + i + ":30");
+        }
+    }
+});
+$(document).ready(function (){
+    saveTimetable([[[],[]]])
+    switchTerm("fall",1);
+})
 $(document).ready(function () { 
     selectControl.on('change', function(){ 
         courseSelectChangeEvent(selectControl); // 将用户选择的可成加入进List和HTML
@@ -160,14 +171,12 @@ function addCourseToTimetable() {
         async: false,
         success: function (data){
             //小视角加载
-
+            console.log(data);
             saveTimetable(data);
             if (fallCourseChoose.length != 0 || winterCourseChoose.length == 0){
-                switchTerm("fall");
-                displayTimetable("F");
+                switchTerm("fall",1);
             }else{
-                switchTerm("winter");
-                displayTimetable("W");
+                switchTerm("winter",1);
             }
         },
         error: function () {
@@ -188,14 +197,12 @@ function getCourseColor(courseCode, session) {
 }
 
 function saveTimetable(allGeneratedTimetable){
-    //初始化timetable模板
-    initTimetableTemplat();
-    var index = 0
+    let index = 1;
     for (let generatedTimetable of allGeneratedTimetable){
-        allTimeTables.push()
-        index ++;
-        console.log(generatedTimetable[0]);
-        console.log(generatedTimetable[1]);
+        //初始化timetable模板
+        let timetableFall = Object.assign({},{});
+        let timetableWinter = Object.assign({},{});
+        initTimetableTemplat(timetableFall, timetableWinter);
         // 将fall课程元素加入至fall timetable模板
         for (let courseInfo of generatedTimetable[0]) {
             let color = getCourseColor(courseInfo.course, "F"); // 获取课程颜色
@@ -207,7 +214,7 @@ function saveTimetable(allGeneratedTimetable){
                 for (var i = sectionInfo.start; i < sectionInfo.end; i += 1800000) {
                     let tempTime = convertMillisecondsToHM(i);
                     if ((tempTime != timeStart) && (tempTime in timetableFall) && (tempTime != lastTime)) {
-                        isDisplayFall[tempTime][day] = false;
+                        timetableFall[tempTime][day] = "NOT_DISPLAY";
                         lastTime = tempTime;
                         counter++;
                     }
@@ -228,7 +235,7 @@ function saveTimetable(allGeneratedTimetable){
                 for (var i = sectionInfo.start; i < sectionInfo.end; i += 1800000) {
                     let tempTime = convertMillisecondsToHM(i);
                     if ((tempTime != timeStart) && (tempTime in timetableWinter) && (tempTime != lastTime)) {
-                        isDisplayWinter[tempTime][day] = false;
+                        timetableWinter[tempTime][day] = "NOT_DISPLAY";
                         lastTime = tempTime;
                         counter++;
                     }
@@ -238,77 +245,60 @@ function saveTimetable(allGeneratedTimetable){
                 timetableWinter[timeStart][day] = `<td id="${info}" rowspan="${counter}" onclick="tdHaveSection(this)" style="background-color: ${color};">${courseInfo.course}<br>${courseInfo.section}</td>`;
             }
         }
-        console.log(timetableFall);
-        console.log(timetableWinter);
+        allTimeTables[index] = {"fall": timetableFall, "winter": timetableWinter};
+        index++;
     }
-
+    
 }
 
-function initTimetableTemplat(){
+function initTimetableTemplat(timetableFall, timetableWinter){
     // 初始化timetable
     let dayTemplate = {
-        1: true,
-        2: true,
-        3: true,
-        4: true,
-        5: true
+        1: "NO_CLASS",
+        2: "NO_CLASS",
+        3: "NO_CLASS",
+        4: "NO_CLASS",
+        5: "NO_CLASS"
     };
     // 生成课表模板
     for (var i = 9; i <= 21; i++) {
         if (i < 10) {
+            
             timetableFall["0" + i + ":00"] = Object.assign({}, dayTemplate);
-            isDisplayFall["0" + i + ":00"] = Object.assign({}, dayTemplate);
             timetableWinter["0" + i + ":00"] = Object.assign({}, dayTemplate);
-            isDisplayWinter["0" + i + ":00"] = Object.assign({}, dayTemplate);
-
+            
             timetableFall["0" + i + ":30"] = Object.assign({}, dayTemplate);
-            isDisplayFall["0" + i + ":30"] = Object.assign({}, dayTemplate);
             timetableWinter["0" + i + ":30"] = Object.assign({}, dayTemplate);
-            isDisplayWinter["0" + i + ":30"] = Object.assign({}, dayTemplate);
         } else {
+            
             timetableFall["" + i + ":00"] = Object.assign({}, dayTemplate);
-            isDisplayFall["" + i + ":00"] = Object.assign({}, dayTemplate);
             timetableWinter["" + i + ":00"] = Object.assign({}, dayTemplate);
-            isDisplayWinter["" + i + ":00"] = Object.assign({}, dayTemplate);
-
+            
             timetableFall["" + i + ":30"] = Object.assign({}, dayTemplate);
-            isDisplayFall["" + i + ":30"] = Object.assign({}, dayTemplate);
             timetableWinter["" + i + ":30"] = Object.assign({}, dayTemplate);
-            isDisplayWinter["" + i + ":30"] = Object.assign({}, dayTemplate);
         }
     }
 }
 
-function displayTimetable (term) {
+// index表的number
+function displayTimetable (term, index) {
     // 将元素加入至HTML
     let p = document.querySelector("#timetable-output");
     let output = "";
-    let times = (term === "F" ? Object.keys(timetableFall).sort() : Object.keys(timetableWinter).sort());
+    let timetable = allTimeTables[index][term];
+    
     for (let time of times) {
         let tLen = time.length;
         output += (time[tLen - 2] == 0 ? `<tr><th>${time}</th>` : `<tr><th></th>`);
         for (let j = 1; j <= 5; j++) {
             //判断现在用户选择的是否为Fall的课表，否则输出Winter的课表
-            if(term === "F"){
-                if (isDisplayFall[time][j] == true) {
-                    if (timetableFall[time][j] != true) {
-                        output += timetableFall[time][j];
-    
-                    } else {
-                        output += `<td onclick="tdNoSection(this)"></td>`;
-                    }
+            if (timetable[time][j] !== "NO_CLASS") {
+                if (timetable[time][j] !== "NOT_DISPLAY"){
+                    output += timetable[time][j];
                 }
-            }else{
-                if (isDisplayWinter[time][j] == true) {
-                    if (timetableWinter[time][j] != true) {
-                        output += timetableWinter[time][j];
-    
-                    } else {
-                        output += `<td onclick="tdNoSection(this)"></td>`;
-                    }
-                }
+            } else {
+                output += `<td onclick="tdNoSection(this)"></td>`;
             }
-            
         }
         output += `</tr>`;
     }
@@ -361,7 +351,7 @@ function switchView() {
 }
   
 
-function switchTerm(term) {
+function switchTerm(term, index=1) {
     // 获取所有的 term 按钮和课程列表
     var termButtons = document.querySelectorAll('.term-btn');
     var coursesSections = document.querySelectorAll('.courses-section-content');
@@ -374,15 +364,15 @@ function switchTerm(term) {
         section.style.display = 'none';
     });
 
+    displayTimetable(term, index);
+
     // 根据选择的学期显示课程列表，并激活相应的按钮
     if(term === 'fall') {
-        displayTimetable("F");
         document.getElementById('fall-courses').style.display = 'block';
-        document.querySelector('button[onclick="switchTerm(\'fall\')"]').classList.add('active');
+        document.querySelector(`button[onclick="switchTerm(\'fall\')"]`).classList.add('active');
     } else {
-        displayTimetable("W");
         document.getElementById('winter-courses').style.display = 'block';
-        document.querySelector('button[onclick="switchTerm(\'winter\')"]').classList.add('active');
+        document.querySelector(`button[onclick="switchTerm(\'winter\')"]`).classList.add('active');
     }
 }
 
