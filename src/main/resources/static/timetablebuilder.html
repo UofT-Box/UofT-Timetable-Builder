@@ -57,22 +57,102 @@
     </div>
     <div class="container">
         <div class="timetable">
-            <br>
-            <div style="width: 60%; display: inline-block;">
-                <table class="table table-bordered" id="test" style="text-align: center;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>MON</th>
-                            <th>TUE</th>
-                            <th>WED</th>
-                            <th>THU</th>
-                            <th>FRI</th>
-                        </tr>
-                    </thead>
-                    <tbody id="timetable-output"></tbody>
-                </table>
+            <div id="large-view" class="timetable-view">
+                <!-- 大视图的课程表内容 -->
+                <br>
+                <div style="width: 60%; display: inline-block;">
+                    <table class="table table-bordered" id="test" style="text-align: center;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>MON</th>
+                                <th>TUE</th>
+                                <th>WED</th>
+                                <th>THU</th>
+                                <th>FRI</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timetable-output"></tbody>
+                    </table>
+                </div>
             </div>
+            <div id="small-view" class="timetable-view">
+                <!-- 小视图的课程表内容 -->
+                <!-- 第一行 -->
+                <div class="row">
+                    <div class="timetable-thumbnail" id="thumbnail-1">
+                        <div class="thumbnail-header">Timetable #1</div>
+                        <div class="thumbnail-content">
+                            <div class="semester">Fall</div>
+                            <div class="semester">Winter</div>
+                        </div>
+                    </div>
+                    <div class="timetable-thumbnail" id="thumbnail-2">
+                        <div class="thumbnail-header">Timetable #2</div>
+                        <div class="thumbnail-content">
+                            <div class="semester">Fall</div>
+                            <div class="semester">Winter</div>
+                        </div>
+                    </div>
+                    <div class="timetable-thumbnail" id="thumbnail-3">
+                        <div class="thumbnail-header">Timetable #3</div>
+                        <div class="thumbnail-content">
+                            <div class="semester">Fall</div>
+                            <div class="semester">Winter</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 第二行 -->
+                <div class="row">
+                    <div class="timetable-thumbnail" id="thumbnail-4">
+                        <div class="thumbnail-header">Timetable #4</div>
+                        <div class="thumbnail-content">
+                            <div class="semester">Fall</div>
+                            <div class="semester">Winter</div>
+                        </div>
+                    </div>
+                    <div class="timetable-thumbnail" id="thumbnail-5">
+                        <div class="thumbnail-header">Timetable #5</div>
+                        <div class="thumbnail-content">
+                            <div class="semester">Fall</div>
+                            <div class="semester">Winter</div>
+                        </div>
+                    </div>
+                    <div class="timetable-thumbnail" id="thumbnail-6">
+                        <div class="thumbnail-header">Timetable #6</div>
+                        <div class="thumbnail-content">
+                            <div class="semester">Fall</div>
+                            <div class="semester">Winter</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 第三行 -->
+                <div class="row">
+                    <div class="timetable-thumbnail" id="thumbnail-7">
+                        <div class="thumbnail-header">Timetable #7</div>
+                        <div class="thumbnail-content">
+                            <div class="semester">Fall</div>
+                            <div class="semester">Winter</div>
+                        </div>
+                    </div>
+                    <div class="timetable-thumbnail" id="thumbnail-8">
+                        <div class="thumbnail-header">Timetable #8</div>
+                        <div class="thumbnail-content">
+                            <div class="semester">Fall</div>
+                            <div class="semester">Winter</div>
+                        </div>
+                    </div>
+                    <div class="timetable-thumbnail" id="thumbnail-9">
+                        <div class="thumbnail-header">Timetable #9</div>
+                        <div class="thumbnail-content">
+                            <div class="semester">Fall</div>
+                            <div class="semester">Winter</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 视图切换按钮 -->
+            <button id="toggle-view-btn" onclick="switchView()">切换视图</button>
         </div>
 
         <div class="sidebar">

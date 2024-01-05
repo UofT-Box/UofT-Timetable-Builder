@@ -8,6 +8,50 @@
     width: 67%;
 }
 
+.timetable-view {
+    display: none; /* 默认不显示 */
+}
+  
+.timetable-view.active {
+    display: block; /* 激活的视图显示 */    
+}
+
+#small-view {
+    /* display: flex; */
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px; /* 为每行添加间隔 */
+}
+
+.row .timetable-thumbnail {
+    width: 33% !important; /* 只有在没有其他方法时才使用 !important */
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 10px;
+}
+
+.thumbnail-header {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.thumbnail-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.semester {
+    width: 48%; /* 每个学期视图占据缩略图内容的一半 */
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
 .sidebar {
     width: 33%;
     /* 其他样式保持不变 */
