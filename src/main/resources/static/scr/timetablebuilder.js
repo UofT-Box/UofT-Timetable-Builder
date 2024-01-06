@@ -12,6 +12,18 @@ var lastInput = "";
 
 var $select = $('.relevantCourses').selectize(); // 输入-下滑选择框生成
 var selectControl = $select[0].selectize;
+
+// $(document).ready(function(){
+//     var color = [];
+//     while(color.length < 30){
+//         var temp = randomColor();
+//         if(!(color.includes(temp))){
+//             color.push(temp)
+//         }
+//     }
+//     console.log(color);
+// })
+
 $(document).ready(function () { 
     document.getElementById('large-view').classList.add('active');
 });
@@ -77,9 +89,10 @@ function addSelectedCourse(courseCode, sectionCode){
         generateCourses(courseCode,"fall");
         switchTerm("fall");
         fallCredit += 0.5;
-    }else{
+    }else{ // 年课
         fallCourseChoose.push(courseCode);
-        var color = getRandomColor()
+        var color = getRandomColor();
+        // let color = null;
         generateCourses(courseCode,"fall",color);
         winterCourseChoose.push(courseCode);
         generateCourses(courseCode,"winter",color);
@@ -171,7 +184,6 @@ function addCourseToTimetable() {
         async: false,
         success: function (data){
             //小视角加载
-            console.log(data);
             saveTimetable(data);
             if (fallCourseChoose.length != 0 || winterCourseChoose.length == 0){
                 switchTerm("fall",1);
@@ -208,20 +220,19 @@ function saveTimetable(allGeneratedTimetable){
             let color = getCourseColor(courseInfo.course, "F"); // 获取课程颜色
             for(let sectionInfo of courseInfo.timeAndPlaceList){
                 let day = sectionInfo.day;
-                let timeStart = convertMillisecondsToHM(sectionInfo.start);
-                let counter = 1;
-                let lastTime = null;
+                let info = {
+                    "course": courseInfo.course,
+                    "section": courseInfo.section,
+                    "prof": courseInfo.prof,
+                    "location": (sectionInfo.location != "" ? sectionInfo.location : "TBA"),
+                    "color": color
+                }
                 for (var i = sectionInfo.start; i < sectionInfo.end; i += 1800000) {
                     let tempTime = convertMillisecondsToHM(i);
-                    if ((tempTime != timeStart) && (tempTime in timetableFall) && (tempTime != lastTime)) {
-                        timetableFall[tempTime][day] = "NOT_DISPLAY";
-                        lastTime = tempTime;
-                        counter++;
+                    if(tempTime in timetableFall){
+                        timetableFall[tempTime][day] = info;
                     }
                 }
-                let location = sectionInfo.location;
-                let info = `Course: ${courseInfo.course}<br>Section: ${courseInfo.section}<br>Location: ${(location != "" ? location : "TBA")}`;
-                timetableFall[timeStart][day] = `<td id="${info}" rowspan="${counter}" onclick="tdHaveSection(this)" style="background-color: ${color};">${courseInfo.course}<br>${courseInfo.section}</td>`;
             }
         }
         // 将winter课程元素加入至winter timetable模板
@@ -229,20 +240,19 @@ function saveTimetable(allGeneratedTimetable){
             let color = getCourseColor(courseInfo.course,"S"); // 获取课程颜色
             for(let sectionInfo of courseInfo.timeAndPlaceList){
                 let day = sectionInfo.day;
-                let timeStart = convertMillisecondsToHM(sectionInfo.start);
-                let counter = 1;
-                let lastTime = null;
+                let info = {
+                    "course": courseInfo.course,
+                    "section": courseInfo.section,
+                    "prof": courseInfo.prof,
+                    "location": (sectionInfo.location != "" ? sectionInfo.location : "TBA"),
+                    "color": color
+                }
                 for (var i = sectionInfo.start; i < sectionInfo.end; i += 1800000) {
                     let tempTime = convertMillisecondsToHM(i);
-                    if ((tempTime != timeStart) && (tempTime in timetableWinter) && (tempTime != lastTime)) {
-                        timetableWinter[tempTime][day] = "NOT_DISPLAY";
-                        lastTime = tempTime;
-                        counter++;
+                    if(tempTime in timetableWinter){
+                        timetableWinter[tempTime][day] = info;
                     }
                 }
-                let location = sectionInfo.location;
-                let info = `Course: ${courseInfo.course}<br>Section: ${courseInfo.section}<br>Location: ${(location != "" ? location : "TBA")}`;
-                timetableWinter[timeStart][day] = `<td id="${info}" rowspan="${counter}" onclick="tdHaveSection(this)" style="background-color: ${color};">${courseInfo.course}<br>${courseInfo.section}</td>`;
             }
         }
         allTimeTables[index] = {"fall": timetableFall, "winter": timetableWinter};
@@ -254,26 +264,22 @@ function saveTimetable(allGeneratedTimetable){
 function initTimetableTemplat(timetableFall, timetableWinter){
     // 初始化timetable
     let dayTemplate = {
-        1: "NO_CLASS",
-        2: "NO_CLASS",
-        3: "NO_CLASS",
-        4: "NO_CLASS",
-        5: "NO_CLASS"
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: ""
     };
     // 生成课表模板
     for (var i = 9; i <= 21; i++) {
         if (i < 10) {
-            
             timetableFall["0" + i + ":00"] = Object.assign({}, dayTemplate);
             timetableWinter["0" + i + ":00"] = Object.assign({}, dayTemplate);
-            
             timetableFall["0" + i + ":30"] = Object.assign({}, dayTemplate);
             timetableWinter["0" + i + ":30"] = Object.assign({}, dayTemplate);
         } else {
-            
             timetableFall["" + i + ":00"] = Object.assign({}, dayTemplate);
             timetableWinter["" + i + ":00"] = Object.assign({}, dayTemplate);
-            
             timetableFall["" + i + ":30"] = Object.assign({}, dayTemplate);
             timetableWinter["" + i + ":30"] = Object.assign({}, dayTemplate);
         }
@@ -281,30 +287,51 @@ function initTimetableTemplat(timetableFall, timetableWinter){
 }
 
 // index表的number
-function displayTimetable (term, index) {
+function displayTimetable (term, index, tag="#timetable-output") {
     // 将元素加入至HTML
-    let p = document.querySelector("#timetable-output");
+    let table = document.querySelector(tag);
     let output = "";
-    let timetable = allTimeTables[index][term];
+    let timetable = allTimeTables[index][term]; //获取课表
     
     for (let time of times) {
         let tLen = time.length;
         output += (time[tLen - 2] == 0 ? `<tr><th>${time}</th>` : `<tr><th></th>`);
         for (let j = 1; j <= 5; j++) {
-            //判断现在用户选择的是否为Fall的课表，否则输出Winter的课表
-            if (timetable[time][j] !== "NO_CLASS") {
-                if (timetable[time][j] !== "NOT_DISPLAY"){
-                    output += timetable[time][j];
-                }
-            } else {
-                output += `<td onclick="tdNoSection(this)"></td>`;
+            if (timetable[time][j] !== ""){
+                let info = timetable[time][j];
+                output += `<td class = "${time}" id = "${j}" onclick="tdHaveSection(this)" style="background-color: ${info["color"]};">${info["course"]}<br>${info["section"]}</td>`;
+            }else{
+                output += `<td class = "${time} "id = "${j}" onclick="tdNoSection(this)"></td>`
             }
         }
         output += `</tr>`;
     }
-    p.innerHTML = output;
+    table.innerHTML = output;
+
+    mergeCells(table); // 合并单元格
 }
 
+function mergeCells(table) {
+    let remove = [];
+    for(let i = 1; i <= 5; i++){
+        let headerCell = null;
+        for (let row of table.rows) {
+            const firstCell = row.cells[i];
+            if (firstCell === null || firstCell.innerText === ""){
+                continue;
+            }
+            if (headerCell === null || firstCell.innerText !== headerCell.innerText) {
+                headerCell = firstCell;
+            } else {
+                headerCell.rowSpan++;
+                remove.push(firstCell);
+            }
+        }
+    }
+    for (let r of remove){
+        r.remove();
+    }
+}
 
 function convertMillisecondsToHM(milliseconds) {
     var hours = parseInt((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -325,9 +352,31 @@ function convertMillisecondsToHM(milliseconds) {
 // 展示具体课程信息
 function tdHaveSection(event){
     let element = document.querySelector("#courseDetaillInfo")
-    let detaillInfo = event.id + "<br>";
-    let proofName = "";
-    detaillInfo += `<a href="https://www.ratemyprofessors.com/search/professors?q=${proofName}">Click me to view the professor ratings</a>`;
+    let day = event.id; // 获取一周的哪一天
+    let time = event.className; //获取时间
+    
+    let timetable = allTimeTables[1]["winter"];
+    let info = timetable[time][day];
+
+    //获取课程详细信息
+    let course = info["course"];
+    let section = info["section"];
+    let location = info["location"];
+    let profName = info["prof"];
+    let detaillInfo = `<p>Course: ${course}<br>Section: ${section}<br>Location: ${location}</p>`;
+    console.log(section);
+    if(profName !== "" && section.includes("LEC")){
+        if (profName.includes(",")){
+            let profNameList = profName.split(',');
+            for(let prof of profNameList){
+                detaillInfo += `<p>Prof. ${prof}: <a href="https://www.ratemyprofessors.com/search/professors?q=${prof}" target="_blank">Click me to view the professor ratings</a></p>`;
+            }
+        }else{
+            detaillInfo += `<p>Prof. ${profName}: <a href="https://www.ratemyprofessors.com/search/professors?q=${profName}" target="_blank">Click me to view the professor ratings</a></p>`;
+        }
+    }
+
+    // 将信息添加进弹窗并激活弹窗
     element.innerHTML = detaillInfo;
     document.querySelector("#displayDetaillCourseInfo").click();
 }
@@ -351,7 +400,7 @@ function switchView() {
 }
   
 
-function switchTerm(term, index=1) {
+function switchTerm(term) {
     // 获取所有的 term 按钮和课程列表
     var termButtons = document.querySelectorAll('.term-btn');
     var coursesSections = document.querySelectorAll('.courses-section-content');
@@ -364,26 +413,38 @@ function switchTerm(term, index=1) {
         section.style.display = 'none';
     });
 
-    displayTimetable(term, index);
-
+    
     // 根据选择的学期显示课程列表，并激活相应的按钮
     if(term === 'fall') {
+        displayTimetable(term, 1);
         document.getElementById('fall-courses').style.display = 'block';
         document.querySelector(`button[onclick="switchTerm(\'fall\')"]`).classList.add('active');
     } else {
+        displayTimetable(term, 1);
         document.getElementById('winter-courses').style.display = 'block';
         document.querySelector(`button[onclick="switchTerm(\'winter\')"]`).classList.add('active');
     }
 }
 
 // 随机颜色
+var usedColor = []
 function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
+    let color = 360 * Math.random();
+    while(true){
+        let checkStop = true;
+        for(let used of usedColor){
+            if(Math.abs(color - used) < 0.5){
+                checkStop = false;
+                break;
+            }
+        }
+        if(checkStop){
+            break;
+        }
+        color = 360 * Math.random();
     }
-    return color;
+    usedColor.push(color);
+    return "hsla(" + ~~(color) + "," +"70%," + "80%,1)";
 }
 
 // 生成课程元素
@@ -401,7 +462,8 @@ function generateCourses(course,term,color=null) {
     const colorIndicator = document.createElement('div');
     colorIndicator.className = 'color-indicator';
     colorIndicator.setAttribute('data-course-code', course);
-    colorIndicator.style.backgroundColor = color!=null ? color:getRandomColor(); // 设置随机颜色
+    
+    colorIndicator.style.backgroundColor = (color != null ? color : getRandomColor()); // 设置随机颜色
 
     // 名称
     const courseName = document.createElement('span');
