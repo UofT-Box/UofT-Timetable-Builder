@@ -178,7 +178,7 @@ def get_walking_info(api_key, origin, destination):
     else:
         return None, None
 
-api_key = 'AIzaSyAIS9hioan8Vys9MR_ZfyBAzWi2E0kr4yA'
+api_key = '' #add you own google api key
 conn = sqlite3.connect('walking_distances.db')
 cursor = conn.cursor()
 
@@ -193,6 +193,9 @@ else:
 
 conn.close()
 
+######################################
+# For test, check if api is working  #
+######################################
 # cursor.execute('''
 #     CREATE TABLE IF NOT EXISTS distances (
 #         id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -164,6 +164,11 @@ function getDivision(courseCode) {
 
 function addCourseToTimetable() {
     switchButton("toggle");
+    let weigthDict = getWeight();
+
+    let timeWeight = weigthDict["timeWeight"];
+    let daySpend = weigthDict["daySpend"] * Number(getRadioInput("days-spent"));
+    let classInterval = weigthDict["classInterval"] * Number(getRadioInput("class-interval"));
     $.ajax({
         type: "post",
         url: "http://localhost:8080/generateTimetable",
@@ -171,7 +176,10 @@ function addCourseToTimetable() {
         data: JSON.stringify({
             fallCourseList: fallCourseChoose,
             winterCourseList: winterCourseChoose,
-            preferenceWeight: []
+            preferredTimeIndex: Number(getRadioInput("start-time")),
+            preferredTimeWeight: timeWeight,
+            balanceWeight: daySpend,
+            breakTimeWeight: classInterval
         }),
         dataType: "json",
         async: false,
@@ -193,6 +201,7 @@ function addCourseToTimetable() {
 
 function displaySmallVeiw(){
     let smallVeiw = document.querySelector("#small-view");
+    smallVeiw.innerHTML = "";
     let output = "";
     let len = Object.keys(allTimeTables).length;
     output += `<div class= "row">`;
@@ -229,16 +238,15 @@ function displaySmallVeiwTimetable (index) {
     for (let i = 1; i <= len; i++){
         for (let term of terms){
             let table = document.querySelector("#" + term + "Table" + (i));
-            // console.log("#" + term + "Table" + (i));
             let output = "";
             let timetable = allTimeTables[i][term]; //获取课表
             
             for (let time of times) {
-                output += `<tr style="height:0.000001px">`;
+                output += `<tr>`;
                 for (let j = 1; j <= 5; j++) {
                     if (timetable[time][j] !== ""){
                         let info = timetable[time][j];
-                        output += `<td style="background-color: ${info["color"]};"></td>`;
+                        output += `<td id="${info["section"]}${info["color"]}" style="background-color: ${info["color"]};"></td>`;
                     }else{
                         output += `<td></td>`
                     }
@@ -247,11 +255,31 @@ function displaySmallVeiwTimetable (index) {
             }
             // 将元素加入至HTML
             table.innerHTML = output;
-            // mergeCells(table); // 合并单元格
+            mergeSmaillViewCells(table); // 合并单元格
         }
     }
 }
-
+function mergeSmaillViewCells(table) {
+    let remove = [];
+    for(let i = 0; i <= 4; i++){
+        let headerCell = null;
+        for (let row of table.rows) {
+            const firstCell = row.cells[i];
+            if (firstCell === null || firstCell.id === ""){
+                continue;
+            }
+            if (headerCell === null || firstCell.id !== headerCell.id) {
+                headerCell = firstCell;
+            } else {
+                headerCell.rowSpan++;
+                remove.push(firstCell);
+            }
+        }
+    }
+    for (let r of remove){
+        r.remove();
+    }
+}
 function getCourseColor(courseCode, session) {
     // 获取特定学期的颜色指示器
     var colorIndicator = document.querySelector('.color-indicator[data-course-code="' + courseCode + session + '"]');
@@ -264,6 +292,7 @@ function getCourseColor(courseCode, session) {
 }
 
 function saveTimetable(allGeneratedTimetable){
+    allTimeTables = {};
     let index = 1;
     for (let generatedTimetable of allGeneratedTimetable){
         //初始化timetable模板
@@ -420,7 +449,7 @@ function tdHaveSection(event){
     let location = info["location"];
     let profName = info["prof"];
     let detaillInfo = `<p>Course: ${course}<br>Section: ${section}<br>Location: ${location}</p>`;
-    console.log(section);
+
     if(profName !== "" && section.includes("LEC")){
         if (profName.includes(",")){
             let profNameList = profName.split(',');
@@ -465,13 +494,11 @@ function switchButton(name) {
         generateBtn.classList.toggle('active');
         toggleBTn.classList.toggle('active');
     }
-    
-    
 }
   
 
 function switchTerm(term,index=1) {
-    console.log(term);
+
     // 获取所有的 term 按钮和课程列表
     var termButtons = document.querySelectorAll('.term-btn');
     var coursesSections = document.querySelectorAll('.courses-section-content');
@@ -589,98 +616,8 @@ function deleteCourse(deleteBtn){
             break;
         }
     }
-    
+    switchButton("generate");
 }
-
-// let dragSrcEl = null;
-
-// function handleDragStart(e) {
-//     dragSrcEl = this;
-//     e.dataTransfer.effectAllowed = 'move';
-//     e.dataTransfer.setData('text/html', this.outerHTML);
-
-//     // 保存当前的选项状态
-//     this.storedInputs = [];
-//     let inputs = this.querySelectorAll('input[type="radio"]');
-//     inputs.forEach(input => {
-//         this.storedInputs.push({
-//             id: input.id,
-//             checked: input.checked
-//         });
-//     });
-// }
-
-// function handleDragOver(e) {
-//     //默认不允许放置
-//     if (e.preventDefault) {
-//         e.preventDefault();
-//     }
-//     // 设置放置效果
-//     e.dataTransfer.dropEffect = 'move';
-//     return false;
-// }
-
-// function handleDragEnter(e) {
-//     // 当某被拖拽的元素进入另一元素时调用
-//     this.classList.add('over');
-// }
-
-// function handleDragLeave(e) {
-//     // 当被拖拽的元素离开某元素时调用
-//     this.classList.remove('over');
-// }
-
-// function handleDrop(e) {
-//     if (e.stopPropagation) {
-//         e.stopPropagation(); // 阻止事件冒泡
-//     }
-
-//     if (dragSrcEl !== this) {
-//         // 执行放置操作
-//         this.parentNode.removeChild(dragSrcEl);
-//         const dropHTML = e.dataTransfer.getData('text/html');
-//         this.insertAdjacentHTML('beforebegin', dropHTML);
-//         const droppedElem = this.previousSibling;
-//         addDnDHandlers(droppedElem);
-
-//         // 恢复选项状态
-//         droppedElem.storedInputs.forEach(inputInfo => {
-//             const input = droppedElem.querySelector(`#${inputInfo.id}`);
-//             if (input) {
-//                 input.checked = inputInfo.checked;
-//             }
-//         });
-//     }
-
-//     return false;
-// }
-
-// function handleDragEnd(e) {
-//     // 拖拽结束时调用
-//     this.classList.remove('over');
-//     this.classList.remove('dragging');
-// }
-
-// function addDnDHandlers(elem) {
-//     elem.addEventListener('dragstart', handleDragStart, false);
-//     elem.addEventListener('dragover', handleDragOver, false); // 已定义的其他处理函数
-//     elem.addEventListener('drop', handleDrop, false);
-//     elem.addEventListener('dragend', handleDragEnd, false); // 已定义的其他处理函数
-
-//     // 存储每个偏好设置的当前选中状态
-//     let inputs = elem.querySelectorAll('input[type="radio"]');
-//     elem.storedInputs = [];
-//     inputs.forEach(input => {
-//         elem.storedInputs.push({
-//             id: input.id,
-//             checked: input.checked
-//         });
-//     });
-// }
-
-// 获取所有偏好设置项
-const prefs = document.querySelectorAll('.preference');
-prefs.forEach(addDnDHandlers);
 
 function dragInit(){
     let list = document.querySelector('.preference-list');
@@ -690,8 +627,8 @@ function dragInit(){
         currentLi = e.target;
         setTimeout(()=>{
             currentLi.classList.add('moving');
-        })
-    })
+        });
+    });
 
     list.addEventListener('dragenter',(e)=>{
         e.preventDefault();
@@ -702,20 +639,69 @@ function dragInit(){
         let currentIndex = liArray.indexOf(currentLi);
         let targetindex = liArray.indexOf(e.target);
 
-        if(currentIndex<targetindex){
-
-            list.insertBefore(currentLi,e.target.nextElementSibling);
-        }else{
-
-            list.insertBefore(currentLi,e.target);
+        if (currentLi.id === "weigth" && e.target.id === "weigth"){
+            switchButton("generate");
+            if(currentIndex < targetindex){
+                list.insertBefore(currentLi,e.target.nextElementSibling);
+            }else{
+                list.insertBefore(currentLi,e.target);
+            }
         }
-    })
+    });
     list.addEventListener('dragover',(e)=>{
         e.preventDefault();
-    })
+    });
     list.addEventListener('dragend',(e)=>{
         currentLi.classList.remove('moving');
-    })
+    });
 }
 
-dragInit();
+function getRadioInput(radioName){
+    var item = null;
+    var obj = document.getElementsByName(radioName)
+    for (var i = 0; i < obj.length; i++) { //遍历Radio 
+        if (obj[i].checked) {
+            item = obj[i].value;                   
+        }
+    }
+    return item;
+}
+
+function getWeight(){
+    let weigth = {
+        "timeWeight": null,
+        "daySpend": null,
+        "classInterval": null
+    };
+    let parentDiv = document.getElementById('weigth-parent');
+    // 获取所有子元素
+    var children = parentDiv.children;
+
+    // 遍历并打印每个子元素及其顺序
+    let idx = 4;
+    for (let i = 0; i < children.length; i++) {
+        if(children[i].id === "weigth"){
+
+            let preferenceChildren = children[i].innerText;
+
+            if(preferenceChildren.includes("Start time")){
+                weigth["timeWeight"] = idx;
+                idx--;
+            }else if(preferenceChildren.includes("Class Interval")){
+                weigth["classInterval"] = idx;
+                idx--;
+            }else if(preferenceChildren.includes("Days Spent")){
+                weigth["daySpend"] = idx;
+                idx--;
+            }else if(preferenceChildren.includes("Reasonable Walking Time")){
+                weigth["walkTime"] = idx;
+                idx--;
+            }
+
+            if(idx < 0){
+                break;
+            }
+        }
+    }
+    return weigth;
+}

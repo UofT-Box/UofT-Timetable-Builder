@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserInput;
+import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 import com.uoftbox.uofttimetablebuilder.repository.courses.RelevantCourse;
 import com.uoftbox.uofttimetablebuilder.service.TimetableService;
 import com.uoftbox.uofttimetablebuilder.service.dbservice.SearchBarService;
@@ -38,12 +39,18 @@ public class TimetableContoller {
     public List<List<List<CourseInfo>>> generateTimetable(@RequestBody UserInput userInput) throws InterruptedException, ExecutionException{
         List<String> fallCourseCode = userInput.getFallCourseCode();
         List<String> winterCourseCode = userInput.getWinterCourseCode();
-        
-        CompletableFuture<List<List<CourseInfo>>> fallTimetable = timetableService.getTopTimetable(fallCourseCode, "F");
-        CompletableFuture<List<List<CourseInfo>>> winterTimetable = timetableService.getTopTimetable(winterCourseCode, "S");
+
+        UserPreferences userPreferences = new UserPreferences();
+        userPreferences.setPreferredTimeIndex(userInput.getPreferredTimeIndex());
+        userPreferences.setPreferredTimeWeight((double) userInput.getPreferredTimeWeight());
+        userPreferences.setBalanceWeight((double)userInput.getBalanceWeight());
+        userPreferences.setBreakTimeWeight((double)userInput.getBreakTimeWeight());
+        userPreferences.setScoreThreshold(-100000.0);
+
+        CompletableFuture<List<List<CourseInfo>>> fallTimetable = timetableService.getTopTimetable(fallCourseCode, "F",userPreferences);
+        CompletableFuture<List<List<CourseInfo>>> winterTimetable = timetableService.getTopTimetable(winterCourseCode, "S",userPreferences);
         CompletableFuture.allOf(fallTimetable,winterTimetable).join();
 
-        
         List<List<CourseInfo>> fallTimetableResult = fallTimetable.get();
         List<List<CourseInfo>> winterTimetableResult = winterTimetable.get();
 

@@ -9,9 +9,9 @@ import java.util.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.uoftbox.uofttimetablebuilder.model.TimetableMetrics;
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimeAndPlace;
+import com.uoftbox.uofttimetablebuilder.model.backend.TimetableMetrics;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimetableWithScore;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 import com.uoftbox.uofttimetablebuilder.service.dbservice.CourseDataService;
@@ -25,15 +25,12 @@ public class TimetableGeneratService {
     @Autowired
     private DistanceService distanceService;
     
-    public List<List<CourseInfo>> generateAllTimetables(Map<String, Map<String, Map<String, List<CourseInfo>>>> courses) {
+    public List<List<CourseInfo>> generateAllTimetables(Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, UserPreferences userPreferences) {
         Queue<TimetableWithScore> queue = new PriorityQueue<>();
         TimetableMetrics metrics = new TimetableMetrics();
         
         List<List<CourseInfo>> allTimetables = new ArrayList<>();
         List<CourseInfo> currentTimetable = new ArrayList<>();
-        
-        //TODO: 这里需要跟前端做交互
-        UserPreferences userPreferences = new UserPreferences(2,1,2,3,0);
 
         generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, 0, 0);
 
@@ -89,7 +86,7 @@ public class TimetableGeneratService {
             boolean conflict = sectionInfo.stream().anyMatch(classInfo -> isConflict(classInfo, currentTimetable));
 
             if (!conflict) {
-                //TODO: conflict
+                
                 TimetableMetrics savedMetrics = new TimetableMetrics(metrics); // 保存当前状态
 
                 for (CourseInfo course : sectionInfo) {

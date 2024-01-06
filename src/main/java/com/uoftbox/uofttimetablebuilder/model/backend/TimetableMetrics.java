@@ -1,12 +1,10 @@
-package com.uoftbox.uofttimetablebuilder.model;
+package com.uoftbox.uofttimetablebuilder.model.backend;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
-import com.uoftbox.uofttimetablebuilder.model.backend.TimeAndPlace;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 
 public class TimetableMetrics {

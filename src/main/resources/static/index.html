@@ -114,35 +114,35 @@
             <!-- 偏好设置 -->
             <div class = "preference" id="preferences-section">
                 <h4>Preferences:</h4>
-                <div class = "preference-list" id="preferences-section">
-                    <div class="preference" draggable="true">
+                <div class = "preference-list" id="weigth-parent">
+                    <div class="preference" id = "weigth" draggable="true">
                         <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
-                        <span>Start time</span>
+                        <span id = "weight-name">Start time</span>
                         <div class="options">
-                            <input type="radio" id="start-early" name="start-time" value="early"><label for="start-early">Early</label>
-                            <input type="radio" id="start-mid" name="start-time" value="mid" checked><label for="start-mid">Mid</label>
-                            <input type="radio" id="start-late" name="start-time" value="late"><label for="start-late">Late</label>
+                            <input type="radio" id="start-early" name="start-time" value="0"><label for="start-early">Early</label>
+                            <input type="radio" id="start-mid" name="start-time" value="1" checked><label for="start-mid">Mid</label>
+                            <input type="radio" id="start-late" name="start-time" value="2"><label for="start-late">Late</label>
                         </div>
                     </div>
-                    <div class="preference" draggable="true">
+                    <div class="preference" id = "weigth" draggable="true">
                         <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
-                        <span>Class Interval</span>
+                        <span id = "weight-name">Class Interval</span>
                         <div class="options">
-                            <input type="radio" id="interval-short" name="class-interval" value="sort"><label for="interval-short">Short</label>
-                            <input type="radio" id="interval-long" name="class-interval" value="long" checked><label for="interval-long">Long</label>
+                            <input type="radio" id="interval-short" name="class-interval" value="1"><label for="interval-short">Short</label>
+                            <input type="radio" id="interval-long" name="class-interval" value="-1" checked><label for="interval-long">Long</label>
                         </div>
                     </div>
-                    <div class="preference" draggable="true">
+                    <div class="preference" id="weigth" draggable="true">
                         <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
-                        <span>Days Spent</span>
+                        <span id = "weight-name">Days Spent</span>
                         <div class="options">
-                            <input type="radio" id="spent-min" name="days-spent" value="min"><label for="spent-min">Min</label>
-                            <input type="radio" id="spent-max" name="days-spent" value="max" checked><label for="spent-max">Max</label>
+                            <input type="radio" id="spent-min" name="days-spent" value="1"><label for="spent-min">Min</label>
+                            <input type="radio" id="spent-max" name="days-spent" value="-1" checked><label for="spent-max">Max</label>
                         </div>
                     </div>
-                    <div class="preference" draggable="true">
+                    <div class="preference" id = "weigth" draggable="true">
                         <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
-                        <span>Reasonable Walking Time</span>
+                        <span id = "weight-name">Reasonable Walking Time</span>
                     </div>
                 </div>
             </div>
