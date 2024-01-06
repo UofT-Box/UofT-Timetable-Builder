@@ -35,7 +35,7 @@ public class TimetableService {
         
         if (allTimetables.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No timetable find");
 
-        Collections.shuffle(allTimetables);
+        // Collections.shuffle(allTimetables);
         
         return CompletableFuture.completedFuture(allTimetables);
     }

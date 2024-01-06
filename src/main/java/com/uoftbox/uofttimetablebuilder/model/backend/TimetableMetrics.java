@@ -7,6 +7,9 @@ import java.util.List;
 
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class TimetableMetrics {
     private int[] timeDistribution; // 存储早中晚的课程分布
     private List<Integer> dailyCourseCounts; // 每天的课程量
@@ -84,9 +87,9 @@ public class TimetableMetrics {
         // 根据 TimeAndPlace 确定它属于一天中的哪个时间段
         // 早上：0，中午：1，晚上：2
         int hour = tap.getStart();
-        if (hour >= 25200000 && hour < 43200000) {
+        if (hour < 36000000) {
             return 0;
-        } else if (hour >= 43200000 && hour < 61200000) {
+        } else if (hour >= 36000000 && hour < 57600000) {
             return 1;
         } else {
             return 2;
@@ -135,13 +138,20 @@ public class TimetableMetrics {
         // 检查是否有课程
         if (totalCourses > 0) {
             // 计算用户首选时间段内的课程比例
-            preferredTimeRatio = (double) timeDistribution[userPreferences.getPreferredTimeIndex()] / totalCourses;
+            preferredTimeRatio = ((double) timeDistribution[userPreferences.getPreferredTimeIndex()]) / totalCourses;
             // System.out.println(timeDistribution[userPreferences.getPreferredTimeIndex()]);
         } else {
             // 如果没有课程，则比例为0
             preferredTimeRatio = 0;
         }
-        score += 2 * preferredTimeRatio * userPreferences.getPreferredTimeWeight();
+        double a = (double) timeDistribution[userPreferences.getPreferredTimeIndex()];
+        if(a > 2){
+            log.info("preferredTimeRatio: "+preferredTimeRatio);
+            log.info("choose: "+a);
+            log.info("totla: "+totalCourses);
+            log.info("time: "+score);
+            score += 20 * preferredTimeRatio * userPreferences.getPreferredTimeWeight();
+        }
         // System.out.println("总课程数量分数：" + score);
 
         // 每天课程数量的均衡性评分
@@ -156,7 +166,7 @@ public class TimetableMetrics {
             varianceSum += Math.pow(count - averageCoursesPerDay, 2);
         }
         double variance = varianceSum / dailyCourseCounts.size();
-        score += (1 - Math.sqrt(variance)) * userPreferences.getBalanceWeight(); // 低差异得高分
+        score += 10 * (1 - Math.sqrt(variance)) * userPreferences.getBalanceWeight(); // 低差异得高分
         // System.out.println("差异评分:" + (1 - Math.sqrt(variance)) * userPreferences.getBalanceWeight());
 
         // 平均每天课间时间评分
@@ -166,10 +176,10 @@ public class TimetableMetrics {
         }
         double averageBreakTime = dailyBreakTimes.isEmpty() ? 0 : totalBreakTime / dailyBreakTimes.size();
         averageBreakTime = averageBreakTime/36000000;
-        score += averageBreakTime * userPreferences.getBreakTimeWeight();
+        score += 10 * averageBreakTime * userPreferences.getBreakTimeWeight();
         // System.out.println("课间时间评分: " + averageBreakTime * userPreferences.getBreakTimeWeight());
         
-
+        log.info("total: "+score);
         return score;
     }
 }
