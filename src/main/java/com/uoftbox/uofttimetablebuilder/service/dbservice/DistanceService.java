@@ -1,9 +1,7 @@
 package com.uoftbox.uofttimetablebuilder.service.dbservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.uoftbox.uofttimetablebuilder.repository.distance.DistancesRepository;
 
@@ -22,7 +20,6 @@ public class DistanceService {
 
     public Integer getDuration(String origin, String destination){
         Integer duration = distancesRepository.findDurationByLocation(origin, destination);
-        if (duration == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        return duration;
+        return duration != null ? duration : -1; // 如果未找到时间，返回 -1
     }
 }

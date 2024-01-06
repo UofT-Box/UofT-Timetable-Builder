@@ -9,13 +9,31 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserInput {
     private List<String> fallCourseList;
     private List<String> winterCourseList;
+    private int preferredTimeIndex; // 0 代表早上, 1 代表中午, 2 代表晚上
+    private int preferredTimeWeight; // 时间分布偏好的权重
+    private int balanceWeight; // 课程均衡性的权重
+    private int breakTimeWeight; // 课间时间的权重
 
+    
     public UserInput() {
-
+        
+    }    
+    
+    public UserInput(List<String> fallCourseList, List<String> winterCourseList, int preferredTimeIndex,
+            int preferredTimeWeight, int balanceWeight, int breakTimeWeight) {
+        this.fallCourseList = fallCourseList;
+        this.winterCourseList = winterCourseList;
+        this.preferredTimeIndex = preferredTimeIndex;
+        this.preferredTimeWeight = preferredTimeWeight;
+        this.balanceWeight = balanceWeight;
+        this.breakTimeWeight = breakTimeWeight;
     }
 
-    public UserInput(List<String> winterCourseList, List<String> fallCourseList) {
-        this.winterCourseList = winterCourseList;
+    public List<String> getFallCourseList() {
+        return fallCourseList;
+    }
+
+    public void setFallCourseList(List<String> fallCourseList) {
         this.fallCourseList = fallCourseList;
     }
 
@@ -23,16 +41,40 @@ public class UserInput {
         return winterCourseList;
     }
 
-    public List<String> getFallCourseList() {
-        return fallCourseList;
-    }
-
     public void setWinterCourseList(List<String> winterCourseList) {
         this.winterCourseList = winterCourseList;
     }
 
-    public void setFallCourseList(List<String> fallCourseList) {
-        this.fallCourseList = fallCourseList;
+    public int getPreferredTimeIndex() {
+        return preferredTimeIndex;
+    }
+
+    public void setPreferredTimeIndex(int preferredTimeIndex) {
+        this.preferredTimeIndex = preferredTimeIndex;
+    }
+
+    public int getPreferredTimeWeight() {
+        return preferredTimeWeight;
+    }
+
+    public void setPreferredTimeWeight(int preferredTimeWeight) {
+        this.preferredTimeWeight = preferredTimeWeight;
+    }
+
+    public int getBalanceWeight() {
+        return balanceWeight;
+    }
+
+    public void setBalanceWeight(int balanceWeight) {
+        this.balanceWeight = balanceWeight;
+    }
+
+    public int getBreakTimeWeight() {
+        return breakTimeWeight;
+    }
+
+    public void setBreakTimeWeight(int breakTimeWeight) {
+        this.breakTimeWeight = breakTimeWeight;
     }
 
     public List<String> getFallCourseCode(){
@@ -47,7 +89,7 @@ public class UserInput {
         List<String> result = new ArrayList<>();
         for (String course : courseList) {
             int courseCodeEndIdx = getCourseCodeEndIdx(course);
-            if (courseCodeEndIdx == -1) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            if (courseCodeEndIdx == -1) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not finde course code index");
             String courseCode = course.substring(0, courseCodeEndIdx);
             result.add(courseCode);
         }
