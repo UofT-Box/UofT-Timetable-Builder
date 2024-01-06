@@ -29,10 +29,10 @@ public class TimetableGeneratService {
         Queue<TimetableWithScore> queue = new PriorityQueue<>();
         TimetableMetrics metrics = new TimetableMetrics();
         
-        List<List<CourseInfo>> allTimetables = new ArrayList<>();
+        int timeTableNumber = 0;
         List<CourseInfo> currentTimetable = new ArrayList<>();
 
-        generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, 0, 0);
+        generateTimetables(queue, metrics, courses, currentTimetable, timeTableNumber, userPreferences, 0, 0);
 
         // 创建最终的课程表列表
         List<List<CourseInfo>> topTimetables = new ArrayList<>();
@@ -42,18 +42,25 @@ public class TimetableGeneratService {
             TimetableWithScore tws = queue.poll();
             List<CourseInfo> ttb = tws.getTimetable();
             selectOptimalTuts(ttb);
-            topTimetables.add(ttb);
+            topTimetables.add(0,ttb);
         }
+        int size = topTimetables.size();
+        int[] b = new int[size]; 
+        int j = size; 
+        for (int i = 0; i < size; i++) { 
+            b[j - 1] = topTimetables[i]; 
+            j = j - 1; 
+        } 
         return topTimetables;
     }
 
-    private void generateTimetables(Queue<TimetableWithScore> queue, TimetableMetrics metrics, Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, List<CourseInfo> currentTimetable, List<List<CourseInfo>> allTimetables, UserPreferences userPreferences, int courseIndex, int typeIndex) {
+    private void generateTimetables(Queue<TimetableWithScore> queue, TimetableMetrics metrics, Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, List<CourseInfo> currentTimetable, int timeTableNumber, UserPreferences userPreferences, int courseIndex, int typeIndex) {
 
         if (courseIndex == courses.size()) {
             double score = metrics.calculateScore(userPreferences);
+            timeTableNumber ++;
             if (score > userPreferences.getScoreThreshold()) {
                 queue.add(new TimetableWithScore(new ArrayList<>(currentTimetable), score));
-                allTimetables.add(new ArrayList<>(currentTimetable));
 
                 // 保持队列大小最多为50
                 while (queue.size() > 50) {
@@ -63,7 +70,7 @@ public class TimetableGeneratService {
             return;
         }
 
-        if (allTimetables.size() >= 100000){
+        if (timeTableNumber >= 100){
             return;
         }
 
@@ -73,7 +80,7 @@ public class TimetableGeneratService {
         List<String> courseTypes = new ArrayList<>(courseInfo.keySet());
 
         if (typeIndex == courseTypes.size()) {
-            generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, courseIndex + 1, 0);
+            generateTimetables(queue, metrics, courses, currentTimetable, timeTableNumber, userPreferences, courseIndex + 1, 0);
             return;
         }
 
@@ -98,7 +105,7 @@ public class TimetableGeneratService {
                 }
 
                 currentTimetable.addAll(sectionInfo);
-                generateTimetables(queue, metrics, courses, currentTimetable, allTimetables, userPreferences, courseIndex, typeIndex + 1);
+                generateTimetables(queue, metrics, courses, currentTimetable, timeTableNumber, userPreferences, courseIndex, typeIndex + 1);
 
                 metrics.restore(savedMetrics); // 回溯，还原状态
                 currentTimetable.removeAll(sectionInfo);
@@ -161,9 +168,10 @@ public class TimetableGeneratService {
                 if (newTimeSlot.getDay() == existingTimeSlot.getDay() && !canAdd(newTimeSlot, existingTimeSlot)) {
                     return true;
                 }
-                if(campusesCode == 1 && !enoughWalkingTimeUTSG(newTimeSlot, existingTimeSlot)){
-                    return true;
-                }
+                
+                // if(campusesCode == 1 && !enoughWalkingTimeUTSG(newTimeSlot, existingTimeSlot)){
+                //     return true;
+                // }
             }
         }
         return false;

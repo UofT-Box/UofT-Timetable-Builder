@@ -52,6 +52,14 @@
         <a class="active" href="./timetablebuilder.html">Timetable Builder</a>
     </div>
     <br> -->
+    <div class="timetable-header">
+        <div class="title">
+            <span class="title-main">UofT</span><span class="title-sub">Timetable Biluder</span>
+        </div>
+        <nav class="timetable-header-nav">
+        </nav>
+        <button class="report-issue-btn">Report Issue</button>
+    </div>
     <div class="input">
         <select class="relevantCourses" id="select-state" placeholder="Enter the course code/name...">
             <option value="">Enter the course code/name...</option>
@@ -95,20 +103,23 @@
             <div class="courses-section" id="courses">
                 <div class="courses-section-title">
                     <div class="term-toggle">
-                        <button type="button" class="term-btn active" onclick="switchTerm('fall')">Fall</button>
-                        <button type="button" class="term-btn" onclick="switchTerm('winter')">Winter</button>
+                        <button type="button" class="term-btn active" id = "fall-term-btn" onclick="switchTerm('fall')">Fall</button>
+                        <button type="button" class="term-btn" id = "winter-term-btn" onclick="switchTerm('winter')">Winter</button>
                     </div>
                 </div>
                 <h4> Courses</h4>
-                <!-- 秋季课程列表 -->
-                <div class="courses-section-content" id="fall-courses">
-                    <!-- 秋季课程内容 -->
+                <div class="course-choose-list">
+                    <!-- 秋季课程列表 -->
+                    <div class="courses-section-content" id="fall-courses">
+                        <!-- 秋季课程内容 -->
+                    </div>
+
+                    <!-- 冬季课程列表 -->
+                    <div class="courses-section-content" id="winter-courses" style="display: none;">
+                        <!-- 冬季课程内容 -->
+                    </div>
                 </div>
 
-                <!-- 冬季课程列表 -->
-                <div class="courses-section-content" id="winter-courses" style="display: none;">
-                    <!-- 冬季课程内容 -->
-                </div>
                 
             </div>
             <!-- 偏好设置 -->

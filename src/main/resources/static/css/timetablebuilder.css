@@ -3,12 +3,16 @@
     width: 100%;
 
 }
-
+.course-choose-list {
+    overflow: auto;
+    height: 150px;
+}
 .timetable {
+    overflow: auto;
     flex: 2;
     width: auto;
+    height: 600px;
 }
-
 .sidebar {
     width: 33%;
     /* 其他样式保持不变 */
@@ -18,19 +22,12 @@
     display: none; /* 默认不显示 */
 }
 
-.generate-schedule,
-.toggle-view {
-    display: none;
-}
+
   
 .timetable-view.active {
     display: block; /* 激活的视图显示 */    
 }
 
-.generate-schedule.active,
-.toggle-view.active {
-    display: block;
-}
 
 #small-view {
     /* display: flex; */
@@ -46,7 +43,7 @@
 }
 
 .row .timetable-thumbnail {
-    width: 33% !important; /* 只有在没有其他方法时才使用 !important */
+    width: 33% !important;
     border: 1px solid #ccc;
     text-align: center;
     padding: 10px;
@@ -82,40 +79,11 @@
     text-align: center; /* 按钮居中 */
 }
 
-.generate-schedule,
-.toggle-view {
-    width: 100%; /* 按钮宽度与侧边栏相同 */
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
 
-.generate-schedule:hover {
-    background-color: #45a049;
-}
 
 .term-toggle {
     text-align: center;
     margin-bottom: 20px;
-}
-
-.term-btn {
-    background-color: #e7e7e7;
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    margin-right: 5px;
-    /* 可以根据需要调整样式 */
-}
-
-.term-btn.active {
-    background-color: #4CAF50;
-    color: white;
 }
 
 .courses-section-title {
@@ -179,11 +147,6 @@
     zoom: 500%;
 } */
 
-.timetable {
-    height: 600px;
-    overflow: auto;
-}
-
 .preference-list.moving{
     background: transparent;
     color: transparent;
@@ -195,4 +158,127 @@
     transform: translateY(-2px); /* 向上移动10像素 */
     /* width:50%; */
     zoom:80%;
+}
+
+/*滚动条美化*/
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    border-radius: 3px;
+    background: rgba(0,0,0,0.06);
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.08);
+}
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: rgba(0,0,0,0.12);
+    -webkit-box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+
+/*buttons*/
+
+.generate-schedule,
+.toggle-view {
+    width: 100%;
+    background-color: rgb(8, 121, 235);
+    
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.generate-schedule:hover,
+.toggle-view:hover {
+    background-color: #2263e4;
+}
+
+.generate-schedule,
+.toggle-view {
+    display: none;
+}
+
+.generate-schedule.active,
+.toggle-view.active {
+    display: block;
+}
+
+.term-btn {
+    background-color: #e7e7e7;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.term-btn:hover{
+    background-color: #d0caca;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.term-btn.active {
+    /* background-color: #4CAF50; */
+    background-color:rgb(8, 121, 235);
+    color: white;
+}
+
+
+.timetable-header {
+    background-color: #004080; 
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em 1em; 
+    border-radius: 0 0 10px 10px;
+}
+
+.timetable-header h1 {
+    margin: 0;
+}
+
+.report-issue-btn {
+    background-color: #f8f8f8; 
+    color: #004080;
+    border: none;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.report-issue-btn:hover {
+    background-color: #e8e8e8;
+}
+
+.title {
+    font-family: 'Arial', sans-serif; /* 或者您喜欢的其他字体 */
+    color: #004080; /* 深蓝色 */
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block; /* 或 flex，取决于您的布局需求 */
+}
+
+.title-main {
+    font-weight: bold;
+    color: #FFF; /* 白色字体 */
+    background-color: #004080; /* 深蓝色背景 */
+    padding: 5px 10px;
+    border-radius: 5px 0 0 5px; /* 左边弧度 */
+}
+
+.title-sub {
+    font-weight: normal;
+    color: #004080; /* 深蓝色字体 */
+    padding: 5px 10px;
+    border-radius: 0 5px 5px 0; /* 右边弧度 */
 }

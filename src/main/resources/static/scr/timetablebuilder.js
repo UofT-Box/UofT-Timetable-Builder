@@ -54,6 +54,9 @@ $(document).ready(function(){
         }
     });
 })
+$(document).ready(function(){
+    checkboxMonitor();
+})
 function courseSelectChangeEvent(selectControl){
     let courseCode = selectControl.getValue(); // 获取用户的选择
     if (courseCode == ""){ //判断用户选择是否为空
@@ -678,7 +681,7 @@ function getWeight(){
     var children = parentDiv.children;
 
     // 遍历并打印每个子元素及其顺序
-    let idx = 4;
+    let idx = 8;
     for (let i = 0; i < children.length; i++) {
         if(children[i].id === "weigth"){
 
@@ -686,22 +689,36 @@ function getWeight(){
 
             if(preferenceChildren.includes("Start time")){
                 weigth["timeWeight"] = idx;
-                idx--;
+                idx -= 2;
             }else if(preferenceChildren.includes("Class Interval")){
                 weigth["classInterval"] = idx;
-                idx--;
+                idx -= 2;
             }else if(preferenceChildren.includes("Days Spent")){
                 weigth["daySpend"] = idx;
-                idx--;
+                idx -= 2;
             }else if(preferenceChildren.includes("Reasonable Walking Time")){
                 weigth["walkTime"] = idx;
-                idx--;
+                idx -= 2;
             }
 
-            if(idx < 0){
+            if(idx <= 0){
                 break;
             }
         }
     }
     return weigth;
+}
+
+
+function checkboxMonitor(){
+    var radios = document.querySelectorAll('input[type=radio]');
+
+    // 为每个单选按钮添加change事件监听器
+    radios.forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                switchButton("generate");
+            }
+        });
+    });
 }
