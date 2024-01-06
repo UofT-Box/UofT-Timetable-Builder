@@ -1,19 +1,35 @@
-.container {
+.containerr {
     display: flex;
     width: 100%;
+
 }
 
 .timetable {
     flex: 2;
-    width: 67%;
+    width: auto;
+}
+
+.sidebar {
+    width: 33%;
+    /* 其他样式保持不变 */
 }
 
 .timetable-view {
     display: none; /* 默认不显示 */
 }
+
+.generate-schedule,
+.toggle-view {
+    display: none;
+}
   
 .timetable-view.active {
     display: block; /* 激活的视图显示 */    
+}
+
+.generate-schedule.active,
+.toggle-view.active {
+    display: block;
 }
 
 #small-view {
@@ -52,10 +68,7 @@
     padding: 10px;
 }
 
-.sidebar {
-    width: 33%;
-    /* 其他样式保持不变 */
-}
+
 
 .courses-section, .preferences-section {
     background-color: #f9f9f9;
@@ -65,11 +78,12 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.generate-button-section {
+.interface-buttons {
     text-align: center; /* 按钮居中 */
 }
 
-.generate-schedule {
+.generate-schedule,
+.toggle-view {
     width: 100%; /* 按钮宽度与侧边栏相同 */
     background-color: #4CAF50;
     color: white;
@@ -159,4 +173,26 @@
 
 .options label {
     margin-left: 5px;
+}
+
+/* .semester.table.table-bordered {
+    zoom: 500%;
+} */
+
+.timetable {
+    height: 600px;
+    overflow: auto;
+}
+
+.preference-list.moving{
+    background: transparent;
+    color: transparent;
+    border: 1px dashed #ccc;
+}  
+
+.svg {
+    /* display: block; */
+    transform: translateY(-2px); /* 向上移动10像素 */
+    /* width:50%; */
+    zoom:80%;
 }

@@ -3,12 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>Timetable Builder</title>
     <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/timetablebuilder.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- CSS --> 
+    <!-- selectize stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+    <!-- bootstrap stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- JavaScript -->
+    <!-- selectize script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <!-- bootstrap script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- randomColor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.6.1/randomColor.min.js"></script>
+
 </head>
 <body>
-    <div class="topnav">
-        <a class="active" href="./index.html">Home</a>
-        <a href="./timetablebuilder.html">Timetable Bulder</a>
+    <!-- templet -->
+    <!-- Button trigger modal -->
+    <button type="button" id="displayDetaillCourseInfo" data-bs-toggle="modal" data-bs-target="#detaillInfo" style="display: none; height: 0px; width: 0px;"></button>
+    <!-- detaill info Modal -->
+    <div class="modal fade" id="detaillInfo" tabindex="-1" aria-labelledby="detaillInfoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="detaillInfoLabel">Detailed Information</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="courseDetaillInfo">
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        </div>
     </div>
+    <!-- Real body start here -->
+    <!-- <div class="topnav">
+        <a href="./index.html">Home</a>
+        <a class="active" href="./timetablebuilder.html">Timetable Builder</a>
+    </div>
+    <br> -->
+    <div class="input">
+        <select class="relevantCourses" id="select-state" placeholder="Enter the course code/name...">
+            <option value="">Enter the course code/name...</option>
+        </select>
+    </div>
+    <div class="containerr">
+        <div class="timetable" >
+            <div id="large-view" class="timetable-view">
+                <!-- 大视图的课程表内容 -->
+                <br>    
+                <div style="width: 100%;">
+                    <!--  -->
+                    <table class="table table-bordered" id="test" style="text-align: center;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>MON</th>
+                                <th>TUE</th>
+                                <th>WED</th>
+                                <th>THU</th>
+                                <th>FRI</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timetable-output">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="small-view" class="timetable-view" >
+                <!-- 小视图的课程表内容 -->
+            </div>
+            <!-- 视图切换按钮 -->
+            <!-- <button id="toggle-view-btn" onclick="switchView()">切换视图</button> -->
+        </div>
+
+        <div class="sidebar">
+            <!-- 学期切换按钮 -->
+        
+            <!-- 用户选择的课程列表 -->
+            <div class="courses-section" id="courses">
+                <div class="courses-section-title">
+                    <div class="term-toggle">
+                        <button type="button" class="term-btn active" onclick="switchTerm('fall')">Fall</button>
+                        <button type="button" class="term-btn" onclick="switchTerm('winter')">Winter</button>
+                    </div>
+                </div>
+                <h4> Courses</h4>
+                <!-- 秋季课程列表 -->
+                <div class="courses-section-content" id="fall-courses">
+                    <!-- 秋季课程内容 -->
+                </div>
+
+                <!-- 冬季课程列表 -->
+                <div class="courses-section-content" id="winter-courses" style="display: none;">
+                    <!-- 冬季课程内容 -->
+                </div>
+                
+            </div>
+            <!-- 偏好设置 -->
+            <div class = "preference" id="preferences-section">
+                <h4>Preferences:</h4>
+                <div class = "preference-list" id="preferences-section">
+                    <div class="preference" draggable="true">
+                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
+                        <span>Start time</span>
+                        <div class="options">
+                            <input type="radio" id="start-early" name="start-time" value="early"><label for="start-early">Early</label>
+                            <input type="radio" id="start-mid" name="start-time" value="mid" checked><label for="start-mid">Mid</label>
+                            <input type="radio" id="start-late" name="start-time" value="late"><label for="start-late">Late</label>
+                        </div>
+                    </div>
+                    <div class="preference" draggable="true">
+                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
+                        <span>Class Interval</span>
+                        <div class="options">
+                            <input type="radio" id="interval-short" name="class-interval" value="sort"><label for="interval-short">Short</label>
+                            <input type="radio" id="interval-long" name="class-interval" value="long" checked><label for="interval-long">Long</label>
+                        </div>
+                    </div>
+                    <div class="preference" draggable="true">
+                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
+                        <span>Days Spent</span>
+                        <div class="options">
+                            <input type="radio" id="spent-min" name="days-spent" value="min"><label for="spent-min">Min</label>
+                            <input type="radio" id="spent-max" name="days-spent" value="max" checked><label for="spent-max">Max</label>
+                        </div>
+                    </div>
+                    <div class="preference" draggable="true">
+                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
+                        <span>Reasonable Walking Time</span>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="interface-buttons">
+                <button type="button" class="generate-schedule active" id = "generate-schedule-btn" onclick="addCourseToTimetable()">GENERATE SCHEDULE</button>
+                <button type="button" class="toggle-view " id="toggle-view-btn" onclick="switchView()">MORE OPPTION</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        
+    </script>
+
+    <script type="text/javascript" src="./scr/timetablebuilder.js"></script>
+</body>
+</body>
 </html>
