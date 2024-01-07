@@ -40,8 +40,7 @@
             <div class="modal-body" id="courseDetaillInfo">
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
         </div>
@@ -58,7 +57,7 @@
         </div>
         <nav class="timetable-header-nav">
         </nav>
-        <button class="report-issue-btn">Report Issue</button>
+        <a href="https://forms.gle/cVXp4STrensowoPw9" target="_blank"><button class="report-issue-btn">Report Issue</button></a>
     </div>
     <div class="input">
         <select class="relevantCourses" id="select-state" placeholder="Enter the course code/name...">
@@ -139,16 +138,16 @@
                         <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
                         <span id = "weight-name">Class Interval</span>
                         <div class="options">
-                            <input type="radio" id="interval-short" name="class-interval" value="1"><label for="interval-short">Short</label>
-                            <input type="radio" id="interval-long" name="class-interval" value="-1" checked><label for="interval-long">Long</label>
+                            <input type="radio" id="interval-short" name="class-interval" value="-1"><label for="interval-short">Short</label>
+                            <input type="radio" id="interval-long" name="class-interval" value="1" checked><label for="interval-long">Long</label>
                         </div>
                     </div>
                     <div class="preference" id="weigth" draggable="true">
                         <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
                         <span id = "weight-name">Days Spent</span>
                         <div class="options">
-                            <input type="radio" id="spent-min" name="days-spent" value="1"><label for="spent-min">Min</label>
-                            <input type="radio" id="spent-max" name="days-spent" value="-1" checked><label for="spent-max">Max</label>
+                            <input type="radio" id="spent-min" name="days-spent" value="-1"><label for="spent-min">Min</label>
+                            <input type="radio" id="spent-max" name="days-spent" value="1" checked><label for="spent-max">Max</label>
                         </div>
                     </div>
                     <div class="preference" id = "weigth" draggable="true">

@@ -29,48 +29,37 @@ public class TimetableGeneratService {
         Queue<TimetableWithScore> queue = new PriorityQueue<>();
         TimetableMetrics metrics = new TimetableMetrics();
         
-        int timeTableNumber = 0;
         List<CourseInfo> currentTimetable = new ArrayList<>();
 
-        generateTimetables(queue, metrics, courses, currentTimetable, timeTableNumber, userPreferences, 0, 0);
+        generateTimetables(queue, metrics, courses, currentTimetable, userPreferences, 0, 0);
 
         // 创建最终的课程表列表
         List<List<CourseInfo>> topTimetables = new ArrayList<>();
 
         // 从优先队列中提取课程表，并添加到列表中
-        while (!queue.isEmpty()) {
+        int counter = 0;
+        while (!queue.isEmpty() && counter < 50) {
             TimetableWithScore tws = queue.poll();
             List<CourseInfo> ttb = tws.getTimetable();
             selectOptimalTuts(ttb);
             topTimetables.add(0,ttb);
+            counter++;
         }
-        int size = topTimetables.size();
-        int[] b = new int[size]; 
-        int j = size; 
-        for (int i = 0; i < size; i++) { 
-            b[j - 1] = topTimetables[i]; 
-            j = j - 1; 
-        } 
+        // topTimetables.add()
         return topTimetables;
     }
 
-    private void generateTimetables(Queue<TimetableWithScore> queue, TimetableMetrics metrics, Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, List<CourseInfo> currentTimetable, int timeTableNumber, UserPreferences userPreferences, int courseIndex, int typeIndex) {
+    private void generateTimetables(Queue<TimetableWithScore> queue, TimetableMetrics metrics, Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, List<CourseInfo> currentTimetable, UserPreferences userPreferences, int courseIndex, int typeIndex) {
 
         if (courseIndex == courses.size()) {
             double score = metrics.calculateScore(userPreferences);
-            timeTableNumber ++;
             if (score > userPreferences.getScoreThreshold()) {
                 queue.add(new TimetableWithScore(new ArrayList<>(currentTimetable), score));
-
-                // 保持队列大小最多为50
-                while (queue.size() > 50) {
-                    queue.poll();
-                }
             }
             return;
         }
 
-        if (timeTableNumber >= 100){
+        if (queue.size() >= 2000000){
             return;
         }
 
@@ -80,7 +69,7 @@ public class TimetableGeneratService {
         List<String> courseTypes = new ArrayList<>(courseInfo.keySet());
 
         if (typeIndex == courseTypes.size()) {
-            generateTimetables(queue, metrics, courses, currentTimetable, timeTableNumber, userPreferences, courseIndex + 1, 0);
+            generateTimetables(queue, metrics, courses, currentTimetable, userPreferences, courseIndex + 1, 0);
             return;
         }
 
@@ -105,7 +94,7 @@ public class TimetableGeneratService {
                 }
 
                 currentTimetable.addAll(sectionInfo);
-                generateTimetables(queue, metrics, courses, currentTimetable, timeTableNumber, userPreferences, courseIndex, typeIndex + 1);
+                generateTimetables(queue, metrics, courses, currentTimetable, userPreferences, courseIndex, typeIndex + 1);
 
                 metrics.restore(savedMetrics); // 回溯，还原状态
                 currentTimetable.removeAll(sectionInfo);
@@ -141,6 +130,9 @@ public class TimetableGeneratService {
             (newTimeSlot.getStart() < existingTimeSlot.getStart() && existingTimeSlot.getStart() < newTimeSlot.getEnd())){
                 return false;
             }
+        if(existingTimeSlot.getStart() == newTimeSlot.getStart() && existingTimeSlot.getEnd() == newTimeSlot.getEnd()){
+            return false;
+        }
         return true;
     }
     
@@ -165,13 +157,14 @@ public class TimetableGeneratService {
 
         for (TimeAndPlace newTimeSlot : newCourseTimeSlots) {
             for (TimeAndPlace existingTimeSlot : existingCourseTimeSlots) {
-                if (newTimeSlot.getDay() == existingTimeSlot.getDay() && !canAdd(newTimeSlot, existingTimeSlot)) {
-                    return true;
+                if (newTimeSlot.getDay() == existingTimeSlot.getDay()) {
+                    if(!canAdd(newTimeSlot, existingTimeSlot)){
+                        return true;
+                    }
+                    // if(campusesCode == 1 && !enoughWalkingTimeUTSG(newTimeSlot, existingTimeSlot)){
+                    //     return true;
+                    // }
                 }
-                
-                // if(campusesCode == 1 && !enoughWalkingTimeUTSG(newTimeSlot, existingTimeSlot)){
-                //     return true;
-                // }
             }
         }
         return false;
@@ -223,8 +216,8 @@ public class TimetableGeneratService {
             for (CourseInfo tut : tuts) {
                 if (tutIndex > 0) {
                     CourseInfo previousCourse = timetable.get(tutIndex - 1);
-                    String origin = previousCourse.getTime().get(0).getLocation();
-                    String destination = tut.getTime().get(0).getLocation();
+                    String origin = previousCourse.getTimeAndPlaceList().get(0).getLocation();
+                    String destination = tut.getTimeAndPlaceList().get(0).getLocation();
                     Integer distance = distanceService.getDistance(origin,destination);
                     if (distance < shortestDistance) {
                         shortestDistance = distance;
