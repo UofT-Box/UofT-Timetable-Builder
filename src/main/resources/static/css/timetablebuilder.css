@@ -143,10 +143,6 @@
     margin-left: 5px;
 }
 
-/* .semester.table.table-bordered {
-    zoom: 500%;
-} */
-
 .preference-list.moving{
     background: transparent;
     color: transparent;
@@ -233,7 +229,7 @@
 
 
 .timetable-header {
-    background-color: #004080; 
+    background-color: #045ab0; 
     color: white;
     display: flex;
     justify-content: space-between;
@@ -260,25 +256,66 @@
 }
 
 .title {
-    font-family: 'Arial', sans-serif; /* 或者您喜欢的其他字体 */
-    color: #004080; /* 深蓝色 */
+    font-family: 'Arial', sans-serif; 
+    color: #055eb6; 
     background-color: white;
     padding: 10px;
     border-radius: 5px;
-    display: inline-block; /* 或 flex，取决于您的布局需求 */
+    display: inline-block; 
 }
 
 .title-main {
     font-weight: bold;
-    color: #FFF; /* 白色字体 */
-    background-color: #004080; /* 深蓝色背景 */
+    color: #FFF; 
+    background-color: #045ab1; 
     padding: 5px 10px;
-    border-radius: 5px 0 0 5px; /* 左边弧度 */
+    border-radius: 5px 0 0 5px;
 }
 
 .title-sub {
     font-weight: normal;
-    color: #004080; /* 深蓝色字体 */
+    color: #004080; 
     padding: 5px 10px;
-    border-radius: 0 5px 5px 0; /* 右边弧度 */
+    border-radius: 0 5px 5px 0;
+}
+
+.timetableTd:hover {
+    background-color: #004080;
+    cursor: pointer;
+    box-shadow: 0px 10px 80px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.semester:hover {
+    box-shadow: 0px 10px 80px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.courses-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.cridit {
+    font-family: 'Arial', sans-serif; 
+    text-align: right;
+    transform: scale(0.7);
+}
+
+#loading-overlay {
+    position: fixed; /* 固定定位，使遮罩全屏覆盖 */
+    display: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); 
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    z-index: 1000000000; /* 确保遮罩在最顶层 */
+}
+
+#loading-overlay img {
+    zoom: 150%;
 }

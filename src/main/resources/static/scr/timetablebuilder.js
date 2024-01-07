@@ -5,14 +5,18 @@ var timeTableIndex = 0;
 var fallCourseChoose = [];
 var winterCourseChoose = [];
 var yearCourseChoose = [];
-var fallCredit = 0;
-var winterCredit = 0;
+var fallCredit = 0.0;
+var winterCredit = 0.0;
 var lastInput = "";
 
 
 var $select = $('.relevantCourses').selectize(); // 输入-下滑选择框生成
 var selectControl = $select[0].selectize;
 
+$(document).ready(function(){
+    // hideLoading();
+    // showLoading();
+})
 $(document).ready(function(){
     dragInit();
 })
@@ -77,13 +81,13 @@ function addSelectedCourse(courseCode, sectionCode){
     if (sectionCode === 'S'){
         winterCourseChoose.push(courseCode);
         generateCourses(courseCode,"winter");
-        switchTerm("winter");
         winterCredit += 0.5;
+        switchTerm("winter");
     }else if(sectionCode === "F"){
         fallCourseChoose.push(courseCode);
         generateCourses(courseCode,"fall");
-        switchTerm("fall");
         fallCredit += 0.5;
+        switchTerm("fall");
     }else{ // 年课
         fallCourseChoose.push(courseCode);
         var color = getRandomColor();
@@ -91,10 +95,9 @@ function addSelectedCourse(courseCode, sectionCode){
         generateCourses(courseCode,"fall",color);
         winterCourseChoose.push(courseCode);
         generateCourses(courseCode,"winter",color);
-        
-
         fallCredit += 0.5;
         winterCredit += 0.5;
+        switchTerm("fall");
     }
 }
 function getSectionCode(courseCode){
@@ -195,6 +198,9 @@ function addCourseToTimetable() {
                 switchTerm("winter",1);
             }
             displaySmallVeiw();
+            hideLoading();
+            let generateBtn = document.querySelector("#generate-schedule-btn");
+            generateBtn.disabled = false;
         },
         error: function () {
             alert("Error, something went wrong pleace contact admin!");
@@ -386,9 +392,9 @@ function displayTimetable (term, index) {
         for (let j = 1; j <= 5; j++) {
             if (timetable[time][j] !== ""){
                 let info = timetable[time][j];
-                output += `<td class = "${time}|${term}" id = "${j}" onclick="tdHaveSection(this)" style="background-color: ${info["color"]};">${info["course"]}<br>${info["section"]}</td>`;
+                output += `<td class = "timetableTd" id = "${time}|${term}|${j}" onclick="tdHaveSection(this)" style="background-color: ${info["color"]};">${info["course"]}<br>${info["section"]}</td>`;
             }else{
-                output += `<td class = "${time}|${term}"id = "${j}" onclick="tdNoSection(this)"></td>`
+                output += `<td class = "" id = "${time}|${term}|${j}" onclick="tdNoSection(this)"></td>`
             }
         }
         output += `</tr>`;
@@ -439,10 +445,10 @@ function convertMillisecondsToHM(milliseconds) {
 // 展示具体课程信息
 function tdHaveSection(event){
     let element = document.querySelector("#courseDetaillInfo")
-    let day = event.id; // 获取一周的哪一天
-    let className = event.className.split("|"); //获取时间
-    let time = className[0];
-    let term = className[1];
+    let idName = event.id.split("|");
+    let time = idName[0];
+    let term = idName[1];
+    let day = idName[2];
     let timetable = allTimeTables[1][term];
     let info = timetable[time][day];
 
@@ -525,6 +531,21 @@ function switchTerm(term,index=1) {
         document.getElementById('winter-courses').style.display = 'block';
         document.querySelector(`button[onclick="switchTerm(\'winter\')"]`).classList.add('active');
     }
+    switchCridit(term);
+}
+
+function switchCridit(term) {
+    let cridit = document.querySelectorAll('.cridit');
+    let output = ""
+    
+    if (term === "fall") {
+        output = `Cridits: ${fallCredit.toFixed(2)} / 3.00`;
+    }else{  
+        output = `Cridits: ${winterCredit.toFixed(2)} / 3.00`;
+    } 
+    cridit.forEach(cridit => {
+        cridit.innerText = output;
+    });
 }
 
 // 随机颜色
@@ -534,7 +555,7 @@ function getRandomColor() {
     while(true){
         let checkStop = true;
         for(let used of usedColor){
-            if(Math.abs(color - used) < 0.5){
+            if(Math.abs(color - used) < 1.0){
                 checkStop = false;
                 break;
             }
@@ -603,12 +624,14 @@ function deleteCourse(deleteBtn){
         if (fallCourseChoose[i] === deleteId){
             fallCourseChoose.splice(i,1);
             fallCredit -= 0.5;
+            switchCridit("fall");
         }
     }
     for (let i = 0; i < winterCourseChoose.length; i++){
         if (winterCourseChoose[i] === deleteId){
             winterCourseChoose.splice(i,1);
             winterCredit -= 0.5;
+            switchCridit("winter");
         }
     }
     while (true){
@@ -722,3 +745,23 @@ function checkboxMonitor(){
         });
     });
 }
+
+
+function showLoading() {
+    document.getElementById('loading-overlay').style.display = 'flex';
+    console.log("show");
+}
+
+// 隐藏加载遮罩
+function hideLoading() {
+    document.getElementById('loading-overlay').style.display = 'none';
+    console.log("hide");
+}
+
+function fetchData() {
+    let generateBtn = document.querySelector("#generate-schedule-btn");
+    generateBtn.disabled = true;
+    showLoading();
+    setTimeout(addCourseToTimetable, 1);
+}
+

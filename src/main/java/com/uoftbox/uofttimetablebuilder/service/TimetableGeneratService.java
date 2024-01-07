@@ -31,7 +31,8 @@ public class TimetableGeneratService {
         
         List<CourseInfo> currentTimetable = new ArrayList<>();
 
-        generateTimetables(queue, metrics, courses, currentTimetable, userPreferences, 0, 0);
+        long timeStart = System.currentTimeMillis();
+        generateTimetables(queue, metrics, courses, currentTimetable, userPreferences, 0, 0,timeStart);
 
         // 创建最终的课程表列表
         List<List<CourseInfo>> topTimetables = new ArrayList<>();
@@ -49,7 +50,7 @@ public class TimetableGeneratService {
         return topTimetables;
     }
 
-    private void generateTimetables(Queue<TimetableWithScore> queue, TimetableMetrics metrics, Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, List<CourseInfo> currentTimetable, UserPreferences userPreferences, int courseIndex, int typeIndex) {
+    private void generateTimetables(Queue<TimetableWithScore> queue, TimetableMetrics metrics, Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, List<CourseInfo> currentTimetable, UserPreferences userPreferences, int courseIndex, int typeIndex, long timeStart) {
 
         if (courseIndex == courses.size()) {
             double score = metrics.calculateScore(userPreferences);
@@ -63,13 +64,19 @@ public class TimetableGeneratService {
             return;
         }
 
+        long timeEnd = System.currentTimeMillis();
+        if ((timeEnd - timeStart) > 10000){
+            return;
+        }
+
+
         List<String> courseKeys = new ArrayList<>(courses.keySet());
         String courseKey = courseKeys.get(courseIndex);
         Map<String, Map<String, List<CourseInfo>>> courseInfo = courses.get(courseKey);
         List<String> courseTypes = new ArrayList<>(courseInfo.keySet());
 
         if (typeIndex == courseTypes.size()) {
-            generateTimetables(queue, metrics, courses, currentTimetable, userPreferences, courseIndex + 1, 0);
+            generateTimetables(queue, metrics, courses, currentTimetable, userPreferences, courseIndex + 1, 0, timeStart);
             return;
         }
 
@@ -94,7 +101,7 @@ public class TimetableGeneratService {
                 }
 
                 currentTimetable.addAll(sectionInfo);
-                generateTimetables(queue, metrics, courses, currentTimetable, userPreferences, courseIndex, typeIndex + 1);
+                generateTimetables(queue, metrics, courses, currentTimetable, userPreferences, courseIndex, typeIndex + 1, timeStart);
 
                 metrics.restore(savedMetrics); // 回溯，还原状态
                 currentTimetable.removeAll(sectionInfo);
