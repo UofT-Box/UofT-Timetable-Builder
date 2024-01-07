@@ -1,5 +1,3 @@
-// var allTimeTable = [[timetableFall,timetableWinter]];
-
 var allTimeTables = {};
 var timeTableIndex = 0;
 var fallCourseChoose = [];
@@ -13,10 +11,6 @@ var lastInput = "";
 var $select = $('.relevantCourses').selectize(); // 输入-下滑选择框生成
 var selectControl = $select[0].selectize;
 
-$(document).ready(function(){
-    // hideLoading();
-    // showLoading();
-})
 $(document).ready(function(){
     dragInit();
 })
@@ -130,9 +124,10 @@ function canAdd(courseCode , sectionCode){
     return true;
 }
 function addCourseToSelect(input) {
+    let origin = window.location.origin;
     $.ajax({
         type: "post",
-        url: "http://localhost:8080/course-input",
+        url: `${origin}/course-input`,
         data: {
             courseInput: input
         },
@@ -175,9 +170,10 @@ function addCourseToTimetable() {
     let timeWeight = weigthDict["timeWeight"];
     let daySpend = weigthDict["daySpend"] * Number(getRadioInput("days-spent"));
     let classInterval = weigthDict["classInterval"] * Number(getRadioInput("class-interval"));
+    let origin = window.location.origin;
     $.ajax({
         type: "post",
-        url: "http://localhost:8080/generateTimetable",
+        url: `${origin}/generateTimetable`,
         contentType: "application/json",
         data: JSON.stringify({
             fallCourseList: fallCourseChoose,
