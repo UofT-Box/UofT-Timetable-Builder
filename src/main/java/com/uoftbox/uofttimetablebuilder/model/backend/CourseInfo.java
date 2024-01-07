@@ -5,34 +5,46 @@ import java.util.List;
 public class CourseInfo {
     private String course;
     private String section;
-    private String getprof;
+    private String prof;
     private List<TimeAndPlace> timeAndPlaceList;
     
-    public CourseInfo(String course, String section, String getprof, List<TimeAndPlace> timeAndPlaceList) {
+    public CourseInfo(String course, String section, String prof, List<TimeAndPlace> timeAndPlaceList) {
         this.course = course;
         this.section = section;
-        this.getprof = getprof;
+        this.prof = prof;
         this.timeAndPlaceList = timeAndPlaceList;
     }
 
-    // Getter 方法
     public String getCourse() {
         return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
     }
 
     public String getSection() {
         return section;
     }
 
-    public String getprof(){
-        return getprof;
+    public void setSection(String section) {
+        this.section = section;
     }
 
-    public List<TimeAndPlace> getTime() {
-        return timeAndPlaceList;
+    public String getProf() {
+        return prof;
+    }
+
+    public void setProf(String prof) {
+        this.prof = prof;
     }
 
     public List<TimeAndPlace> getTimeAndPlaceList() {
         return timeAndPlaceList;
     }
+
+    public void setTimeAndPlaceList(List<TimeAndPlace> timeAndPlaceList) {
+        this.timeAndPlaceList = timeAndPlaceList;
+    }
+    
 }

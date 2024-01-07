@@ -93,6 +93,10 @@ public class TimetableContoller {
         int maxLen = Math.min(lst1.size(), lst2.size());
         for (int i = 0; i < maxLen; i++){
             result.add(Arrays.asList(lst1.get(i), lst2.get(i)));
+            if(i == 0){
+                Collections.shuffle(lst1);
+                Collections.shuffle(lst2);
+            }
         }
 
         return result;

@@ -681,7 +681,7 @@ function getWeight(){
     var children = parentDiv.children;
 
     // 遍历并打印每个子元素及其顺序
-    let idx = 8;
+    let idx = 4;
     for (let i = 0; i < children.length; i++) {
         if(children[i].id === "weigth"){
 
@@ -689,16 +689,16 @@ function getWeight(){
 
             if(preferenceChildren.includes("Start time")){
                 weigth["timeWeight"] = idx;
-                idx -= 2;
+                idx--;
             }else if(preferenceChildren.includes("Class Interval")){
                 weigth["classInterval"] = idx;
-                idx -= 2;
+                idx--;
             }else if(preferenceChildren.includes("Days Spent")){
                 weigth["daySpend"] = idx;
-                idx -= 2;
+                idx--;
             }else if(preferenceChildren.includes("Reasonable Walking Time")){
                 weigth["walkTime"] = idx;
-                idx -= 2;
+                idx--;
             }
 
             if(idx <= 0){

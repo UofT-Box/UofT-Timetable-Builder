@@ -3,8 +3,8 @@ package com.uoftbox.uofttimetablebuilder.model.frontend;
 public class UserPreferences {
     private int preferredTimeIndex; // 0 代表早上, 1 代表中午, 2 代表晚上
     private double preferredTimeWeight; // 时间分布偏好的权重---前端用户选择的顺序 (1,2,3,4)
-    private double balanceWeight; // 课程均衡性的权重---max = (1,2,3,4); min = -(1,2,3,4)
-    private double breakTimeWeight; // 课间时间的权重---short = (1,2,3,4); long = -(1,2,3,4)
+    private double balanceWeight; // 课程均衡性的权重---max = -(1,2,3,4); min = (1,2,3,4)
+    private double breakTimeWeight; // 课间时间的权重---short = -(1,2,3,4); long = (1,2,3,4)
     private double scoreThreshold; // 阈值时间
 
     public UserPreferences() {

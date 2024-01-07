@@ -1,6 +1,5 @@
 package com.uoftbox.uofttimetablebuilder.service;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +33,6 @@ public class TimetableService {
         allTimetables = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences);
         
         if (allTimetables.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No timetable find");
-
-        // Collections.shuffle(allTimetables);
         
         return CompletableFuture.completedFuture(allTimetables);
     }
