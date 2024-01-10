@@ -320,7 +320,7 @@
 }
 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 950px) {
     .containerr {
       flex-direction: column;
     }

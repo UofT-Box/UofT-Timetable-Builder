@@ -698,11 +698,12 @@ function dragInitMobile() {
     let list = document.querySelector('.preference-list');
     let currentLi = null;
     list.addEventListener('touchstart', function(e) {
-        if (e.target.classList.contains('preference') && e.target.id === 'weigth') {
-            currentLi = e.target;
-            currentLi.classList.add('moving');
-            // 阻止默认滑动
+        // 阻止默认滑动
+        currentTarget = e.target;
+        if (currentTarget.parentNode.className !== "options"){
             e.preventDefault();
+            currentLi = currentTarget;
+            currentLi.classList.add('moving');
         }
     }, false);
 
@@ -727,10 +728,20 @@ function dragInitMobile() {
     function moveListItem(targetElement) {
         let targetIndex = Array.from(list.children).indexOf(targetElement);
         let currentIndex = Array.from(list.children).indexOf(currentLi);
-        if (currentIndex < targetIndex) {
-            list.insertBefore(currentLi, targetElement.nextSibling);
-        } else if (currentIndex > targetIndex) {
-            list.insertBefore(currentLi, targetElement);
+        if (currentLi.id !== "weigth"){
+            currentLi = currentLi.parentNode;
+        }
+        if (currentLi.id === "weigth"){
+            if (targetElement.id !== "weigth"){
+                targetElement = targetElement.parentNode;
+            }
+            if (targetElement.id === "weigth"){
+                if (currentIndex < targetIndex) {
+                    list.insertBefore(currentLi, targetElement.nextSibling);
+                } else if (currentIndex > targetIndex) {
+                    list.insertBefore(currentLi, targetElement);
+                }
+            }
         }
     }
 }
