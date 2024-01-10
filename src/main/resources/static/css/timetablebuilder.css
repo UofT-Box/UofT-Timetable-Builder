@@ -334,4 +334,8 @@
       width: 100%;
       order: 2;
     }
+
+    .timetable-header {
+        zoom: 80%;
+    }
   }

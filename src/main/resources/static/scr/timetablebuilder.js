@@ -700,7 +700,7 @@ function dragInitMobile() {
     list.addEventListener('touchstart', function(e) {
         // 阻止默认滑动
         currentTarget = e.target;
-        if (currentTarget.parentNode.className !== "options"){
+        if (currentTarget.parentNode.className !== "options" && currentTarget.className !== "preference-list"){
             e.preventDefault();
             currentLi = currentTarget;
             currentLi.classList.add('moving');
@@ -731,11 +731,11 @@ function dragInitMobile() {
         if (currentLi.id !== "weigth"){
             currentLi = currentLi.parentNode;
         }
-        if (currentLi.id === "weigth"){
-            if (targetElement.id !== "weigth"){
+        if (currentLi !== null && currentLi.id === "weigth"){
+            if (targetElement!== null && targetElement.id !== "weigth"){
                 targetElement = targetElement.parentNode;
             }
-            if (targetElement.id === "weigth"){
+            if (targetElement !== null && targetElement.id === "weigth"){
                 if (currentIndex < targetIndex) {
                     list.insertBefore(currentLi, targetElement.nextSibling);
                 } else if (currentIndex > targetIndex) {
