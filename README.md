@@ -62,7 +62,7 @@ cd target
 ```
 6. run using the 'java -jar' command
 ```sh
-java -jar uofttimetablebuilder-1.0.0-RELEASE.jar
+java -jar uofttimetablebuilder-1.1.0-RELEASE.jar
 ```
 7. Go to browser tap:
 ```sh
@@ -89,7 +89,7 @@ cd target
 ```
 6. run using the 'java -jar' command
 ```sh
-java -jar uofttimetablebuilder-1.0.0-RELEASE.jar
+java -jar uofttimetablebuilder-1.1.0-RELEASE.jar
 ```
 7. Go to browser tap:
 ```sh
@@ -117,6 +117,8 @@ Select the class schedule you want in the thumbnails
 To be continue
 
 ## Release History
+* 1.1.0
+    * mobile adaptation
 * 1.0.0
     * Fix all known bugs
     * Official release

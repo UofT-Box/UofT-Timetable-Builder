@@ -1,3 +1,4 @@
+//******* Global Variables and Initializations *************//
 var allTimeTables = {};
 var timeTableIndex = 0;
 var fallCourseChoose = [];
@@ -7,16 +8,18 @@ var fallCredit = 0.0;
 var winterCredit = 0.0;
 var lastInput = "";
 
-
+//************ UI Element Initialization ****************//
 var $select = $('.relevantCourses').selectize(); // 输入-下滑选择框生成
 var selectControl = $select[0].selectize;
 
 $(document).ready(function(){
     dragInit();
+    dragInitMobile();
 })
 $(document).ready(function () { 
     document.getElementById('large-view').classList.add('active');
 });
+
 var times = [];
 $(document).ready(function (){
     for (var i = 9; i <= 21; i++) {
@@ -55,6 +58,9 @@ $(document).ready(function(){
 $(document).ready(function(){
     checkboxMonitor();
 })
+
+
+//******* Event Bindings and Handlers *************//
 function courseSelectChangeEvent(selectControl){
     let courseCode = selectControl.getValue(); // 获取用户的选择
     if (courseCode == ""){ //判断用户选择是否为空
@@ -476,6 +482,13 @@ function tdNoSection(event){
     
 }
 
+
+
+
+
+
+
+// *************************** switchs ************************************************//
 function switchView() {
     var largeView = document.getElementById('large-view');
     var smallView = document.getElementById('small-view');
@@ -544,6 +557,8 @@ function switchCridit(term) {
     });
 }
 
+
+//************************** sidebar *******************************/
 // 随机颜色
 var usedColor = []
 function getRandomColor() {
@@ -641,6 +656,7 @@ function deleteCourse(deleteBtn){
     switchButton("generate");
 }
 
+//********************************drag btns**************/
 function dragInit(){
     let list = document.querySelector('.preference-list');
     let currentLi;
@@ -678,6 +694,47 @@ function dragInit(){
     });
 }
 
+function dragInitMobile() {
+    let list = document.querySelector('.preference-list');
+    let currentLi = null;
+    list.addEventListener('touchstart', function(e) {
+        if (e.target.classList.contains('preference') && e.target.id === 'weigth') {
+            currentLi = e.target;
+            currentLi.classList.add('moving');
+            // 阻止默认滑动
+            e.preventDefault();
+        }
+    }, false);
+
+    list.addEventListener('touchmove', function(e) {
+        if (!currentLi) return;
+        
+        let touchLocation = e.targetTouches[0];
+        let targetElement = document.elementFromPoint(touchLocation.clientX, touchLocation.clientY);
+        
+        // 确保目标元素是列表项并且不是当前拖动的列表项
+        if (targetElement && targetElement !== currentLi && targetElement.parentNode === list) {
+            moveListItem(targetElement);
+        }
+    }, false);
+
+    list.addEventListener('touchend', function(e) {
+        if (!currentLi) return;
+        currentLi.classList.remove('moving');
+        currentLi = null;
+    }, false);
+
+    function moveListItem(targetElement) {
+        let targetIndex = Array.from(list.children).indexOf(targetElement);
+        let currentIndex = Array.from(list.children).indexOf(currentLi);
+        if (currentIndex < targetIndex) {
+            list.insertBefore(currentLi, targetElement.nextSibling);
+        } else if (currentIndex > targetIndex) {
+            list.insertBefore(currentLi, targetElement);
+        }
+    }
+}
+
 function getRadioInput(radioName){
     var item = null;
     var obj = document.getElementsByName(radioName)
@@ -700,7 +757,7 @@ function getWeight(){
     var children = parentDiv.children;
 
     // 遍历并打印每个子元素及其顺序
-    let idx = 4;
+    let idx = 4000;
     for (let i = 0; i < children.length; i++) {
         if(children[i].id === "weigth"){
 
@@ -708,16 +765,16 @@ function getWeight(){
 
             if(preferenceChildren.includes("Start time")){
                 weigth["timeWeight"] = idx;
-                idx--;
+                idx -= 1000;
             }else if(preferenceChildren.includes("Class Interval")){
                 weigth["classInterval"] = idx;
-                idx--;
+                idx -= 1000;
             }else if(preferenceChildren.includes("Days Spent")){
                 weigth["daySpend"] = idx;
-                idx--;
+                idx -= 1000;
             }else if(preferenceChildren.includes("Reasonable Walking Time")){
                 weigth["walkTime"] = idx;
-                idx--;
+                idx -= 1000;
             }
 
             if(idx <= 0){
@@ -748,7 +805,6 @@ function showLoading() {
     console.log("show");
 }
 
-// 隐藏加载遮罩
 function hideLoading() {
     document.getElementById('loading-overlay').style.display = 'none';
     console.log("hide");
