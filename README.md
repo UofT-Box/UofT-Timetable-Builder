@@ -62,7 +62,7 @@ cd target
 ```
 6. run using the 'java -jar' command
 ```sh
-java -jar uofttimetablebuilder-1.1.0-RELEASE.jar
+java -jar uofttimetablebuilder-1.1.2-RELEASE.jar
 ```
 7. Go to browser tap:
 ```sh
@@ -89,7 +89,7 @@ cd target
 ```
 6. run using the 'java -jar' command
 ```sh
-java -jar uofttimetablebuilder-1.1.1-RELEASE.jar
+java -jar uofttimetablebuilder-1.1.2-RELEASE.jar
 ```
 7. Go to browser tap:
 ```sh
