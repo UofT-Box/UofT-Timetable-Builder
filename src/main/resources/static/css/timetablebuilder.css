@@ -1,7 +1,6 @@
 .containerr {
     display: flex;
     width: 100%;
-
 }
 .course-choose-list {
     overflow: auto;
@@ -304,18 +303,35 @@
 }
 
 #loading-overlay {
-    position: fixed; /* 固定定位，使遮罩全屏覆盖 */
+    position: fixed;
     display: none;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5); 
-    justify-content: center; /* 水平居中 */
-    align-items: center; /* 垂直居中 */
-    z-index: 1000000000; /* 确保遮罩在最顶层 */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000000000; 
 }
 
 #loading-overlay img {
     zoom: 150%;
 }
+
+
+@media screen and (max-width: 600px) {
+    .containerr {
+      flex-direction: column;
+    }
+  
+    .sidebar {
+      width: 100%;
+      order: 1;
+    }
+  
+    .timetable {
+      width: 100%;
+      order: 2;
+    }
+  }
