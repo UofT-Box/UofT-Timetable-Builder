@@ -736,6 +736,7 @@ function dragInitMobile() {
                 targetElement = targetElement.parentNode;
             }
             if (targetElement !== null && targetElement.id === "weigth"){
+                switchButton("generate");
                 if (currentIndex < targetIndex) {
                     list.insertBefore(currentLi, targetElement.nextSibling);
                 } else if (currentIndex > targetIndex) {
@@ -813,12 +814,10 @@ function checkboxMonitor(){
 
 function showLoading() {
     document.getElementById('loading-overlay').style.display = 'flex';
-    console.log("show");
 }
 
 function hideLoading() {
     document.getElementById('loading-overlay').style.display = 'none';
-    console.log("hide");
 }
 
 function fetchData() {
