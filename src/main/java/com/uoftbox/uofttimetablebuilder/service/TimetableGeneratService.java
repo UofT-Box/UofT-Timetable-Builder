@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimeAndPlace;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimetableMetrics;
+import com.uoftbox.uofttimetablebuilder.model.backend.TimetableResultInfo;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimetableWithScore;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 import com.uoftbox.uofttimetablebuilder.service.dbservice.CourseDataService;
@@ -25,7 +26,7 @@ public class TimetableGeneratService {
     @Autowired
     private DistanceService distanceService;
     
-    public List<List<CourseInfo>> generateAllTimetables(Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, UserPreferences userPreferences) {
+    public TimetableResultInfo generateAllTimetables(Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, UserPreferences userPreferences) {
         Queue<TimetableWithScore> queue = new PriorityQueue<>();
         TimetableMetrics metrics = new TimetableMetrics();
         
@@ -35,8 +36,11 @@ public class TimetableGeneratService {
         generateTimetables(timetable, queue, metrics, courses, currentTimetable, userPreferences, 0, 0,timeStart);
 
         // 创建最终的课程表列表
+        TimetableResultInfo timetableResult = new TimetableResultInfo();
         List<List<CourseInfo>> topTimetables = new ArrayList<>();
 
+        timetableResult.setTotalTimetableSize(queue.size());
+        
         // 从优先队列中提取课程表，并添加到列表中
         int counter = 0;
         while (!queue.isEmpty() && counter < 50) {
@@ -46,8 +50,8 @@ public class TimetableGeneratService {
             topTimetables.add(0,ttb);
             counter++;
         }
-        // topTimetables.add()
-        return topTimetables;
+        timetableResult.setTopTimetables(topTimetables);
+        return timetableResult;
     }
 
     private void generateTimetables(CourseInfo[][] timetable, Queue<TimetableWithScore> queue, TimetableMetrics metrics, Map<String, Map<String, Map<String, List<CourseInfo>>>> courses, List<CourseInfo> currentTimetable, UserPreferences userPreferences, int courseIndex, int typeIndex, long timeStart) {
@@ -59,13 +63,9 @@ public class TimetableGeneratService {
             }
             return;
         }
-
-        if (queue.size() >= 2000000){
-            return;
-        }
-
+        
         long timeEnd = System.currentTimeMillis();
-        if ((timeEnd - timeStart) > 10000){
+        if (queue.size() >= 2000000 || (timeEnd - timeStart) > 10000){
             return;
         }
 
@@ -168,36 +168,40 @@ public class TimetableGeneratService {
     }
 
     public boolean enoughWalkingTime(CourseInfo[][] timetable) {
-        CourseInfo lastCourse = null;
         for (int day = 0; day < timetable.length; day++) {
+            
+            CourseInfo lastCourse = null;
+
             for (int timeSlot = 0; timeSlot < timetable[day].length - 1; timeSlot++) {
                 if (timetable[day][timeSlot] == null || timetable[day][timeSlot].getCourse().contains("TUT")){
                     lastCourse = null;
                     continue;
                 }
-                if (lastCourse != null) {
-                    CourseInfo currentCourse = timetable[day][timeSlot];
-                    String currentCourseCode = currentCourse.getCourse();
-                    int campusesCode = Character.getNumericValue(currentCourseCode.charAt(currentCourseCode.length() - 1));
-                    if (campusesCode != 5){
-                        lastCourse = null;
-                        continue;
-                    }
-                    String currentLocation = currentCourse.getTimeAndPlaceList().get(0).getLocation();
-                    String lastLocation = lastCourse.getTimeAndPlaceList().get(0).getLocation();
-                    if (lastLocation.equals("") || currentLocation.equals("") || lastLocation.equals(currentLocation)){
-                        lastCourse = null;
-                        continue;
-                    }
-                    Integer timeTake = distanceService.getDuration(currentLocation, lastLocation);
-                    if (timeTake > 10){
-                        return false;
-                    }
-
+                if (lastCourse == null){
+                    lastCourse = timetable[day][timeSlot];
+                    continue;
                 }
-                lastCourse = timetable[day][timeSlot];
+                
+                CourseInfo currentCourse = timetable[day][timeSlot];
+                String currentCourseCode = currentCourse.getCourse();
+                int campusesCode = Character.getNumericValue(currentCourseCode.charAt(currentCourseCode.length() - 1));
+                if (campusesCode != 1){
+                    lastCourse = null;
+                    continue;
+                }
+                String currentLocation = currentCourse.getTimeAndPlaceList().get(0).getLocation();
+                String lastLocation = lastCourse.getTimeAndPlaceList().get(0).getLocation();
+                if (lastLocation.equals("") || currentLocation.equals("") || lastLocation.equals(currentLocation)){
+                    lastCourse = null;
+                    continue;
+                }
+                Integer timeTake = distanceService.getDuration(currentLocation, lastLocation);
+                if (timeTake > 10){
+                    return false;
+                }
+
+                lastCourse = currentCourse;
             }
-            lastCourse = null;
         }
         return true;
     }

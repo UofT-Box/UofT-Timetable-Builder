@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
+import com.uoftbox.uofttimetablebuilder.model.backend.TimetableResult;
+import com.uoftbox.uofttimetablebuilder.model.backend.TimetableResultInfo;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserInput;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 import com.uoftbox.uofttimetablebuilder.repository.courses.RelevantCourse;
@@ -38,7 +40,7 @@ public class TimetableContoller {
     }
 
     @PostMapping("/generateTimetable")
-    public List<List<List<CourseInfo>>> generateTimetable(@RequestBody UserInput userInput) throws InterruptedException, ExecutionException{
+    public TimetableResult generateTimetable(@RequestBody UserInput userInput) throws InterruptedException, ExecutionException{
         List<String> fallCourseCode = userInput.getFallCourseCode();
         List<String> winterCourseCode = userInput.getWinterCourseCode();
 
@@ -49,14 +51,20 @@ public class TimetableContoller {
         userPreferences.setBreakTimeWeight((double)userInput.getBreakTimeWeight());
         userPreferences.setScoreThreshold(-100000.0);
 
-        CompletableFuture<List<List<CourseInfo>>> fallTimetable = timetableService.getTopTimetable(fallCourseCode, "F",userPreferences);
-        CompletableFuture<List<List<CourseInfo>>> winterTimetable = timetableService.getTopTimetable(winterCourseCode, "S",userPreferences);
-        CompletableFuture.allOf(fallTimetable,winterTimetable).join();
+        CompletableFuture<TimetableResultInfo> fallResult = timetableService.getTopTimetable(fallCourseCode, "F",userPreferences);
+        CompletableFuture<TimetableResultInfo> winterResult = timetableService.getTopTimetable(winterCourseCode, "S",userPreferences);
+        CompletableFuture.allOf(fallResult,winterResult).join();
 
-        List<List<CourseInfo>> fallTimetableResult = fallTimetable.get();
-        List<List<CourseInfo>> winterTimetableResult = winterTimetable.get();
+        TimetableResultInfo fallTimetableResult = fallResult.get();
+        TimetableResultInfo winterTimetableResult = winterResult.get();
+        List<List<CourseInfo>> fallTimetable = fallTimetableResult.getTopTimetables();
+        List<List<CourseInfo>> winterTimetable = winterTimetableResult.getTopTimetables();
 
-        return getResult(fallTimetableResult, winterTimetableResult);
+        TimetableResult timetableResult = new TimetableResult();
+        timetableResult.setTotalFallTimetableSize(fallTimetableResult.getTotalTimetableSize());
+        timetableResult.setTotalWinterTimetableSize(winterTimetableResult.getTotalTimetableSize());
+        timetableResult.setResult(getResult(fallTimetable, winterTimetable));
+        return timetableResult;
     }
     
     private List<List<List<CourseInfo>>> getResult(List<List<CourseInfo>> fallTimetableResult, List<List<CourseInfo>> winterTimetableResult){
