@@ -7,6 +7,8 @@ var yearCourseChoose = [];
 var fallCredit = 0.0;
 var winterCredit = 0.0;
 var lastInput = "";
+var fallTotalTimetableSize = 0;
+var winetTotalTimetableSize = 0;
 
 //************ UI Element Initialization ****************//
 var $select = $('.relevantCourses').selectize(); // 输入-下滑选择框生成
@@ -33,7 +35,7 @@ $(document).ready(function (){
     }
 });
 $(document).ready(function (){
-    saveTimetable([[[],[]]]);
+    saveTimetable();
     switchTerm("fall",1);
 })
 $(document).ready(function () { 
@@ -302,9 +304,19 @@ function getCourseColor(courseCode, session) {
     return colorIndicator ? colorIndicator.style.backgroundColor : '#FFFFFF';
 }
 
-function saveTimetable(allGeneratedTimetable){
+function saveTimetable(data=null){
     allTimeTables = {};
     let index = 1;
+    let allGeneratedTimetable = [[[],[]]];
+    if (data != null){
+        allGeneratedTimetable = data["result"];
+        fallTotalTimetableSize = data["totalFallTimetableSize"];
+        winetTotalTimetableSize = data["totalWinterTimetableSize"];
+
+        console.log("fall: " + fallTotalTimetableSize);
+        console.log("winter: " + winetTotalTimetableSize);
+    }
+
     for (let generatedTimetable of allGeneratedTimetable){
         //初始化timetable模板
         let timetableFall = Object.assign({},{});

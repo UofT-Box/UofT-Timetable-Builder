@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
+import com.uoftbox.uofttimetablebuilder.model.backend.TimetableResultInfo;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 import com.uoftbox.uofttimetablebuilder.service.dbservice.CourseDataService;
 
@@ -24,16 +25,17 @@ public class TimetableService {
     private TimetableGeneratService timetableGeneratService;
     
     @Async("taskExecutor")
-    public CompletableFuture<List<List<CourseInfo>>> getTopTimetable(List<String> courseCode, String sectionCode, UserPreferences userPreferences){
+    public CompletableFuture<TimetableResultInfo> getTopTimetable(List<String> courseCode, String sectionCode, UserPreferences userPreferences){
         
         Map<String, Map<String, Map<String, List<CourseInfo>>>> meetingSections = new HashMap<>();
         
-        List<List<CourseInfo>> allTimetables;
+        TimetableResultInfo timetableResult;
         meetingSections = courseDataService.fetchSpecialSections(courseCode, sectionCode);
-        allTimetables = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences);
+        timetableResult = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences);
+        List<List<CourseInfo>> allTimetables = timetableResult.getTopTimetables();
         
         if (allTimetables.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No timetable find");
         
-        return CompletableFuture.completedFuture(allTimetables);
+        return CompletableFuture.completedFuture(timetableResult);
     }
 }
