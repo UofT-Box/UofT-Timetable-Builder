@@ -394,7 +394,7 @@ function displayTimetable (term, index) {
         for (let j = 1; j <= 5; j++) {
             if (timetable[time][j] !== ""){
                 let info = timetable[time][j];
-                output += `<td class = "timetableTd" id = "${time}|${term}|${j}" onclick="tdHaveSection(this)" style="background-color: ${info["color"]};">${info["course"]}<br>${info["section"]}</td>`;
+                output += `<td class = "timetableTd" id = "${time}|${term}|${j}" onclick="tdHaveSection(this)" style="background-color: ${info["color"]};"><b>${info["course"]}</b><br><b>${info["section"]}</b></td>`;
             }else{
                 output += `<td class = "" id = "${time}|${term}|${j}" onclick="tdNoSection(this)"></td>`
             }
@@ -459,7 +459,7 @@ function tdHaveSection(event){
     let section = info["section"];
     let location = info["location"];
     let profName = info["prof"];
-    let detaillInfo = `<p>Course: ${course}<br>Section: ${section}<br>Location: ${location}</p>`;
+    let detaillInfo = `<p><b>Course:</b> ${course}<br><b>Section:</b> ${section}<br><b>Location:</b> ${location}</p>`;
 
     if(profName !== "" && section.includes("LEC")){
         if (profName.includes(",")){
