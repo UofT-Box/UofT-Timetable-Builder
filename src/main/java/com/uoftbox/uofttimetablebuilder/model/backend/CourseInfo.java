@@ -15,6 +15,13 @@ public class CourseInfo {
         this.timeAndPlaceList = timeAndPlaceList;
     }
 
+    public CourseInfo(CourseInfo other) {
+        this.course = other.course;
+        this.section = other.section;
+        this.prof = other.prof;
+        this.timeAndPlaceList = other.timeAndPlaceList;
+    }
+
     public String getCourse() {
         return course;
     }
