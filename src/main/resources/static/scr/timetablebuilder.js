@@ -11,6 +11,8 @@ var fallTotalTimetableSize = 0;
 var winetTotalTimetableSize = 0;
 var lockedCoursesFall = [];
 var lockedCoursesWinter = [];
+var building1 = "";
+var building2 = "";
 
 //************ UI Element Initialization ****************//
 var $select = $(".relevantCourses").selectize(); // 输入-下滑选择框生成
@@ -168,6 +170,28 @@ function addCourseToSelect(input) {
         });
       }
       selectControl.refreshOptions();
+    },
+    error: function () {
+      alert("Error, something went wrong pleace contact admin!");
+    },
+  });
+}
+function getDistance(){
+  let origin = window.location.origin;
+  $.ajax({
+    type: "post",
+    url: `${origin}/get-distance`,
+    data: {
+      origin: building1,
+      destination: building2
+    },
+    dataType: "json",
+    async: false,
+    success: function (data) {
+      if (data == -1){ // 查看是否找到
+        return
+      }
+      let distance = data // 距离
     },
     error: function () {
       alert("Error, something went wrong pleace contact admin!");
