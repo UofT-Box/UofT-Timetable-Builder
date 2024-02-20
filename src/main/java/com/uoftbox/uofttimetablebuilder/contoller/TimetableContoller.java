@@ -21,6 +21,7 @@ import com.uoftbox.uofttimetablebuilder.model.frontend.UserInput;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 import com.uoftbox.uofttimetablebuilder.repository.courses.RelevantCourse;
 import com.uoftbox.uofttimetablebuilder.service.TimetableService;
+import com.uoftbox.uofttimetablebuilder.service.dbservice.DistanceService;
 import com.uoftbox.uofttimetablebuilder.service.dbservice.SearchBarService;
 
 @RestController
@@ -31,12 +32,18 @@ public class TimetableContoller {
     private SearchBarService coursesService;
     @Autowired
     private TimetableService timetableService;
+    @Autowired
+    private DistanceService distanceService;
 
-    //@RequestParam("courseInput") String courseName
     @PostMapping("/course-input")
     public List<RelevantCourse> getRelevantCourses(@RequestParam("courseInput") String info) {
         List<RelevantCourse> relevantCourses = coursesService.getRelevantCoursesInfo(info);
         return relevantCourses;
+    }
+
+    @PostMapping("/get-distance")
+    public Integer getDistance(@RequestParam("origin") String origin, @RequestParam("destination") String destination) {
+        return distanceService.getDuration(origin, destination);
     }
 
     @PostMapping("/generateTimetable")
