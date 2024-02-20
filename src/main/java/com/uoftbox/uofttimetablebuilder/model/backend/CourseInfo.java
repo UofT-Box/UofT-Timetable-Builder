@@ -1,5 +1,6 @@
 package com.uoftbox.uofttimetablebuilder.model.backend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseInfo {
@@ -13,6 +14,13 @@ public class CourseInfo {
         this.section = section;
         this.prof = prof;
         this.timeAndPlaceList = timeAndPlaceList;
+    }
+
+    public CourseInfo() {
+        this.course = "course";
+        this.section = "section";
+        this.prof = "prof";
+        this.timeAndPlaceList = new ArrayList<>();
     }
 
     public CourseInfo(CourseInfo other) {

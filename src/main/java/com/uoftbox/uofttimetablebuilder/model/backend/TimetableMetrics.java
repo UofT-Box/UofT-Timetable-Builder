@@ -162,8 +162,13 @@ public class TimetableMetrics {
         // System.out.println("总课程数量:" + totalCourses);
         // 检查是否有课程
         if (totalCourses > 0) {
-            // 计算用户首选时间段内的课程比例
-            preferredTimeRatio = ((double) timeDistribution[userPreferences.getPreferredTimeIndex()]) / totalCourses;
+            int pefer = userPreferences.getPreferredTimeIndex();
+            preferredTimeRatio = ((double) timeDistribution[pefer]) / totalCourses;
+            if (pefer == 2){
+                preferredTimeRatio -= 10 * ((double) timeDistribution[0]) / totalCourses;
+            }else if(pefer == 0){
+                preferredTimeRatio -= 10 * ((double) timeDistribution[2]) / totalCourses;
+            }
         } else {
             // 如果没有课程，则比例为0
             preferredTimeRatio = 0;

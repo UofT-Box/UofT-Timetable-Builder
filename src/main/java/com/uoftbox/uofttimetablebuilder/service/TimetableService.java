@@ -25,13 +25,14 @@ public class TimetableService {
     private TimetableGeneratService timetableGeneratService;
     
     @Async("taskExecutor")
-    public CompletableFuture<TimetableResultInfo> getTopTimetable(List<String> courseCode, String sectionCode, UserPreferences userPreferences){
+    public CompletableFuture<TimetableResultInfo> getTopTimetable(List<String> courseCode, String sectionCode, UserPreferences userPreferences, List<String> lockedCourses){
         
         Map<String, Map<String, Map<String, List<CourseInfo>>>> meetingSections = new HashMap<>();
         
         TimetableResultInfo timetableResult;
-        meetingSections = courseDataService.fetchSpecialSections(courseCode, sectionCode);
-        timetableResult = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences);
+        meetingSections = courseDataService.fetchSpecialSections(courseCode, sectionCode, lockedCourses);
+        Map<String, Map<String, CourseInfo>> lockedSections = courseDataService.fetchLockSections(sectionCode,lockedCourses);
+        timetableResult = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences, lockedSections);
         List<List<CourseInfo>> allTimetables = timetableResult.getTopTimetables();
         
         if (allTimetables.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No timetable find");

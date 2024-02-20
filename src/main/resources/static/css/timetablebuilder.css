@@ -1,341 +1,362 @@
 .containerr {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 .course-choose-list {
-    overflow: auto;
-    height: 150px;
+  overflow: auto;
+  height: 150px;
 }
 .timetable {
-    overflow: auto;
-    flex: 2;
-    width: auto;
-    height: 600px;
+  overflow: auto;
+  flex: 2;
+  width: auto;
+  height: 600px;
 }
 .sidebar {
-    width: 33%;
-    /* 其他样式保持不变 */
+  width: 33%;
+  /* 其他样式保持不变 */
 }
 
 .timetable-view {
-    display: none; /* 默认不显示 */
+  display: none; /* 默认不显示 */
 }
 
-
-  
 .timetable-view.active {
-    display: block; /* 激活的视图显示 */    
+  display: block; /* 激活的视图显示 */
 }
-
 
 #small-view {
-    /* display: flex; */
-    flex-wrap: wrap;
-    justify-content: space-between;
+  /* display: flex; */
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .row {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px; /* 为每行添加间隔 */
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px; /* 为每行添加间隔 */
 }
 
 .row .timetable-thumbnail {
-    width: 33% !important;
-    border: 1px solid #ccc;
-    text-align: center;
-    padding: 10px;
+  width: 33% !important;
+  border: 1px solid #ccc;
+  text-align: center;
+  padding: 10px;
 }
 
 .thumbnail-header {
-    font-weight: bold;
-    margin-bottom: 5px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .thumbnail-content {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .semester {
-    width: 48%; /* 每个学期视图占据缩略图内容的一半 */
-    border: 1px solid #ccc;
-    padding: 10px;
+  width: 48%; /* 每个学期视图占据缩略图内容的一半 */
+  border: 1px solid #ccc;
+  padding: 10px;
 }
 
-
-
-.courses-section, .preferences-section {
-    background-color: #f9f9f9;
-    margin-bottom: 20px;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+.courses-section,
+.preferences-section {
+  background-color: #f9f9f9;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .interface-buttons {
-    text-align: center; /* 按钮居中 */
+  text-align: center; /* 按钮居中 */
 }
 
-
-
 .term-toggle {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .courses-section-title {
-    display: flex;
+  display: flex;
 }
 
 .course-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px; /* 为每个课程项添加一些间隔 */
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* 为每个课程项添加一些间隔 */
 }
 
 .color-indicator {
-    width: 20px;
-    height: 20px;
-    background-color: rgb(193, 84, 7); /* 课程的颜色 */
-    margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  background-color: rgb(193, 84, 7); /* 课程的颜色 */
+  margin-right: 10px;
 }
 
 .course-name {
-    flex-grow: 1; /* 确保课程名字占据大部分的空间 */
+  flex-grow: 1; /* 确保课程名字占据大部分的空间 */
 }
 
 .edit-btn,
 .delete-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-left: 10px; /* 在按钮之间添加一些空间 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px; /* 在按钮之间添加一些空间 */
 }
 
 /* 您可能还需要为按钮添加hover效果 */
 .edit-btn:hover,
 .delete-btn:hover {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
-
 .preference {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f9f9f9;
-    cursor: grab; /* 鼠标样式表明这个元素是可以拖动的 */
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  cursor: grab; /* 鼠标样式表明这个元素是可以拖动的 */
 }
 
 .options {
-    float: right;
+  float: right;
 }
 
 /* 样式化radio按钮和标签 */
 .options input[type="radio"] {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .options label {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
-.preference-list.moving{
-    background: transparent;
-    color: transparent;
-    border: 1px dashed #ccc;
-}  
+.preference-list.moving {
+  background: transparent;
+  color: transparent;
+  border: 1px dashed #ccc;
+}
 
 .svg {
-    /* display: block; */
-    transform: translateY(-2px); /* 向上移动10像素 */
-    /* width:50%; */
-    zoom:80%;
+  /* display: block; */
+  transform: translateY(-2px); /* 向上移动10像素 */
+  /* width:50%; */
+  zoom: 80%;
 }
 
 /*滚动条美化*/
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-    border-radius: 3px;
-    background: rgba(0,0,0,0.06);
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.08);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.06);
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.08);
 }
 /* 滚动条滑块 */
 ::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    background: rgba(0,0,0,0.12);
-    -webkit-box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 /*buttons*/
 
 .generate-schedule,
 .toggle-view {
-    width: 100%;
-    background-color: rgb(8, 121, 235);
-    
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 100%;
+  background-color: rgb(8, 121, 235);
+
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .generate-schedule:hover,
 .toggle-view:hover {
-    background-color: #2263e4;
+  background-color: #2263e4;
 }
 
 .generate-schedule,
 .toggle-view {
-    display: none;
+  display: none;
 }
 
 .generate-schedule.active,
 .toggle-view.active {
-    display: block;
+  display: block;
 }
 
 .term-btn {
-    background-color: #e7e7e7;
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    margin-right: 5px;
+  background-color: #e7e7e7;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
 }
 
-.term-btn:hover{
-    background-color: #d0caca;
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    margin-right: 5px;
+.term-btn:hover {
+  background-color: #d0caca;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
 }
 
 .term-btn.active {
-    /* background-color: #4CAF50; */
-    background-color:rgb(8, 121, 235);
-    color: white;
+  /* background-color: #4CAF50; */
+  background-color: rgb(8, 121, 235);
+  color: white;
 }
 
-
 .timetable-header {
-    background-color: #045ab0; 
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5em 1em; 
-    border-radius: 0 0 10px 10px;
+  background-color: #045ab0;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em 1em;
+  border-radius: 0 0 10px 10px;
 }
 
 .timetable-header h1 {
-    margin: 0;
+  margin: 0;
 }
 
 .report-issue-btn {
-    background-color: #f8f8f8; 
-    color: #004080;
-    border: none;
-    padding: 0.5em 1em;
-    cursor: pointer;
-    border-radius: 5px;
+  background-color: #f8f8f8;
+  color: #004080;
+  border: none;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .report-issue-btn:hover {
-    background-color: #e8e8e8;
+  background-color: #e8e8e8;
 }
 
 .title {
-    font-family: 'Arial', sans-serif; 
-    color: #055eb6; 
-    background-color: white;
-    padding: 10px;
-    border-radius: 5px;
-    display: inline-block; 
+  font-family: "Arial", sans-serif;
+  color: #055eb6;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  display: inline-block;
 }
 
 .title-main {
-    font-weight: bold;
-    color: #FFF; 
-    background-color: #045ab1; 
-    padding: 5px 10px;
-    border-radius: 5px 0 0 5px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #045ab1;
+  padding: 5px 10px;
+  border-radius: 5px 0 0 5px;
 }
 
 .title-sub {
-    font-weight: normal;
-    color: #004080; 
-    padding: 5px 10px;
-    border-radius: 0 5px 5px 0;
+  font-weight: normal;
+  color: #004080;
+  padding: 5px 10px;
+  border-radius: 0 5px 5px 0;
 }
 
 .timetableTd:hover {
-    background-color: #004080;
-    cursor: pointer;
-    box-shadow: 0px 10px 80px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05);
+  background-color: #004080;
+  cursor: pointer;
+  box-shadow: 0px 10px 80px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .semester:hover {
-    box-shadow: 0px 10px 80px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05);
+  box-shadow: 0px 10px 80px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .courses-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .cridit {
-    font-family: 'Arial', sans-serif; 
-    text-align: right;
-    transform: scale(0.7);
+  font-family: "Arial", sans-serif;
+  text-align: right;
+  transform: scale(0.7);
 }
 
 #loading-overlay {
-    position: fixed;
-    display: none;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); 
-    justify-content: center;
-    align-items: center;
-    z-index: 1000000000; 
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000000000;
 }
 
 #loading-overlay img {
-    zoom: 150%;
+  zoom: 150%;
 }
 
+/* locker */
+/* .timetableTd .lock-icon {
+  position: relative;
+  top: 0; 
+  right: 0;
+  padding: 5px;
+  cursor: pointer;
+}
+ */
+.fa-lock {
+  font-size: 1.5em;
+  color: black;
+}
+
+.lock-icon {
+  display: none;
+}
+
+.timetableTd:hover .lock-icon {
+  display: block;
+}
+
+.small-icon {
+    font-size: 0.8em; /* 或者适当的大小 */
+}
+
+.large-icon {
+    font-size: 1.2em; /* 或者适当的大小 */
+}
 
 @media screen and (max-width: 950px) {
-    .containerr {
-      flex-direction: column;
-    }
-  
-    .sidebar {
-      width: 100%;
-      order: 1;
-    }
-  
-    .timetable {
-      width: 100%;
-      order: 2;
-    }
-
-    .timetable-header {
-        zoom: 80%;
-    }
+  .containerr {
+    flex-direction: column;
   }
+
+  .sidebar {
+    width: 100%;
+    order: 1;
+  }
+
+  .timetable {
+    width: 100%;
+    order: 2;
+  }
+
+  .timetable-header {
+    zoom: 80%;
+  }
+}
