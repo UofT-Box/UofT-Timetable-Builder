@@ -37,6 +37,9 @@ Java Development Kit (JDK) 17 or higher
 ```
 python packages include sqlite3 pymysql
 ```
+```
+Make sure you have MySQL installed and configured. You can use the provided web scraping scripts located in UofT-Timetable-Builder\script\sql_script to fetch the required data.
+```
 
 ## Installation
 

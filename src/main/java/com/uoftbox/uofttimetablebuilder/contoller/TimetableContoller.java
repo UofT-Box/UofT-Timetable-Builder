@@ -51,8 +51,11 @@ public class TimetableContoller {
         userPreferences.setBreakTimeWeight((double)userInput.getBreakTimeWeight());
         userPreferences.setScoreThreshold(-100000.0);
 
-        CompletableFuture<TimetableResultInfo> fallResult = timetableService.getTopTimetable(fallCourseCode, "F",userPreferences);
-        CompletableFuture<TimetableResultInfo> winterResult = timetableService.getTopTimetable(winterCourseCode, "S",userPreferences);
+        List<String> lockedCoursesFall = userInput.getLockedCoursesFall();
+        List<String> lockedCoursesWinter = userInput.getLockedCoursesWinter();
+
+        CompletableFuture<TimetableResultInfo> fallResult = timetableService.getTopTimetable(fallCourseCode, "F",userPreferences, lockedCoursesFall);
+        CompletableFuture<TimetableResultInfo> winterResult = timetableService.getTopTimetable(winterCourseCode, "S",userPreferences, lockedCoursesWinter);
         CompletableFuture.allOf(fallResult,winterResult).join();
 
         TimetableResultInfo fallTimetableResult = fallResult.get();

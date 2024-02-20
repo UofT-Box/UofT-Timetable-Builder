@@ -13,20 +13,40 @@ public class UserInput {
     private int preferredTimeWeight; // 时间分布偏好的权重
     private int balanceWeight; // 课程均衡性的权重
     private int breakTimeWeight; // 课间时间的权重
+    private List<String> lockedCoursesFall;
+    private List<String> lockedCoursesWinter;
 
-    
     public UserInput() {
-        
-    }    
-    
+
+    }
+
     public UserInput(List<String> fallCourseList, List<String> winterCourseList, int preferredTimeIndex,
-            int preferredTimeWeight, int balanceWeight, int breakTimeWeight) {
+            int preferredTimeWeight, int balanceWeight, int breakTimeWeight, List<String> lockedCoursesFall, List<String> lockedCoursesWinter) {
         this.fallCourseList = fallCourseList;
         this.winterCourseList = winterCourseList;
         this.preferredTimeIndex = preferredTimeIndex;
         this.preferredTimeWeight = preferredTimeWeight;
         this.balanceWeight = balanceWeight;
         this.breakTimeWeight = breakTimeWeight;
+        this.lockedCoursesFall = lockedCoursesFall;
+        this.lockedCoursesWinter = lockedCoursesWinter;
+    }
+
+
+    public List<String> getLockedCoursesFall() {
+        return lockedCoursesFall;
+    }
+
+    public void setLockedCoursesFall(List<String> lockedCoursesFall) {
+        this.lockedCoursesFall = lockedCoursesFall;
+    }
+
+    public List<String> getLockedCoursesWinter() {
+        return lockedCoursesWinter;
+    }
+
+    public void setLockedCoursesWinter(List<String> lockedCoursesWinter) {
+        this.lockedCoursesWinter = lockedCoursesWinter;
     }
 
     public List<String> getFallCourseList() {
@@ -77,34 +97,35 @@ public class UserInput {
         this.breakTimeWeight = breakTimeWeight;
     }
 
-    public List<String> getFallCourseCode(){
+    public List<String> getFallCourseCode() {
         return convertToCourseCode(fallCourseList);
     }
 
-    public List<String> getWinterCourseCode(){
+    public List<String> getWinterCourseCode() {
         return convertToCourseCode(winterCourseList);
     }
 
-    private List<String> convertToCourseCode(List<String> courseList){
+    private List<String> convertToCourseCode(List<String> courseList) {
         List<String> result = new ArrayList<>();
         for (String course : courseList) {
             int courseCodeEndIdx = getCourseCodeEndIdx(course);
-            if (courseCodeEndIdx == -1) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not finde course code index");
+            if (courseCodeEndIdx == -1)
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Did not finde course code index");
             String courseCode = course.substring(0, courseCodeEndIdx);
             result.add(courseCode);
         }
         return result;
     }
-    
-    private int getCourseCodeEndIdx(String course){
+
+    private int getCourseCodeEndIdx(String course) {
         int len = course.length();
-        for (int i = len - 2; i >= 0; i++){
+        for (int i = len - 2; i >= 0; i++) {
             char tempChar = course.charAt(i);
-            if (tempChar >= 48 &&  tempChar <= 57){
+            if (tempChar >= 48 && tempChar <= 57) {
                 return i + 1;
             }
         }
         return -1;
     }
-    
+
 }
