@@ -65,21 +65,16 @@
         </nav>
         <a href="https://forms.gle/cVXp4STrensowoPw9" target="_blank"><button class="report-issue-btn">Report Issue</button></a>
     </div>
-    <div class="input">
-        <select class="relevantCourses" id="select-state" placeholder="Enter the course code/name...">
-            <option value="">Enter the course code/name...</option>
-        </select>
-    </div>
     <div class="containerr">
         <div class="timetable" >
             <div id="large-view" class="timetable-view">
                 <!-- 大视图的课程表内容 -->
                 <br>    
                 <div style="width: 100%;">
-                    <table class="table table-bordered" id="test" style="text-align: center;">
-                        <thead>
+                    <table class="table table-bordered" id="table-body" style="text-align: center;">
+                        <thead id="timetable-head">
                             <tr>
-                                <th></th>
+                                <th><img src = "./lib/walk-svgrepo-com.svg" style = "width: 20px;">Travel Path</th>
                                 <th>MON</th>
                                 <th>TUE</th>
                                 <th>WED</th>
@@ -101,6 +96,11 @@
         </div>
 
         <div class="sidebar">
+            <div class="input">
+                <select class="relevantCourses" id="select-state" placeholder="Enter the course code/name...">
+                    <option value="">Enter the course code/name...</option>
+                </select>
+            </div>
             <!-- 学期切换按钮 -->
         
             <!-- 用户选择的课程列表 -->

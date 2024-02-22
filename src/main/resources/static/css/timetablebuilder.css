@@ -19,6 +19,7 @@
 
 .timetable-view {
   display: none; /* 默认不显示 */
+  margin-top: -25px;
 }
 
 .timetable-view.active {
@@ -334,11 +335,11 @@
 }
 
 .small-icon {
-    font-size: 0.8em; /* 或者适当的大小 */
+  font-size: 0.8em; /* 或者适当的大小 */
 }
 
 .large-icon {
-    font-size: 1.2em; /* 或者适当的大小 */
+  font-size: 1.2em; /* 或者适当的大小 */
 }
 
 @media screen and (max-width: 950px) {
@@ -359,4 +360,77 @@
   .timetable-header {
     zoom: 80%;
   }
+}
+
+.travel-img {
+  width: 20px;
+  height: auto;
+}
+
+#estimator-btn {
+  background-color: #ffffff;
+  color: rgb(68, 183, 255);
+  padding: 5px 20px;
+  border-color: #007bff;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#estimator-open {
+  display: flex;
+  align-items: center;
+  background-color: #007bff; /* 蓝色背景 */
+  border-radius: 20px; /* 圆角边框 */
+  color: white; /* 白色文字 */
+  font-size: 16px; /* 字体大小 */
+  padding: 2px;
+  width: max-content;
+}
+
+#estimator-open input[type="text"] {
+  flex-grow: 1;
+  margin-right: 10px;
+  padding: 1px 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+#estimator-open button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+#display-container {
+  display: flex;
+  align-items: center;
+  background-color: #007bff; /* 蓝色背景 */
+  border-radius: 20px; /* 圆角边框 */
+  color: white; /* 白色文字 */
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+.display-box {
+  background-color: white;
+  border: 2px solid #007bff;
+  border-radius: 15px;
+  color: #007bff;
+  padding: 1px 15px;
+  margin-right: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+#close-btn,
+#search-btn {
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
 }
