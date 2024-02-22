@@ -13,10 +13,22 @@ var lockedCoursesFall = [];
 var lockedCoursesWinter = [];
 var building1 = "";
 var building2 = "";
+var building_list = {};
 
 //************ UI Element Initialization ****************//
 var $select = $(".relevantCourses").selectize(); // 输入-下滑选择框生成
 var selectControl = $select[0].selectize;
+
+$(document).ready(function () {
+  fetch("./lib/locations.json")
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      building_list = data;
+    });
+});
 
 $(document).ready(function () {
   dragInit();
@@ -176,22 +188,23 @@ function addCourseToSelect(input) {
     },
   });
 }
-function getDistance(){
+function getDistance() {
   let origin = window.location.origin;
   $.ajax({
     type: "post",
     url: `${origin}/get-distance`,
     data: {
       origin: building1,
-      destination: building2
+      destination: building2,
     },
     dataType: "json",
     async: false,
     success: function (data) {
-      if (data == -1){ // 查看是否找到
-        return
+      if (data == -1) {
+        // 查看是否找到
+        return;
       }
-      let distance = data // 距离
+      let distance = data; // 距离
     },
     error: function () {
       alert("Error, something went wrong pleace contact admin!");
@@ -437,9 +450,69 @@ function initTimetableTemplat(timetableFall, timetableWinter) {
   }
 }
 
-// index表的number
+function displayTimetableHead(term, index) {
+  var daysOfWeek = ["MON", "TUE", "WED", "THU", "FRI"];
+
+  let timetable = allTimeTables[index][term];
+  var googleMapLinks = {};
+  // 初始化googleMapLinks结构
+  daysOfWeek.forEach((day, index_day) => {
+    let locations = [];
+    let preCourse = "";
+    let preSection = "";
+    for (let time of times) {
+      let info = timetable[time][index_day + 1];
+      if (
+        info &&
+        info.location &&
+        (preCourse != info["course"] || preSection != info["section"])
+      ) {
+        if (info.location in building_list) {
+          let location_name = building_list[info.location];
+          locations.push(location_name);
+        }
+      }
+      preCourse = info["course"];
+      preSection = info["section"];
+    }
+
+    if (locations.length > 0) {
+      let baseUrl = "https://www.google.com/maps/dir/";
+      let query = locations
+        .map((location) => encodeURIComponent(location))
+        .join("/");
+      googleMapLinks[day] = baseUrl + query;
+    } else {
+      googleMapLinks[day] = null; // 当天没有地点的情况
+    }
+  });
+
+  // 举例使用googleMapLinks
+  console.log(googleMapLinks);
+
+  // 假设thead的ID是timetable-head
+  var thead = document.querySelector("#timetable-head");
+  if (thead) {
+    var thElements = thead.querySelectorAll("th");
+    for (let i = 1; i < thElements.length; i++) {
+      let day = daysOfWeek[i - 1];
+      let th = thElements[i];
+      th.innerHTML = "";
+      if (googleMapLinks[day] != null) {
+        let a = document.createElement("a");
+        a.href = googleMapLinks[day];
+        a.textContent = day;
+        a.target = "_blank";
+        th.appendChild(a);
+      } else {
+        th.append(day);
+      }
+    }
+  }
+}
+
 function displayTimetable(term, index) {
-  // 将元素加入至HTML
+  displayTimetableHead(term, index);
   let table = document.querySelector("#timetable-output");
   let output = "";
   let timetable = allTimeTables[index][term]; //获取课表
@@ -451,8 +524,6 @@ function displayTimetable(term, index) {
       if (timetable[time][j] !== "") {
         let info = timetable[time][j];
         var courseSectionKey = info["course"] + "<br>" + info["section"];
-        // var courseSectionKey = "<b>" + info["course"] + "</b><br><b>" + info["section"] + "</b>";
-        console.log(courseSectionKey);
         var isLockedFall = lockedCoursesFall.includes(courseSectionKey);
         var isLockedWinter = lockedCoursesWinter.includes(courseSectionKey);
         console.log(isLockedFall || isLockedWinter);
@@ -481,7 +552,7 @@ function displayTimetable(term, index) {
   }
   table.innerHTML = output;
 
-  mergeCells(table); // 合并单元格
+  mergeCells(table);
 }
 
 function lockSection(event, span) {
