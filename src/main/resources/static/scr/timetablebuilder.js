@@ -519,10 +519,15 @@ function displayTimetableHead(term, index) {
       let th = thElements[i];
       th.innerHTML = "";
       if (googleMapLinks[day] != null) {
+        let img = document.createElement("img");
+        img.src = "./lib/walk-svgrepo-com.svg";
+        img.style = "width: 20px;";
+        th.appendChild(img)
         let a = document.createElement("a");
         a.href = googleMapLinks[day];
         a.textContent = day;
         a.target = "_blank";
+        a.style = "text-decoration: none;"
         th.appendChild(a);
       } else {
         th.append(day);
