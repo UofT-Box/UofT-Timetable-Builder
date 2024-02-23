@@ -218,7 +218,8 @@ function getDivision(courseCode) {
   }
 }
 
-function addCourseToTimetable() {
+function addCourseToTimetable(returnTime = false) {
+  console.log(returnTime);
   switchButton("toggle");
 
   let weigthDict = getWeight();
@@ -240,6 +241,7 @@ function addCourseToTimetable() {
       breakTimeWeight: classInterval,
       lockedCoursesFall: lockedCoursesFall,
       lockedCoursesWinter: lockedCoursesWinter,
+      returnTime: returnTime,
     }),
     dataType: "json",
     async: false,
@@ -395,7 +397,7 @@ function saveTimetable(data = null) {
             timetableFall[tempTime][day] = info;
           }
         }
-        if (!(courseInfo.course in fallCourseChoose)){
+        if (!(courseInfo.course in fallCourseChoose)) {
           fallCourseChoose[courseInfo.course] = [];
         }
         fallCourseChoose[courseInfo.course].push(info);
@@ -419,7 +421,7 @@ function saveTimetable(data = null) {
             timetableWinter[tempTime][day] = info;
           }
         }
-        if (!(courseInfo.course in fallCourseChoose)){
+        if (!(courseInfo.course in fallCourseChoose)) {
           winterTimetableInfo[courseInfo.course] = [];
         }
         winterTimetableInfo[courseInfo.course].push(info);
@@ -716,8 +718,10 @@ function tdHaveSection(event) {
   // 将信息添加进弹窗并激活弹窗
   element.innerHTML = detaillInfo;
   let style = document.querySelector("#detaillStyle");
-  style.className = "modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm";
-  document.querySelector("#detaillInfoLabel").innerHTML = "Detailed Information";
+  style.className =
+    "modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm";
+  document.querySelector("#detaillInfoLabel").innerHTML =
+    "Detailed Information";
   document.querySelector("#displayDetaillCourseInfo").click();
 }
 
@@ -859,11 +863,11 @@ function generateCourses(course, term, color = null) {
   courseName.textContent = course.slice(0, -1) + " " + course.slice(-1); // 设置课程名称
 
   // 编辑按钮
-  const editBtn = document.createElement('button');
-  editBtn.className = 'edit-btn';
+  const editBtn = document.createElement("button");
+  editBtn.className = "edit-btn";
   editBtn.id = course;
-  editBtn.textContent = '✏️'; //TODO
-  editBtn.setAttribute("onclick", "displayNewTime(this)")
+  editBtn.textContent = "✏️";
+  editBtn.setAttribute("onclick", "displayNewTime(this)");
 
   // 删除按钮
   const deleteBtn = document.createElement("button");
@@ -882,51 +886,250 @@ function generateCourses(course, term, color = null) {
 }
 
 // 展示课程时间信息
+//TODO
+
+function createTableHeader(headers) {
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  headers.forEach((headerText) => {
+    const header = document.createElement("th");
+    header.textContent = headerText;
+    headerRow.appendChild(header);
+  });
+  thead.appendChild(headerRow);
+  thead.className = "table-light";
+  return thead;
+}
+
 function displayNewTime(event) {
   let eleId = event.id;
   let courseCode = getCourseCode(eleId);
   let sectionCode = getSectionCode(eleId);
-  
+
   // 将信息添加进弹窗并激活弹窗
   let element = document.querySelector("#courseDetaillInfo");
   element.innerHTML = "";
-  let lecture = "<h2>Lecture</h2>";
-  let tutorials = "<h2>Tutorials</h2>";
-  let practical = "<h2>Practical</h2>";
+  const lecTable = document.createElement("table");
+  const tutTable = document.createElement("table");
+  const praTable = document.createElement("table");
+  lecTable.className = "table";
+  tutTable.className = "table";
+  praTable.className = "table";
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  const headers = ["", "ACTIVITY", "TIME", "LOCATION", "INSTRUCTOR", "SIZE"];
+  headers.forEach((headerText) => {
+    const header = document.createElement("th");
+    header.textContent = headerText;
+    headerRow.appendChild(header);
+  });
+  thead.appendChild(headerRow);
+  lecTable.appendChild(createTableHeader(headers));
+  tutTable.appendChild(createTableHeader(headers));
+  praTable.appendChild(createTableHeader(headers));
+
   // getTimeInfo(courseCode, sectionCode);
-  let timeInfo = Object.values(getTimeInfo(courseCode, sectionCode));
-  for (info in timeInfo){
-    let section = timeInfo[info].sectionCode;
-    let prof = timeInfo[info].instructors;
-    let time = timeInfo[info].times;
-    let size = timeInfo[info].size;
-    let notes = timeInfo[info].notes;
-    if (section[0] === "L"){
+  let timeInfo = getTimeInfo(courseCode, sectionCode);
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const lecTbody = document.createElement("tbody");
+  const tutTbody = document.createElement("tbody");
+  const praTbody = document.createElement("tbody");
 
-    }else if(section[0] === "T"){
+  timeInfo.forEach((info) => {
+    let section_ori = info.sectionCode;
+    let prof = "TBA";
+    let profs = info.instructors;
+    if (profs.length != 0) {
+      profs = info.instructors.split(", ");
 
-    }else{
+      profs.forEach((profName, index) => {
+        let url = `https://www.ratemyprofessors.com/search/professors?q=${profName}`;
 
+        let link = `<a href="${url}" target="_blank" style = "text-decoration: none;">${profName}</a>`;
+        if (index != 0) {
+          prof += "<br>" + link;
+        } else {
+          prof = link;
+        }
+      });
     }
-    element.innerHTML += `${section}-${prof}-${time}-${size}-${notes}`;
-  }
 
+    let size = info.size;
+    let section = section_ori + "<br>" + info.notes;
+
+    let allTimeAndLocation = JSON.parse(info.times);
+    let allTimes = "";
+    let allLocations = "";
+
+    allTimeAndLocation.forEach((timeAndLocation) => {
+      let day = days[Number(timeAndLocation["day"]) - 1];
+      let start = convertMillisecondsToHM(Number(timeAndLocation["start"]));
+      let end = convertMillisecondsToHM(Number(timeAndLocation["end"]));
+      let time = `${day} ${start}-${end}`;
+      allTimes += time + "<br>";
+      let location =
+        timeAndLocation["location"].length === 0
+          ? "TBA"
+          : timeAndLocation["location"];
+      allLocations += location + "<br>";
+    });
+
+    const row = document.createElement("tr");
+    const cell_input = document.createElement("td");
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.id = "courseSelectionRadio";
+    input.name = section[0];
+    input.value = courseCode + "<br>" + section_ori;
+    input.style = "margin-right: 3px;";
+    if (
+      lockedCoursesFall.includes(courseCode + "<br>" + section_ori) ||
+      lockedCoursesWinter.includes(courseCode + "<br>" + section_ori)
+    ) {
+      input.checked = true; // 将 radio 按钮设置为初始选中状态
+    }
+    cell_input.appendChild(input);
+    row.appendChild(cell_input);
+    const cell_section = document.createElement("td");
+    cell_section.innerHTML = section;
+    row.appendChild(cell_section);
+
+    const cell_allTimes = document.createElement("td");
+    cell_allTimes.innerHTML = allTimes;
+    row.appendChild(cell_allTimes);
+
+    const cell_allLocations = document.createElement("td");
+    cell_allLocations.innerHTML = allLocations;
+    row.appendChild(cell_allLocations);
+
+    const cell_prof = document.createElement("td");
+    cell_prof.innerHTML = prof;
+    row.appendChild(cell_prof);
+
+    const cell_size = document.createElement("td");
+    cell_size.innerHTML = size;
+    row.appendChild(cell_size);
+
+    if (section[0] === "L") {
+      lecTbody.appendChild(row);
+    } else if (section[0] === "T") {
+      tutTbody.appendChild(row);
+    } else {
+      praTbody.appendChild(row);
+    }
+  });
+  lecTable.appendChild(lecTbody);
+  tutTable.appendChild(tutTbody);
+  praTable.appendChild(praTbody);
+
+  if (lecTbody.children.length != 0) {
+    element.appendChild(lecTable);
+  }
+  if (tutTbody.children.length != 0) {
+    element.appendChild(tutTable);
+  }
+  if (praTbody.children.length != 0) {
+    element.appendChild(praTable);
+  }
   // 放入并激活弹窗
   let style = document.querySelector("#detaillStyle");
-  style.className = "modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl";
+  style.className =
+    "modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl";
   document.querySelector("#detaillInfoLabel").innerHTML = "Other time";
   document.querySelector("#displayDetaillCourseInfo").click();
+  const confer_btns = document.getElementsByClassName("btn-primary");
+  Array.from(confer_btns).forEach((btn, index) => {
+    btn.id = "courseChooseComfer";
+    btn.innerHTML = "Comfer";
+    btn.addEventListener("click", function () {
+      const selectedValues = {
+        L: null,
+        T: null,
+        P: null,
+      };
+
+      Object.keys(selectedValues).forEach((type) => {
+        const selectedRadio = document.querySelector(
+          `input[type="radio"][name="${type}"]:checked`
+        );
+        if (selectedRadio) {
+          selectedValues[type] = selectedRadio.value;
+        }
+      });
+
+      console.log(selectedValues);
+      const fallButton = document.querySelector(
+        `button[onclick="switchTerm('fall')"]`
+      );
+      let currentTerm;
+      if (fallButton.classList.contains("active")) {
+        currentTerm = "fall";
+      } else {
+        currentTerm = "winter";
+      }
+      let originalLockedCourses =
+        currentTerm === "fall"
+          ? [...lockedCoursesFall]
+          : [...lockedCoursesWinter];
+      updateLockedCourses(selectedValues, currentTerm);
+      let updatedLockedCourses =
+        currentTerm === "fall" ? lockedCoursesFall : lockedCoursesWinter;
+      if (!arraysEqual(originalLockedCourses, updatedLockedCourses)) {
+        fetchOneData();
+      }
+    });
+  });
 }
-function getCourseCode(target){
+
+function arraysEqual(a, b) {
+  a.sort();
+  b.sort();
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+
+  for (let i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
+function updateLockedCourses(selectedValues, term) {
+  let lockedCourses = term === "fall" ? lockedCoursesFall : lockedCoursesWinter;
+
+  Object.values(selectedValues).forEach((value) => {
+    if (value) {
+      const [courseCode, section] = value.split("<br>");
+      const existingIndex = lockedCourses.findIndex(
+        (v) => v.startsWith(courseCode + "<br>") && v !== value
+      );
+      if (existingIndex !== -1) {
+        lockedCourses[existingIndex] = value;
+      } else {
+        if (!lockedCourses.includes(value)) {
+          lockedCourses.push(value);
+        }
+      }
+    }
+  });
+
+  if (term === "fall") {
+    lockedCoursesFall = lockedCourses;
+  } else {
+    lockedCoursesWinter = lockedCourses;
+  }
+}
+
+function getCourseCode(target) {
   let checker = ["Y", "F", "S"];
   let len = target.length - 2;
-  if (checker.includes(target[len + 1])){
-    return target.substring(0, len+1);
-  }else if(checker.includes(target[len])){
+  if (checker.includes(target[len + 1])) {
+    return target.substring(0, len + 1);
+  } else if (checker.includes(target[len])) {
     return target.substring(0, len);
   }
 }
-function getTimeInfo(courseCode, sectionCode){
+function getTimeInfo(courseCode, sectionCode) {
   let origin = window.location.origin;
   let info = {};
   $.ajax({
@@ -934,7 +1137,7 @@ function getTimeInfo(courseCode, sectionCode){
     url: `${origin}/get-time-info`,
     data: {
       courseCode: courseCode,
-      sectionCode: sectionCode
+      sectionCode: sectionCode,
     },
     dataType: "json",
     async: false,
@@ -946,11 +1149,11 @@ function getTimeInfo(courseCode, sectionCode){
     },
   });
   console.log(info);
-  return info
+  return info;
 }
 
-function getchangeCourseTimeInfo(courseCode, sectionCode){
-  if (sectionCode === 'F'){
+function getchangeCourseTimeInfo(courseCode, sectionCode) {
+  if (sectionCode === "F") {
     return fallTimetableInfo[courseCode];
   }
   return winterTimetableInfo[courseCode];
@@ -1169,10 +1372,23 @@ function hideLoading() {
 }
 
 function fetchData() {
+  var saveBtn = document.getElementById("save-btn");
+  saveBtn.src = "./lib/save.svg";
   let generateBtn = document.querySelector("#generate-schedule-btn");
   generateBtn.disabled = true;
   showLoading();
   setTimeout(addCourseToTimetable, 1);
+}
+
+function fetchOneData() {
+  var saveBtn = document.getElementById("save-btn");
+  saveBtn.src = "./lib/save.svg";
+  let generateBtn = document.querySelector("#generate-schedule-btn");
+  generateBtn.disabled = true;
+  showLoading();
+  setTimeout(function () {
+    addCourseToTimetable(true);
+  }, 1);
 }
 
 function saveBtnInit() {
@@ -1246,14 +1462,12 @@ function downloadPDF() {
   // 目标元素
   const element = document.getElementById("table-body");
   console.log(element);
-  html2canvas(element).then(function(canvas) {
-    // 创建一个链接，并设置图像的下载属性
+  html2canvas(element).then(function (canvas) {
     var link = document.createElement("a");
-    link.download = "table_image.png"; // 设置下载的文件名
-    link.href = canvas.toDataURL(); // 将画布转换为 base64 编码的数据 URL
-    // 将链接添加到文档中，并模拟点击下载
+    link.download = "table_image.png";
+    link.href = canvas.toDataURL();
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-});
+  });
 }

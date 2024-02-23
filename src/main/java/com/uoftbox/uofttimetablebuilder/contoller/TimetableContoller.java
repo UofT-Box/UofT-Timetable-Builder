@@ -71,8 +71,9 @@ public class TimetableContoller {
         List<String> lockedCoursesFall = userInput.getLockedCoursesFall();
         List<String> lockedCoursesWinter = userInput.getLockedCoursesWinter();
 
-        CompletableFuture<TimetableResultInfo> fallResult = timetableService.getTopTimetable(fallCourseCode, "F",userPreferences, lockedCoursesFall);
-        CompletableFuture<TimetableResultInfo> winterResult = timetableService.getTopTimetable(winterCourseCode, "S",userPreferences, lockedCoursesWinter);
+        boolean returnTime = userInput.getReturnTime();
+        CompletableFuture<TimetableResultInfo> fallResult = timetableService.getTopTimetable(fallCourseCode, "F",userPreferences, lockedCoursesFall,returnTime);
+        CompletableFuture<TimetableResultInfo> winterResult = timetableService.getTopTimetable(winterCourseCode, "S",userPreferences, lockedCoursesWinter,returnTime);
         CompletableFuture.allOf(fallResult,winterResult).join();
 
         TimetableResultInfo fallTimetableResult = fallResult.get();

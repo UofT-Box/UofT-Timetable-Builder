@@ -27,9 +27,9 @@ public class TimetableService {
 
     @Async("taskExecutor")
     public CompletableFuture<TimetableResultInfo> getTopTimetable(List<String> courseCode, String sectionCode,
-            UserPreferences userPreferences, List<String> lockedCourses) {
+            UserPreferences userPreferences, List<String> lockedCourses, boolean returnTime) {
                 
-        TimetableResultInfo timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, lockedCourses, false);
+        TimetableResultInfo timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, lockedCourses, returnTime);
         List<List<CourseInfo>> allTimetables = timetableResult.getTopTimetables();
         
         
@@ -38,7 +38,7 @@ public class TimetableService {
                 break;
             }
             Collections.shuffle(courseCode);
-            timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, lockedCourses, false);
+            timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, lockedCourses, returnTime);
             allTimetables = timetableResult.getTopTimetables();
         }
 

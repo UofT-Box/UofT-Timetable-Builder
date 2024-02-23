@@ -15,13 +15,14 @@ public class UserInput {
     private int breakTimeWeight; // 课间时间的权重
     private List<String> lockedCoursesFall;
     private List<String> lockedCoursesWinter;
+    private boolean returnTime;
 
     public UserInput() {
 
     }
 
     public UserInput(List<String> fallCourseList, List<String> winterCourseList, int preferredTimeIndex,
-            int preferredTimeWeight, int balanceWeight, int breakTimeWeight, List<String> lockedCoursesFall, List<String> lockedCoursesWinter) {
+            int preferredTimeWeight, int balanceWeight, int breakTimeWeight, List<String> lockedCoursesFall, List<String> lockedCoursesWinter, boolean returnTime) {
         this.fallCourseList = fallCourseList;
         this.winterCourseList = winterCourseList;
         this.preferredTimeIndex = preferredTimeIndex;
@@ -30,6 +31,7 @@ public class UserInput {
         this.breakTimeWeight = breakTimeWeight;
         this.lockedCoursesFall = lockedCoursesFall;
         this.lockedCoursesWinter = lockedCoursesWinter;
+        this.returnTime = returnTime;
     }
 
 
@@ -126,6 +128,14 @@ public class UserInput {
             }
         }
         return -1;
+    }
+
+    public boolean getReturnTime() {
+        return returnTime;
+    }
+
+    public void setReturnTime(boolean returnTime) {
+        this.returnTime = returnTime;
     }
 
 }
