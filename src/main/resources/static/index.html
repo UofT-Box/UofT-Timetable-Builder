@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,15 +12,18 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- CSS --> 
+    <!-- CSS -->
     <!-- selectize stylesheet -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+        integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
     <!-- bootstrap stylesheet -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- JavaScript -->
     <!-- selectize script -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
+        integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <!-- bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -29,6 +33,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
 </head>
+
 <body>
     <!-- Loading Overlay -->
     <div id="loading-overlay">
@@ -36,45 +41,41 @@
     </div>
     <!-- templet -->
     <!-- Button trigger modal -->
-    <button type="button" id="displayDetaillCourseInfo" data-bs-toggle="modal" data-bs-target="#detaillInfo" style="display: none; height: 0px; width: 0px;"></button>
+    <button type="button" id="displayDetaillCourseInfo" data-bs-toggle="modal" data-bs-target="#detaillInfo"
+        style="display: none; height: 0px; width: 0px;"></button>
     <!-- detaill info Modal -->
     <div class="modal fade" id="detaillInfo" tabindex="-1" aria-labelledby="detaillInfoLabel" aria-hidden="true">
         <div id="detaillStyle" class="modal-dialog modal-dialog-centered modal-dialog-scrollable ">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="detaillInfoLabel">Detailed Information</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="courseDetaillInfo">
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detaillInfoLabel">Detailed Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="courseDetaillInfo">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
-        </div>
     </div>
-    <!-- Real body start here -->
-    <!-- <div class="topnav">
-        <a href="./index.html">Home</a>
-        <a class="active" href="./timetablebuilder.html">Timetable Builder</a>
-    </div>
-    <br> -->
     <div class="timetable-header">
         <div class="title">
             <span class="title-main">UofT</span><span class="title-sub">Timetable Builder</span>
         </div>
-        <img id="folder-btn" src="./lib/folder.svg">
-        <img id="save-btn" src="./lib/save.svg">
-        <img id="share-btn" src="./lib/share.svg">
+        <img id="folder-btn" src="./lib/folder.svg" title="favorites">
+        <img id="save-btn" src="./lib/save.svg" title="save">
+        <img id="share-btn" src="./lib/share.svg" title="download timetable">
         <nav class="timetable-header-nav">
         </nav>
-        <a href="https://forms.gle/cVXp4STrensowoPw9" target="_blank"><button class="report-issue-btn">Report Issue</button></a>
+        <a href="https://forms.gle/cVXp4STrensowoPw9" target="_blank"><button class="report-issue-btn">Report
+                Issue</button></a>
     </div>
     <div class="containerr">
-        <div class="timetable" >
+        <div class="timetable">
             <div id="large-view" class="timetable-view">
                 <!-- 大视图的课程表内容 -->
-                <br>    
+                <br>
                 <div style="width: 100%;">
                     <table class="table table-bordered" id="table-body" style="text-align: center;">
                         <thead id="timetable-head">
@@ -93,11 +94,9 @@
                     </table>
                 </div>
             </div>
-            <div id="small-view" class="timetable-view" >
+            <div id="small-view" class="timetable-view">
                 <!-- 小视图的课程表内容 -->
             </div>
-            <!-- 视图切换按钮 -->
-            <!-- <button id="toggle-view-btn" onclick="switchView()">切换视图</button> -->
         </div>
 
         <div class="sidebar">
@@ -107,13 +106,15 @@
                 </select>
             </div>
             <!-- 学期切换按钮 -->
-        
+
             <!-- 用户选择的课程列表 -->
             <div class="courses-section" id="courses">
                 <div class="courses-section-title">
                     <div class="term-toggle">
-                        <button type="button" class="term-btn active" id = "fall-term-btn" onclick="switchTerm('fall')"><b>Fall</b></button>
-                        <button type="button" class="term-btn" id = "winter-term-btn" onclick="switchTerm('winter')"><b>Winter</b></button>
+                        <button type="button" class="term-btn active" id="fall-term-btn"
+                            onclick="switchTerm('fall')"><b>Fall</b></button>
+                        <button type="button" class="term-btn" id="winter-term-btn"
+                            onclick="switchTerm('winter')"><b>Winter</b></button>
                     </div>
                 </div>
                 <div class="courses-title">
@@ -132,57 +133,87 @@
                     </div>
                 </div>
 
-                
+
             </div>
             <!-- 偏好设置 -->
-            <div class = "preference" id="preferences-section">
+            <div class="preference" id="preferences-section">
                 <h4>Preferences:</h4>
-                <div class = "preference-list" id="weigth-parent">
-                    <div class="preference" id = "weigth" draggable="true">
-                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
-                        <span id = "weight-name">Start time</span>
+                <div class="preference-list" id="weigth-parent">
+                    <div class="preference" id="weigth" draggable="true">
+                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em"
+                            height="1em" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z">
+                            </path>
+                        </svg>
+                        <span id="weight-name">Start time</span>
                         <div class="options">
-                            <input type="radio" id="start-early" name="start-time" value="0"><label for="start-early">Early</label>
-                            <input type="radio" id="start-mid" name="start-time" value="1" checked><label for="start-mid">Mid</label>
-                            <input type="radio" id="start-late" name="start-time" value="2"><label for="start-late">Late</label>
-                        </div>
-                    </div>
-                    <div class="preference" id = "weigth" draggable="true">
-                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
-                        <span id = "weight-name">Class Interval</span>
-                        <div class="options">
-                            <input type="radio" id="interval-short" name="class-interval" value="-1"><label for="interval-short">Short</label>
-                            <input type="radio" id="interval-long" name="class-interval" value="1" checked><label for="interval-long">Long</label>
+                            <input type="radio" id="start-early" name="start-time" value="0"><label
+                                for="start-early">Early</label>
+                            <input type="radio" id="start-mid" name="start-time" value="1" checked><label
+                                for="start-mid">Mid</label>
+                            <input type="radio" id="start-late" name="start-time" value="2"><label
+                                for="start-late">Late</label>
                         </div>
                     </div>
                     <div class="preference" id="weigth" draggable="true">
-                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
-                        <span id = "weight-name">Days Spent</span>
+                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em"
+                            height="1em" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z">
+                            </path>
+                        </svg>
+                        <span id="weight-name">Class Interval</span>
                         <div class="options">
-                            <input type="radio" id="spent-min" name="days-spent" value="-1"><label for="spent-min">Min</label>
-                            <input type="radio" id="spent-max" name="days-spent" value="1" checked><label for="spent-max">Max</label>
+                            <input type="radio" id="interval-short" name="class-interval" value="-1"><label
+                                for="interval-short">Short</label>
+                            <input type="radio" id="interval-long" name="class-interval" value="1" checked><label
+                                for="interval-long">Long</label>
                         </div>
                     </div>
-                    <div class="preference" id = "weigth" draggable="true">
-                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg>
-                        <span id = "weight-name">Reasonable Walking Time</span>
+                    <div class="preference" id="weigth" draggable="true">
+                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em"
+                            height="1em" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z">
+                            </path>
+                        </svg>
+                        <span id="weight-name">Days Spent</span>
+                        <div class="options">
+                            <input type="radio" id="spent-min" name="days-spent" value="-1"><label
+                                for="spent-min">Min</label>
+                            <input type="radio" id="spent-max" name="days-spent" value="1" checked><label
+                                for="spent-max">Max</label>
+                        </div>
+                    </div>
+                    <div class="preference" id="weigth" draggable="true">
+                        <svg class="svg" viewBox="64 64 896 896" focusable="false" data-icon="menu" width="1em"
+                            height="1em" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z">
+                            </path>
+                        </svg>
+                        <span id="weight-name">Reasonable Walking Time</span>
                     </div>
                 </div>
             </div>
-    
+
             <div class="interface-buttons">
-                <button type="button" class="generate-schedule active" id = "generate-schedule-btn" onclick="fetchData()">GENERATE SCHEDULE</button>
-                <button type="button" class="toggle-view " id="toggle-view-btn" onclick="switchView()">MORE OPPTION</button>
+                <button type="button" class="generate-schedule active" id="generate-schedule-btn"
+                    onclick="fetchData()">GENERATE SCHEDULE</button>
+                <button type="button" class="toggle-view " id="toggle-view-btn" onclick="switchView()">MORE
+                    OPPTION</button>
             </div>
-            
+
         </div>
     </div>
 
     <script>
-        
+
     </script>
 
     <script type="text/javascript" src="./scr/timetablebuilder.js"></script>
 </body>
 </body>
+
 </html>

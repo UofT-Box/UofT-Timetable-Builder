@@ -219,8 +219,10 @@ function getDivision(courseCode) {
 }
 
 function addCourseToTimetable(returnTime = false) {
-  console.log(returnTime);
-  switchButton("toggle");
+  if (returnTime) {
+    switchView(true);
+  }
+  switchButton(returnTime ? "generate" : "toggle");
 
   let weigthDict = getWeight();
   let timeWeight = weigthDict["timeWeight"];
@@ -248,18 +250,21 @@ function addCourseToTimetable(returnTime = false) {
     success: function (data) {
       //小视角加载
       saveTimetable(data);
-      if (fallCourseChoose.length != 0 || winterCourseChoose.length == 0) {
-        switchTerm("fall", 1);
-      } else {
-        switchTerm("winter", 1);
+      if (!returnTime){
+        if (fallCourseChoose.length != 0 || winterCourseChoose.length == 0) {
+          switchTerm("fall");
+        } else {
+          switchTerm("winter");
+        }
+        displaySmallVeiw();
+      }else{
+        switchTerm(getTerm());
       }
-      displaySmallVeiw();
       hideLoading();
       let generateBtn = document.querySelector("#generate-schedule-btn");
       generateBtn.disabled = false;
     },
     error: function (e) {
-      console.log(e);
       let msg = e.responseJSON.message;
       alert("Error, " + msg);
       hideLoading();
@@ -512,11 +517,11 @@ function displayTimetableHead(term, index) {
       if (googleMapLinks[day] != null) {
         let img = document.createElement("img");
         img.src = "./lib/walk-svgrepo-com.svg";
-        img.style = "width: 20px;";
-        th.appendChild(img);
+        img.style = "width: 20px; margin-top: -5px;";
         let a = document.createElement("a");
         a.href = googleMapLinks[day];
-        a.textContent = day;
+        a.appendChild(img);
+        a.innerHTML += day;
         a.target = "_blank";
         a.style = "text-decoration: none;";
         th.appendChild(a);
@@ -550,7 +555,7 @@ function displayTimetable(term, index) {
           isLockedFall || isLockedWinter
             ? "brightness(70%)"
             : "brightness(100%)";
-        output += `<td class="timetableTd" id="${time}|${term}|${j}" onclick="tdHaveSection(this)" style="background-color: ${info["color"]}; position: relative; filter: ${styleSet};">
+        output += `<td class="timetableTd" id="${time}|${term}|${j}" onclick="tdHaveSection(this)" style="background-color: ${info["color"]}; position: relative; filter: ${styleSet};" title="click to show more detaill Info">
         <b>${info["course"]}</b><br>
         <b>${info["section"]}</b>
         <span class="lock-icon" style="position: absolute; top: 0; right: 0;" onclick="lockSection(event, this);">
@@ -729,20 +734,28 @@ function tdHaveSection(event) {
 function tdNoSection(event) {}
 
 // *************************** switchs ************************************************//
-function switchView() {
+function switchView(isUpdate = false, dispalySmallView = false) {
   var largeView = document.getElementById("large-view");
   var smallView = document.getElementById("small-view");
 
   // 切换active类来显示或隐藏视图
-  largeView.classList.toggle("active");
-  smallView.classList.toggle("active");
+
+  if (!isUpdate && !dispalySmallView){
+    largeView.classList.toggle("active");
+    smallView.classList.toggle("active");
+  }else if(isUpdate && !largeView.classList.contains("active")){
+    largeView.classList.toggle("active");
+    smallView.classList.toggle("active");
+  }else if(dispalySmallView && !smallView.classList.contains("active")){
+    largeView.classList.toggle("active");
+    smallView.classList.toggle("active");
+  }
 
   // 更新切换视图按钮的文本
   var toggleBtn = document.getElementById("toggle-view-btn");
   toggleBtn.textContent = largeView.classList.contains("active")
     ? "MORE OPTION"
     : "BACK";
-
   var saveBtn = document.getElementById("save-btn");
   if (largeView.classList.contains("active")) {
     saveBtn.style.display = "block";
@@ -867,6 +880,7 @@ function generateCourses(course, term, color = null) {
   editBtn.className = "edit-btn";
   editBtn.id = course;
   editBtn.textContent = "✏️";
+  editBtn.title = "change time";
   editBtn.setAttribute("onclick", "displayNewTime(this)");
 
   // 删除按钮
@@ -874,6 +888,7 @@ function generateCourses(course, term, color = null) {
   deleteBtn.className = "delete-btn";
   deleteBtn.id = course;
   deleteBtn.textContent = "🗑️";
+  deleteBtn.title = "delete course";
   deleteBtn.setAttribute("onclick", "deleteCourse(this)");
 
   // 将所有元素添加到课程元素中
@@ -886,8 +901,6 @@ function generateCourses(course, term, color = null) {
 }
 
 // 展示课程时间信息
-//TODO
-
 function createTableHeader(headers) {
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
@@ -1010,12 +1023,14 @@ function displayNewTime(event) {
     cell_size.innerHTML = size;
     row.appendChild(cell_size);
 
-    if (section[0] === "L") {
-      lecTbody.appendChild(row);
-    } else if (section[0] === "T") {
-      tutTbody.appendChild(row);
-    } else {
-      praTbody.appendChild(row);
+    if (allTimes.length !== 0){
+      if (section[0] === "L") {
+        lecTbody.appendChild(row);
+      } else if (section[0] === "T") {
+        tutTbody.appendChild(row);
+      } else {
+        praTbody.appendChild(row);
+      }
     }
   });
   lecTable.appendChild(lecTbody);
@@ -1035,7 +1050,7 @@ function displayNewTime(event) {
   let style = document.querySelector("#detaillStyle");
   style.className =
     "modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl";
-  document.querySelector("#detaillInfoLabel").innerHTML = "Other time";
+  document.querySelector("#detaillInfoLabel").innerHTML = "All time";
   document.querySelector("#displayDetaillCourseInfo").click();
   const confer_btns = document.getElementsByClassName("btn-primary");
   Array.from(confer_btns).forEach((btn, index) => {
@@ -1056,17 +1071,7 @@ function displayNewTime(event) {
           selectedValues[type] = selectedRadio.value;
         }
       });
-
-      console.log(selectedValues);
-      const fallButton = document.querySelector(
-        `button[onclick="switchTerm('fall')"]`
-      );
-      let currentTerm;
-      if (fallButton.classList.contains("active")) {
-        currentTerm = "fall";
-      } else {
-        currentTerm = "winter";
-      }
+      let currentTerm = getTerm();
       let originalLockedCourses =
         currentTerm === "fall"
           ? [...lockedCoursesFall]
@@ -1080,7 +1085,18 @@ function displayNewTime(event) {
     });
   });
 }
-
+function getTerm(){
+  const fallButton = document.querySelector(
+    `button[onclick="switchTerm('fall')"]`
+  );
+  let currentTerm;
+  if (fallButton.classList.contains("active")) {
+    currentTerm = "fall";
+  } else {
+    currentTerm = "winter";
+  }
+  return currentTerm;
+}
 function arraysEqual(a, b) {
   a.sort();
   b.sort();
@@ -1095,13 +1111,13 @@ function arraysEqual(a, b) {
 }
 
 function updateLockedCourses(selectedValues, term) {
-  let lockedCourses = term === "fall" ? lockedCoursesFall : lockedCoursesWinter;
+  let lockedCourses = (term === "fall" ? lockedCoursesFall : lockedCoursesWinter);
 
   Object.values(selectedValues).forEach((value) => {
     if (value) {
       const [courseCode, section] = value.split("<br>");
       const existingIndex = lockedCourses.findIndex(
-        (v) => v.startsWith(courseCode + "<br>") && v !== value
+        (v) => v.startsWith(courseCode + "<br>" + section[0]) && v !== value
       );
       if (existingIndex !== -1) {
         lockedCourses[existingIndex] = value;
@@ -1148,7 +1164,6 @@ function getTimeInfo(courseCode, sectionCode) {
       alert("Error, something went wrong pleace contact admin!");
     },
   });
-  console.log(info);
   return info;
 }
 
@@ -1167,6 +1182,7 @@ function deleteCourse(deleteBtn) {
       fallCourseChoose.splice(i, 1);
       fallCredit -= 0.5;
       switchCridit("fall");
+      break;
     }
   }
   for (let i = 0; i < winterCourseChoose.length; i++) {
@@ -1174,6 +1190,21 @@ function deleteCourse(deleteBtn) {
       winterCourseChoose.splice(i, 1);
       winterCredit -= 0.5;
       switchCridit("winter");
+      break;
+    }
+  }
+  for(let i = 0; i < lockedCoursesFall.length; i++){
+    target = lockedCoursesFall[i].split("<br>")[0]
+    if(deleteId.includes(target)){
+      lockedCoursesFall.splice(i,1);
+      i--;
+    }
+  }
+  for(let i = 0; i < lockedCoursesWinter.length; i++){
+    target = lockedCoursesWinter[i].split("<br>")[0]
+    if(deleteId.includes(target)){
+      lockedCoursesWinter.splice(i,1);
+      i--;
     }
   }
   while (true) {
@@ -1404,6 +1435,7 @@ function saveFolderInit() {
 
   saveBtn.addEventListener("click", function () {
     changeFolder();
+    switchView(false, true);
   });
 }
 
@@ -1438,7 +1470,6 @@ function changeFolder() {
 
   if (src === "./lib/folder-oepn.svg") {
     folderBtn.src = "./lib/folder.svg";
-    console.log("folder");
     allTimeTables = received_timetables;
   } else {
     folderBtn.src = "./lib/folder-oepn.svg";
@@ -1446,7 +1477,6 @@ function changeFolder() {
   }
 
   if (Object.keys(allTimeTables).length === 0) {
-    console.log("kong");
     allTimeTables = blank_timetable;
   }
   if (fallCourseChoose.length != 0 || winterCourseChoose.length == 0) {
@@ -1458,10 +1488,10 @@ function changeFolder() {
   displaySmallVeiw();
 }
 
+// html to png
 function downloadPDF() {
   // 目标元素
   const element = document.getElementById("table-body");
-  console.log(element);
   html2canvas(element).then(function (canvas) {
     var link = document.createElement("a");
     link.download = "table_image.png";

@@ -387,6 +387,18 @@
   .timetable-header {
     zoom: 80%;
   }
+
+  #folder-btn{
+    left: 215px;
+  }
+
+  #save-btn{
+    left: 255px;
+  }
+
+  #share-btn{
+    margin-right: 5px;
+  }
 }
 
 .travel-img {
