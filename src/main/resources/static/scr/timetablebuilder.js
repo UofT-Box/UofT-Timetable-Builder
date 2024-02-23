@@ -19,7 +19,7 @@ var current_timetable = [];
 var received_timetables = {};
 var all_saved_timetables = {};
 
-var blank_timetable = {}
+var blank_timetable = {};
 
 //************ UI Element Initialization ****************//
 var $select = $(".relevantCourses").selectize(); // 输入-下滑选择框生成
@@ -38,6 +38,7 @@ $(document).ready(function () {
 $(document).ready(function () {
   saveBtnInit();
   saveFolderInit();
+  saveInit();
 });
 
 $(document).ready(function () {
@@ -276,12 +277,12 @@ function addCourseToTimetable() {
     },
     error: function (e) {
       console.log(e);
-      let msg = e.responseJSON.message
+      let msg = e.responseJSON.message;
       alert("Error, " + msg);
       hideLoading();
       let generateBtn = document.querySelector("#generate-schedule-btn");
       generateBtn.disabled = false;
-    }
+    },
   });
 }
 
@@ -475,7 +476,6 @@ function initTimetableTemplat(timetableFall, timetableWinter) {
 function displayTimetableHead(term, index) {
   var daysOfWeek = ["MON", "TUE", "WED", "THU", "FRI"];
 
-  console.log(allTimeTables);
   let timetable = allTimeTables[index][term];
   var googleMapLinks = {};
   // 初始化googleMapLinks结构
@@ -522,12 +522,12 @@ function displayTimetableHead(term, index) {
         let img = document.createElement("img");
         img.src = "./lib/walk-svgrepo-com.svg";
         img.style = "width: 20px;";
-        th.appendChild(img)
+        th.appendChild(img);
         let a = document.createElement("a");
         a.href = googleMapLinks[day];
         a.textContent = day;
         a.target = "_blank";
-        a.style = "text-decoration: none;"
+        a.style = "text-decoration: none;";
         th.appendChild(a);
       } else {
         th.append(day);
@@ -1123,6 +1123,14 @@ function saveFolderInit() {
   });
 }
 
+function saveInit() {
+  var shareBtn = document.getElementById("share-btn");
+
+  shareBtn.addEventListener("click", function () {
+    downloadPDF();
+  });
+}
+
 function addToTimetable() {
   var saveBtn = document.getElementById("save-btn");
   if (Object.values(all_saved_timetables).includes(current_timetable)) {
@@ -1146,14 +1154,14 @@ function changeFolder() {
 
   if (src === "./lib/folder-oepn.svg") {
     folderBtn.src = "./lib/folder.svg";
-    console.log("folder")
+    console.log("folder");
     allTimeTables = received_timetables;
   } else {
     folderBtn.src = "./lib/folder-oepn.svg";
     allTimeTables = all_saved_timetables;
   }
-  
-  if (Object.keys(allTimeTables).length === 0){
+
+  if (Object.keys(allTimeTables).length === 0) {
     console.log("kong");
     allTimeTables = blank_timetable;
   }
@@ -1164,4 +1172,20 @@ function changeFolder() {
   }
 
   displaySmallVeiw();
+}
+
+function downloadPDF() {
+  // 目标元素
+  const element = document.getElementById("table-body");
+  console.log(element);
+  html2canvas(element).then(function(canvas) {
+    // 创建一个链接，并设置图像的下载属性
+    var link = document.createElement("a");
+    link.download = "table_image.png"; // 设置下载的文件名
+    link.href = canvas.toDataURL(); // 将画布转换为 base64 编码的数据 URL
+    // 将链接添加到文档中，并模拟点击下载
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
 }
