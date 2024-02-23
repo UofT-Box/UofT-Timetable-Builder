@@ -1,5 +1,6 @@
 package com.uoftbox.uofttimetablebuilder.service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,25 +19,43 @@ import com.uoftbox.uofttimetablebuilder.service.dbservice.CourseDataService;
 
 @Service
 public class TimetableService {
-    
+
     @Autowired
     private CourseDataService courseDataService;
     @Autowired
     private TimetableGeneratService timetableGeneratService;
-    
+
     @Async("taskExecutor")
-    public CompletableFuture<TimetableResultInfo> getTopTimetable(List<String> courseCode, String sectionCode, UserPreferences userPreferences, List<String> lockedCourses){
-        
+    public CompletableFuture<TimetableResultInfo> getTopTimetable(List<String> courseCode, String sectionCode,
+            UserPreferences userPreferences, List<String> lockedCourses) {
+
         Map<String, Map<String, Map<String, List<CourseInfo>>>> meetingSections = new HashMap<>();
-        
+
         TimetableResultInfo timetableResult;
         meetingSections = courseDataService.fetchSpecialSections(courseCode, sectionCode, lockedCourses);
-        Map<String, Map<String, CourseInfo>> lockedSections = courseDataService.fetchLockSections(sectionCode,lockedCourses);
-        timetableResult = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences, lockedSections);
+        Map<String, Map<String, CourseInfo>> lockedSections = courseDataService.fetchLockSections(sectionCode,
+                lockedCourses);
+        timetableResult = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences,
+                lockedSections);
         List<List<CourseInfo>> allTimetables = timetableResult.getTopTimetables();
         
-        if (allTimetables.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No timetable find");
         
+        for(int i = 0; i < 5; i ++) {
+            if(!allTimetables.isEmpty()){
+                break;
+            }
+            Collections.shuffle(courseCode);
+            meetingSections = courseDataService.fetchSpecialSections(courseCode, sectionCode, lockedCourses);
+            lockedSections = courseDataService.fetchLockSections(sectionCode,
+                    lockedCourses);
+            timetableResult = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences,
+                    lockedSections);
+            allTimetables = timetableResult.getTopTimetables();
+        }
+
+        if (allTimetables.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No timetable find");
+
         return CompletableFuture.completedFuture(timetableResult);
     }
 }

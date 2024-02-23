@@ -10,20 +10,19 @@
   overflow: auto;
   flex: 2;
   width: auto;
-  height: 600px;
+  height: 670px;
 }
 .sidebar {
   width: 33%;
-  /* 其他样式保持不变 */
 }
 
 .timetable-view {
-  display: none; /* 默认不显示 */
+  display: none;
   margin-top: -25px;
 }
 
 .timetable-view.active {
-  display: block; /* 激活的视图显示 */
+  display: block;
 }
 
 #small-view {
@@ -36,7 +35,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px; /* 为每行添加间隔 */
+  margin-bottom: 10px;
 }
 
 .row .timetable-thumbnail {
@@ -44,6 +43,30 @@
   border: 1px solid #ccc;
   text-align: center;
   padding: 10px;
+}
+
+#save-btn {
+  width:20px;
+  margin-left: 20px;
+  left: 310px;
+}
+
+#save-btn,
+#folder-btn {
+  cursor: pointer;
+  position: absolute;
+}
+
+#folder-btn:hover,
+#save-btn:hover {
+  transform: scale(1.2);
+}
+
+#folder-btn {
+  width:30px;
+  margin-left: 20px;
+  cursor: pointer;
+  left: 240px;
 }
 
 .thumbnail-header {
@@ -57,7 +80,7 @@
 }
 
 .semester {
-  width: 48%; /* 每个学期视图占据缩略图内容的一半 */
+  width: 48%;
   border: 1px solid #ccc;
   padding: 10px;
 }
@@ -72,7 +95,7 @@
 }
 
 .interface-buttons {
-  text-align: center; /* 按钮居中 */
+  text-align: center;
 }
 
 .term-toggle {
@@ -87,18 +110,18 @@
 .course-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px; /* 为每个课程项添加一些间隔 */
+  margin-bottom: 10px;
 }
 
 .color-indicator {
   width: 20px;
   height: 20px;
-  background-color: rgb(193, 84, 7); /* 课程的颜色 */
+  background-color: rgb(193, 84, 7);
   margin-right: 10px;
 }
 
 .course-name {
-  flex-grow: 1; /* 确保课程名字占据大部分的空间 */
+  flex-grow: 1;
 }
 
 .edit-btn,
@@ -106,10 +129,9 @@
   background: none;
   border: none;
   cursor: pointer;
-  margin-left: 10px; /* 在按钮之间添加一些空间 */
+  margin-left: 10px;
 }
 
-/* 您可能还需要为按钮添加hover效果 */
 .edit-btn:hover,
 .delete-btn:hover {
   background-color: #f2f2f2;
@@ -120,14 +142,13 @@
   padding: 10px;
   margin-bottom: 10px;
   background-color: #f9f9f9;
-  cursor: grab; /* 鼠标样式表明这个元素是可以拖动的 */
+  cursor: grab;
 }
 
 .options {
   float: right;
 }
 
-/* 样式化radio按钮和标签 */
 .options input[type="radio"] {
   margin-left: 10px;
 }
@@ -143,9 +164,7 @@
 }
 
 .svg {
-  /* display: block; */
-  transform: translateY(-2px); /* 向上移动10像素 */
-  /* width:50%; */
+  transform: translateY(-2px);
   zoom: 80%;
 }
 
@@ -251,7 +270,7 @@
   font-family: "Arial", sans-serif;
   color: #055eb6;
   background-color: white;
-  padding: 10px;
+  padding: 7px;
   border-radius: 5px;
   display: inline-block;
 }
