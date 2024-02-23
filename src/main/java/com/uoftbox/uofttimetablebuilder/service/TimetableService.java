@@ -48,28 +48,6 @@ public class TimetableService {
         return CompletableFuture.completedFuture(timetableResult);
     }
 
-    public List<List<CourseInfo>> updateTimetable(List<String> courseCode, String sectionCode,
-    UserPreferences userPreferences, List<String> targetCourse){
-
-        TimetableResultInfo timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, courseCode, true);
-        List<List<CourseInfo>> allTimetables = timetableResult.getTopTimetables();
-        
-        
-        for(int i = 0; i < 5; i ++) {
-            if(!allTimetables.isEmpty()){
-                break;
-            }
-            Collections.shuffle(courseCode);
-            timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, courseCode, true);
-            allTimetables = timetableResult.getTopTimetables();
-        }
-
-        if (allTimetables.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No timetable find");
-
-        return allTimetables;
-    }
-
     private TimetableResultInfo genTopTimetables(List<String> courseCode, String sectionCode,
     UserPreferences userPreferences, List<String> lockedCourses, boolean isUpdate){
 
