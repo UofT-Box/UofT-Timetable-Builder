@@ -57,6 +57,7 @@
   position: absolute;
 }
 
+#share-btn:hover,
 #folder-btn:hover,
 #save-btn:hover {
   transform: scale(1.2);
@@ -67,6 +68,13 @@
   margin-left: 20px;
   cursor: pointer;
   left: 240px;
+}
+
+#share-btn {
+  width:30px;
+  margin-left:auto;
+  margin-right: 20px;
+  cursor: pointer;
 }
 
 .thumbnail-header {
