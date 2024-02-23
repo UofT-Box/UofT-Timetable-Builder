@@ -14,6 +14,12 @@ var lockedCoursesWinter = [];
 var building1 = "";
 var building2 = "";
 var building_list = {};
+var current_timetable = [];
+
+var received_timetables = {};
+var all_saved_timetables = {};
+
+var blank_timetable = {}
 
 //************ UI Element Initialization ****************//
 var $select = $(".relevantCourses").selectize(); // 输入-下滑选择框生成
@@ -25,9 +31,13 @@ $(document).ready(function () {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
       building_list = data;
     });
+});
+
+$(document).ready(function () {
+  saveBtnInit();
+  saveFolderInit();
 });
 
 $(document).ready(function () {
@@ -52,6 +62,7 @@ $(document).ready(function () {
 });
 $(document).ready(function () {
   saveTimetable();
+  blank_timetable = allTimeTables;
   switchTerm("fall", 1);
 });
 $(document).ready(function () {
@@ -263,9 +274,14 @@ function addCourseToTimetable() {
       let generateBtn = document.querySelector("#generate-schedule-btn");
       generateBtn.disabled = false;
     },
-    error: function () {
-      alert("Error, something went wrong pleace contact admin!");
-    },
+    error: function (e) {
+      console.log(e);
+      let msg = e.responseJSON.message
+      alert("Error, " + msg);
+      hideLoading();
+      let generateBtn = document.querySelector("#generate-schedule-btn");
+      generateBtn.disabled = false;
+    }
   });
 }
 
@@ -365,7 +381,7 @@ function getCourseColor(courseCode, session) {
 }
 
 function saveTimetable(data = null) {
-  allTimeTables = {};
+  received_timetables = {};
   let index = 1;
   let allGeneratedTimetable = [[[], []]];
   if (data != null) {
@@ -419,10 +435,16 @@ function saveTimetable(data = null) {
         }
       }
     }
-    allTimeTables[index] = { fall: timetableFall, winter: timetableWinter };
+    received_timetables[index] = {
+      fall: timetableFall,
+      winter: timetableWinter,
+    };
     index++;
   }
   // displaySmallVeiw();
+  const folderBtn = document.getElementById("folder-btn");
+  folderBtn.src = "./lib/folder.svg";
+  allTimeTables = received_timetables;
 }
 
 function initTimetableTemplat(timetableFall, timetableWinter) {
@@ -453,6 +475,7 @@ function initTimetableTemplat(timetableFall, timetableWinter) {
 function displayTimetableHead(term, index) {
   var daysOfWeek = ["MON", "TUE", "WED", "THU", "FRI"];
 
+  console.log(allTimeTables);
   let timetable = allTimeTables[index][term];
   var googleMapLinks = {};
   // 初始化googleMapLinks结构
@@ -486,9 +509,6 @@ function displayTimetableHead(term, index) {
       googleMapLinks[day] = null; // 当天没有地点的情况
     }
   });
-
-  // 举例使用googleMapLinks
-  console.log(googleMapLinks);
 
   // 假设thead的ID是timetable-head
   var thead = document.querySelector("#timetable-head");
@@ -526,7 +546,6 @@ function displayTimetable(term, index) {
         var courseSectionKey = info["course"] + "<br>" + info["section"];
         var isLockedFall = lockedCoursesFall.includes(courseSectionKey);
         var isLockedWinter = lockedCoursesWinter.includes(courseSectionKey);
-        console.log(isLockedFall || isLockedWinter);
         var lockIconClass =
           isLockedFall || isLockedWinter
             ? "fa fa-lock large-icon"
@@ -535,8 +554,6 @@ function displayTimetable(term, index) {
           isLockedFall || isLockedWinter
             ? "brightness(70%)"
             : "brightness(100%)";
-
-        console.log(styleSet);
         output += `<td class="timetableTd" id="${time}|${term}|${j}" onclick="tdHaveSection(this)" style="background-color: ${info["color"]}; position: relative; filter: ${styleSet};">
         <b>${info["course"]}</b><br>
         <b>${info["section"]}</b>
@@ -632,8 +649,6 @@ function lockSection(event, span) {
       }
     });
   }
-  console.log(lockedCoursesFall);
-  console.log(lockedCoursesWinter);
 }
 
 function mergeCells(table) {
@@ -726,6 +741,18 @@ function switchView() {
   toggleBtn.textContent = largeView.classList.contains("active")
     ? "MORE OPTION"
     : "BACK";
+
+  var saveBtn = document.getElementById("save-btn");
+  if (largeView.classList.contains("active")) {
+    saveBtn.style.display = "block";
+    if (Object.values(all_saved_timetables).includes(current_timetable)) {
+      saveBtn.src = "./lib/save-down.svg";
+    } else {
+      saveBtn.src = "./lib/save.svg";
+    }
+  } else {
+    saveBtn.style.display = "none";
+  }
 }
 
 function switchButton(name) {
@@ -743,6 +770,7 @@ function switchButton(name) {
 }
 
 function switchTerm(term, index = 1) {
+  current_timetable = allTimeTables[index];
   // 获取所有的 term 按钮和课程列表
   var termButtons = document.querySelectorAll(".term-btn");
   var coursesSections = document.querySelectorAll(".courses-section-content");
@@ -1072,4 +1100,63 @@ function fetchData() {
   generateBtn.disabled = true;
   showLoading();
   setTimeout(addCourseToTimetable, 1);
+}
+
+function saveBtnInit() {
+  var saveBtn = document.getElementById("save-btn");
+
+  saveBtn.addEventListener("click", function () {
+    addToTimetable();
+  });
+}
+
+function saveFolderInit() {
+  var saveBtn = document.getElementById("folder-btn");
+
+  saveBtn.addEventListener("click", function () {
+    changeFolder();
+  });
+}
+
+function addToTimetable() {
+  var saveBtn = document.getElementById("save-btn");
+  if (Object.values(all_saved_timetables).includes(current_timetable)) {
+    saveBtn.src = "./lib/save.svg";
+    for (const key in all_saved_timetables) {
+      if (all_saved_timetables[key] === current_timetable) {
+        delete all_saved_timetables[key];
+        break;
+      }
+    }
+  } else {
+    let index = Object.keys(all_saved_timetables).length;
+    all_saved_timetables[index + 1] = current_timetable;
+    saveBtn.src = "./lib/save-down.svg";
+  }
+}
+
+function changeFolder() {
+  const folderBtn = document.getElementById("folder-btn");
+  const src = folderBtn.getAttribute("src");
+
+  if (src === "./lib/folder-oepn.svg") {
+    folderBtn.src = "./lib/folder.svg";
+    console.log("folder")
+    allTimeTables = received_timetables;
+  } else {
+    folderBtn.src = "./lib/folder-oepn.svg";
+    allTimeTables = all_saved_timetables;
+  }
+  
+  if (Object.keys(allTimeTables).length === 0){
+    console.log("kong");
+    allTimeTables = blank_timetable;
+  }
+  if (fallCourseChoose.length != 0 || winterCourseChoose.length == 0) {
+    switchTerm("fall", 1);
+  } else {
+    switchTerm("winter", 1);
+  }
+
+  displaySmallVeiw();
 }
