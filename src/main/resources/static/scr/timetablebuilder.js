@@ -21,6 +21,9 @@ var all_saved_timetables = {};
 
 var blank_timetable = {};
 
+var fallTimetableInfo = {};
+var winterTimetableInfo = {};
+
 //************ UI Element Initialization ****************//
 var $select = $(".relevantCourses").selectize(); // 输入-下滑选择框生成
 var selectControl = $select[0].selectize;
@@ -200,29 +203,7 @@ function addCourseToSelect(input) {
     },
   });
 }
-function getDistance() {
-  let origin = window.location.origin;
-  $.ajax({
-    type: "post",
-    url: `${origin}/get-distance`,
-    data: {
-      origin: building1,
-      destination: building2,
-    },
-    dataType: "json",
-    async: false,
-    success: function (data) {
-      if (data == -1) {
-        // 查看是否找到
-        return;
-      }
-      let distance = data; // 距离
-    },
-    error: function () {
-      alert("Error, something went wrong pleace contact admin!");
-    },
-  });
-}
+
 function getDivision(courseCode) {
   let len = courseCode.length;
   switch (courseCode[len - 1]) {
@@ -239,8 +220,8 @@ function getDivision(courseCode) {
 
 function addCourseToTimetable() {
   switchButton("toggle");
-  let weigthDict = getWeight();
 
+  let weigthDict = getWeight();
   let timeWeight = weigthDict["timeWeight"];
   let daySpend = weigthDict["daySpend"] * Number(getRadioInput("days-spent"));
   let classInterval =
@@ -414,6 +395,10 @@ function saveTimetable(data = null) {
             timetableFall[tempTime][day] = info;
           }
         }
+        if (!(courseInfo.course in fallCourseChoose)){
+          fallCourseChoose[courseInfo.course] = [];
+        }
+        fallCourseChoose[courseInfo.course].push(info);
       }
     }
     // 将winter课程元素加入至winter timetable模板
@@ -434,6 +419,10 @@ function saveTimetable(data = null) {
             timetableWinter[tempTime][day] = info;
           }
         }
+        if (!(courseInfo.course in fallCourseChoose)){
+          winterTimetableInfo[courseInfo.course] = [];
+        }
+        winterTimetableInfo[courseInfo.course].push(info);
       }
     }
     received_timetables[index] = {
@@ -726,6 +715,9 @@ function tdHaveSection(event) {
 
   // 将信息添加进弹窗并激活弹窗
   element.innerHTML = detaillInfo;
+  let style = document.querySelector("#detaillStyle");
+  style.className = "modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm";
+  document.querySelector("#detaillInfoLabel").innerHTML = "Detailed Information";
   document.querySelector("#displayDetaillCourseInfo").click();
 }
 
@@ -867,10 +859,11 @@ function generateCourses(course, term, color = null) {
   courseName.textContent = course.slice(0, -1) + " " + course.slice(-1); // 设置课程名称
 
   // 编辑按钮
-  // const editBtn = document.createElement('button');
-  // editBtn.className = 'edit-btn';
-  // editBtn.textContent = '✏️';
-  // TODO: 添加编辑按钮的事件监听
+  const editBtn = document.createElement('button');
+  editBtn.className = 'edit-btn';
+  editBtn.id = course;
+  editBtn.textContent = '✏️'; //TODO
+  editBtn.setAttribute("onclick", "displayNewTime(this)")
 
   // 删除按钮
   const deleteBtn = document.createElement("button");
@@ -882,10 +875,85 @@ function generateCourses(course, term, color = null) {
   // 将所有元素添加到课程元素中
   courseItem.appendChild(colorIndicator);
   courseItem.appendChild(courseName);
-  // courseItem.appendChild(editBtn);
+  courseItem.appendChild(editBtn);
   courseItem.appendChild(deleteBtn);
 
   coursesDiv.appendChild(courseItem);
+}
+
+// 展示课程时间信息
+function displayNewTime(event) {
+  let eleId = event.id;
+  let courseCode = getCourseCode(eleId);
+  let sectionCode = getSectionCode(eleId);
+  
+  // 将信息添加进弹窗并激活弹窗
+  let element = document.querySelector("#courseDetaillInfo");
+  element.innerHTML = "";
+  let lecture = "<h2>Lecture</h2>";
+  let tutorials = "<h2>Tutorials</h2>";
+  let practical = "<h2>Practical</h2>";
+  // getTimeInfo(courseCode, sectionCode);
+  let timeInfo = Object.values(getTimeInfo(courseCode, sectionCode));
+  for (info in timeInfo){
+    let section = timeInfo[info].sectionCode;
+    let prof = timeInfo[info].instructors;
+    let time = timeInfo[info].times;
+    let size = timeInfo[info].size;
+    let notes = timeInfo[info].notes;
+    if (section[0] === "L"){
+
+    }else if(section[0] === "T"){
+
+    }else{
+
+    }
+    element.innerHTML += `${section}-${prof}-${time}-${size}-${notes}`;
+  }
+
+  // 放入并激活弹窗
+  let style = document.querySelector("#detaillStyle");
+  style.className = "modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl";
+  document.querySelector("#detaillInfoLabel").innerHTML = "Other time";
+  document.querySelector("#displayDetaillCourseInfo").click();
+}
+function getCourseCode(target){
+  let checker = ["Y", "F", "S"];
+  let len = target.length - 2;
+  if (checker.includes(target[len + 1])){
+    return target.substring(0, len+1);
+  }else if(checker.includes(target[len])){
+    return target.substring(0, len);
+  }
+}
+function getTimeInfo(courseCode, sectionCode){
+  let origin = window.location.origin;
+  let info = {};
+  $.ajax({
+    type: "post",
+    url: `${origin}/get-time-info`,
+    data: {
+      courseCode: courseCode,
+      sectionCode: sectionCode
+    },
+    dataType: "json",
+    async: false,
+    success: function (data) {
+      info = data;
+    },
+    error: function () {
+      alert("Error, something went wrong pleace contact admin!");
+    },
+  });
+  console.log(info);
+  return info
+}
+
+function getchangeCourseTimeInfo(courseCode, sectionCode){
+  if (sectionCode === 'F'){
+    return fallTimetableInfo[courseCode];
+  }
+  return winterTimetableInfo[courseCode];
 }
 
 function deleteCourse(deleteBtn) {
@@ -916,7 +984,7 @@ function deleteCourse(deleteBtn) {
   switchButton("generate");
 }
 
-//********************************drag btns**************/
+//*********************drag btns*************************/
 function dragInit() {
   let list = document.querySelector(".preference-list");
   let currentLi;

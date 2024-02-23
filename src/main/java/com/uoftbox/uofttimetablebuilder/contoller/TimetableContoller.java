@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
+import com.uoftbox.uofttimetablebuilder.model.backend.CourseTime;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimetableResult;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimetableResultInfo;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserInput;
 import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 import com.uoftbox.uofttimetablebuilder.repository.courses.RelevantCourse;
 import com.uoftbox.uofttimetablebuilder.service.TimetableService;
+import com.uoftbox.uofttimetablebuilder.service.dbservice.CourseDataService;
 import com.uoftbox.uofttimetablebuilder.service.dbservice.DistanceService;
 import com.uoftbox.uofttimetablebuilder.service.dbservice.SearchBarService;
 
@@ -34,6 +36,8 @@ public class TimetableContoller {
     private TimetableService timetableService;
     @Autowired
     private DistanceService distanceService;
+    @Autowired
+    private CourseDataService courseDataService;
 
     @PostMapping("/course-input")
     public List<RelevantCourse> getRelevantCourses(@RequestParam("courseInput") String info) {
@@ -45,6 +49,12 @@ public class TimetableContoller {
     public Integer getDistance(@RequestParam("origin") String origin, @RequestParam("destination") String destination) {
         return distanceService.getDuration(origin, destination);
     }
+
+    @PostMapping("/get-time-info")
+    public List<CourseTime> getRelevantCourseTime(@RequestParam("courseCode") String courseCode, @RequestParam("sectionCode") String sectionCode) {
+        return courseDataService.fethCourseTimes(courseCode, sectionCode);
+    }
+    
 
     @PostMapping("/generateTimetable")
     public TimetableResult generateTimetable(@RequestBody UserInput userInput) throws InterruptedException, ExecutionException{

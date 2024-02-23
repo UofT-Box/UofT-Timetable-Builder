@@ -28,7 +28,7 @@ public class TimetableService {
     @Async("taskExecutor")
     public CompletableFuture<TimetableResultInfo> getTopTimetable(List<String> courseCode, String sectionCode,
             UserPreferences userPreferences, List<String> lockedCourses) {
-
+                
         TimetableResultInfo timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, lockedCourses, false);
         List<List<CourseInfo>> allTimetables = timetableResult.getTopTimetables();
         

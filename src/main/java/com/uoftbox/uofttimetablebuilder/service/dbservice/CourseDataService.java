@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
+import com.uoftbox.uofttimetablebuilder.model.backend.CourseTime;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimeAndPlace;
 import com.uoftbox.uofttimetablebuilder.model.mysql.MeetingSections;
 import com.uoftbox.uofttimetablebuilder.repository.courses.CoursesRepository;
@@ -29,6 +30,23 @@ public class CourseDataService {
     
     @Autowired
     private MeetingSectionsRepository meetingSectionsRepository;
+
+    public List<CourseTime> fethCourseTimes(String courseCode, String sectionCode){
+        String courseId = coursesRepository.findMatchCourseId(courseCode, sectionCode);
+
+        List<MeetingSections> meetingSections = meetingSectionsRepository.findMeetingSectionsByCourseId(courseId);
+        List<CourseTime> courseTimes = new ArrayList<>();
+        for (MeetingSections meetingSection : meetingSections) {
+            String lecture = meetingSection.getSectionCode();
+            String instructors = meetingSection.getInstructors();
+            String times = meetingSection.getTimes();
+            Integer size = meetingSection.getSize();
+            String notes = meetingSection.getNotes();
+            CourseTime tempCourseTime = new CourseTime(lecture, instructors, times, size, notes);
+            courseTimes.add(tempCourseTime);
+        }
+        return courseTimes;
+    }
 
     public Map<String, Map<String, Map<String, List<CourseInfo>>>> fetchSpecialSections(List<String> courseCodeList, String sectionCode, List<String> lockedCourses){
         // 创建用于存储原始课程信息的映射
