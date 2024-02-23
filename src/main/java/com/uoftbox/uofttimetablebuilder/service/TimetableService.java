@@ -29,14 +29,7 @@ public class TimetableService {
     public CompletableFuture<TimetableResultInfo> getTopTimetable(List<String> courseCode, String sectionCode,
             UserPreferences userPreferences, List<String> lockedCourses) {
 
-        Map<String, Map<String, Map<String, List<CourseInfo>>>> meetingSections = new HashMap<>();
-
-        TimetableResultInfo timetableResult;
-        meetingSections = courseDataService.fetchSpecialSections(courseCode, sectionCode, lockedCourses);
-        Map<String, Map<String, CourseInfo>> lockedSections = courseDataService.fetchLockSections(sectionCode,
-                lockedCourses);
-        timetableResult = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences,
-                lockedSections);
+        TimetableResultInfo timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, lockedCourses, false);
         List<List<CourseInfo>> allTimetables = timetableResult.getTopTimetables();
         
         
@@ -45,11 +38,7 @@ public class TimetableService {
                 break;
             }
             Collections.shuffle(courseCode);
-            meetingSections = courseDataService.fetchSpecialSections(courseCode, sectionCode, lockedCourses);
-            lockedSections = courseDataService.fetchLockSections(sectionCode,
-                    lockedCourses);
-            timetableResult = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences,
-                    lockedSections);
+            timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, lockedCourses, false);
             allTimetables = timetableResult.getTopTimetables();
         }
 
@@ -57,5 +46,42 @@ public class TimetableService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No timetable find");
 
         return CompletableFuture.completedFuture(timetableResult);
+    }
+
+    public List<List<CourseInfo>> updateTimetable(List<String> courseCode, String sectionCode,
+    UserPreferences userPreferences, List<String> targetCourse){
+
+        TimetableResultInfo timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, courseCode, true);
+        List<List<CourseInfo>> allTimetables = timetableResult.getTopTimetables();
+        
+        
+        for(int i = 0; i < 5; i ++) {
+            if(!allTimetables.isEmpty()){
+                break;
+            }
+            Collections.shuffle(courseCode);
+            timetableResult = genTopTimetables(courseCode, sectionCode, userPreferences, courseCode, true);
+            allTimetables = timetableResult.getTopTimetables();
+        }
+
+        if (allTimetables.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No timetable find");
+
+        return allTimetables;
+    }
+
+    private TimetableResultInfo genTopTimetables(List<String> courseCode, String sectionCode,
+    UserPreferences userPreferences, List<String> lockedCourses, boolean isUpdate){
+
+        Map<String, Map<String, Map<String, List<CourseInfo>>>> meetingSections = new HashMap<>();
+
+        TimetableResultInfo timetableResult;
+        meetingSections = courseDataService.fetchSpecialSections(courseCode, sectionCode, lockedCourses);
+        Map<String, Map<String, CourseInfo>> lockedSections = courseDataService.fetchLockSections(sectionCode,
+                lockedCourses);
+        timetableResult = timetableGeneratService.generateAllTimetables(meetingSections, userPreferences,
+                lockedSections, isUpdate);
+
+        return timetableResult;
     }
 }
