@@ -9,6 +9,7 @@ cursor.execute('''
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         course_id TEXT,
         course_code TEXT,
+        section_code TEXT,
         name TEXT,
         description TEXT,
         division TEXT,
