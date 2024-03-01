@@ -426,7 +426,7 @@ function saveTimetable(data = null) {
             timetableWinter[tempTime][day] = info;
           }
         }
-        if (!(courseInfo.course in fallCourseChoose)) {
+        if (!(courseInfo.course in winterTimetableInfo)) {
           winterTimetableInfo[courseInfo.course] = [];
         }
         winterTimetableInfo[courseInfo.course].push(info);
