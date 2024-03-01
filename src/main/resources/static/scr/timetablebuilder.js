@@ -21,9 +21,6 @@ var all_saved_timetables = {};
 
 var blank_timetable = {};
 
-var fallTimetableInfo = {};
-var winterTimetableInfo = {};
-
 //************ UI Element Initialization ****************//
 var $select = $(".relevantCourses").selectize(); // 输入-下滑选择框生成
 var selectControl = $select[0].selectize;
@@ -402,10 +399,6 @@ function saveTimetable(data = null) {
             timetableFall[tempTime][day] = info;
           }
         }
-        if (!(courseInfo.course in fallCourseChoose)) {
-          fallCourseChoose[courseInfo.course] = [];
-        }
-        fallCourseChoose[courseInfo.course].push(info);
       }
     }
     // 将winter课程元素加入至winter timetable模板
@@ -426,10 +419,6 @@ function saveTimetable(data = null) {
             timetableWinter[tempTime][day] = info;
           }
         }
-        if (!(courseInfo.course in winterTimetableInfo)) {
-          winterTimetableInfo[courseInfo.course] = [];
-        }
-        winterTimetableInfo[courseInfo.course].push(info);
       }
     }
     received_timetables[index] = {
@@ -1165,13 +1154,6 @@ function getTimeInfo(courseCode, sectionCode) {
     },
   });
   return info;
-}
-
-function getchangeCourseTimeInfo(courseCode, sectionCode) {
-  if (sectionCode === "F") {
-    return fallTimetableInfo[courseCode];
-  }
-  return winterTimetableInfo[courseCode];
 }
 
 function deleteCourse(deleteBtn) {
