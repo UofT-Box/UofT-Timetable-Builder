@@ -1,5 +1,4 @@
 import pymysql
-import json
 import sqlite3
 
 conn_sqlite = sqlite3.connect("walking_distances.db")

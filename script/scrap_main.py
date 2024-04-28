@@ -1,5 +1,4 @@
-import requests, random, json, time
-
+import requests, random, json, time, os
 
 USER_AGENTS = [
     "Mozilla/5.0 (Windows; U; Windows NT 5.2) Gecko/2008070208 Firefox/3.0.1"
@@ -67,6 +66,8 @@ for i in range(0,395):
     }
 
     res = requests.post(url, data=json.dumps(data), headers=headers)
+    if not os.path.exists(f"./result"):
+        os.makedirs(f"./result")
     with open(f"./result/{i+1}.json", "w", encoding="utf-8") as f:
         f.write(res.text)
     print(f"{i+1} page complet")
