@@ -49,21 +49,23 @@ Ensure you have the following installed:
 OS X & Linux:
 ```sh
 git clone https://github.com/UofT-Box/UofT-Timetable-Builder.git
-cd UofT-Timetable-Builder
-python3 script/scrap_main.py
-python3 script/mysql_data_transfer.py
-python3 script/mysql_distance_transfer.py
+cd UofT-Timetable-Builder/script
+python3 scrap_main.py
+python3 mysql_data_transfer.py
+python3 mysql_distance_transfer.py
+cd ..
 mvn spring-boot:run
 In browser tap http://localhost:8080/
 ```
 Windows:
 ```sh
-git clone https://github.com/yourusername/UofT-Timetable-Builder.git
-cd UofT-Timetable-Builder
-python script/scrap_main.py
-python script/mysql_data_transfer.py
-python script/mysql_distance_transfer.py
-./mvnw spring-boot:run
+git clone https://github.com/UofT-Box/UofT-Timetable-Builder.git
+cd UofT-Timetable-Builder\script
+python scrap_main.py
+python mysql_data_transfer.py
+python mysql_distance_transfer.py
+cd ..
+mvnw spring-boot:run
 In browser tap http://localhost:8080/
 ```
 
