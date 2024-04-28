@@ -1,5 +1,6 @@
 import pymysql
 import json
+import os
 
 conn = pymysql.connect(
     host = 'localhost', 
@@ -41,7 +42,8 @@ cursor.execute('''
         FOREIGN KEY(course_id) REFERENCES courses(course_id)
     )
 ''')
-for i in range(1,393):
+number_of_files = len(os.listdir("./result"))
+for i in range(1, number_of_files + 1):
     file_path = f'result/{i}.json'
     with open(file_path, 'r', encoding='utf-8') as file:
         data = json.load(file)

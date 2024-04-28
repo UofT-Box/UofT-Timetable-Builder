@@ -4,11 +4,11 @@ import sqlite3
 
 conn_sqlite = sqlite3.connect("walking_distances.db")
 conn_mysql = pymysql.connect(
-    host="localhost",
-    database="uoft_course_info",
-    user="root",
-    passwd="123456",
-    port=3306,
+    host = 'localhost', 
+    database = 'uoft_course_info', 
+    user = 'root', 
+    passwd = '123456',
+    port = 3306
 )
 
 cursor_mysql = conn_mysql.cursor()

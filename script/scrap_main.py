@@ -29,6 +29,8 @@ USER_AGENTS = [
 
 url = "https://api.easi.utoronto.ca/ttb/getPageableCourses"
 
+print("----Scraping start----")
+
 for i in range(0,395):
     headers = {
         "Accept": "application/json, text/plain, */*",
@@ -65,7 +67,7 @@ for i in range(0,395):
     }
 
     res = requests.post(url, data=json.dumps(data), headers=headers)
-    with open(f"result\\{i+1}.json", "w", encoding="utf-8") as f:
+    with open(f"./result/{i+1}.json", "w", encoding="utf-8") as f:
         f.write(res.text)
     print(f"{i+1} page complet")
     time.sleep(random.uniform(0.5, 1.5))

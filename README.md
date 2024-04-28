@@ -29,97 +29,73 @@ Developed using HTML, CSS, and JavaScript, the front-end is built with an emphas
 The server-side logic is implemented in Java, handling data processing, timetable generation algorithms(include Backtracking Algorithm and Genetic Algorithm), and integration with the front-end.
 
 ## Getting Started
+
+Here's a polished version of your prerequisites section:
+
 ### Prerequisites
+Ensure you have the following installed:
 
-```
-Java Development Kit (JDK) 17 or higher
-```
-```
-python packages include sqlite3 pymysql
-```
-```
-Make sure you have MySQL installed and configured. You can use the provided web scraping scripts located in UofT-Timetable-Builder\script\sql_script to fetch the required data.
-```
++ **Java Development Kit (JDK)**: Version 17 or higher. You can download it from the official [Java website](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html).
 
-## Installation
++ **Python**: Version 3.10.X. Ensure you have the required dependency packages installed. This can be accomplished using pip:
+  ```
+  pip install pymysql requests
+  ```
 
++ **MySQL**: Version 8.X.X. 
+  + **Note**: The default MySQL username and password for this project are `root` and `123456`, respectively. If your credentials differ, please adjust them accordingly in the project configuration.
+
+## Installation/Deployment
 OS X & Linux:
-
-
-1. Open a terminal.
-2. Clone the repository using Git:
 ```sh
 git clone https://github.com/UofT-Box/UofT-Timetable-Builder.git
-```
-3. Navigate to the project directory:
-```sh
 cd UofT-Timetable-Builder
+python3 script/scrap_main.py
+python3 script/mysql_data_transfer.py
+python3 script/mysql_distance_transfer.py
+mvn spring-boot:run
+In browser tap http://localhost:8080/
 ```
-4. Ensure that Java(17) is properly installed by running:
-```sh
-java -version
-```
-5. Enter target file
-```sh
-cd target
-```
-6. run using the 'java -jar' command
-```sh
-java -jar uofttimetablebuilder-2.1.0-RELEASE.jar
-```
-7. Go to browser tap:
-```sh
-http://localhost:8080/
-```
-
 Windows:
-1. Open Command Prompt or PowerShell.
-2. Clone the repository:
 ```sh
 git clone https://github.com/yourusername/UofT-Timetable-Builder.git
-```
-3. Navigate to the project directory:
-```sh
 cd UofT-Timetable-Builder
-```
-4. Verify Java installation:
-```
-java -version
-```
-5. Enter target file
-```sh
-cd target
-```
-6. run using the 'java -jar' command
-```sh
-java -jar uofttimetablebuilder-2.1.0-RELEASE.jar
-```
-7. Go to browser tap:
-```sh
-http://localhost:8080/
+python script/scrap_main.py
+python script/mysql_data_transfer.py
+python script/mysql_distance_transfer.py
+./mvnw spring-boot:run
+In browser tap http://localhost:8080/
 ```
 
 ### Usage example
 Enter the first three letters of the course code in the search bar to display related available courses.
-![](https://github.com/UofT-Box/image/blob/671ee8dff6486f3130e1987e6cf46cad3ad5666f/timetablebuilder1.png?raw=true)
+![](https://github.com/UofT-Box/image/tree/master/timetable_builder/timetablebuilder1.png?raw=true)
 You can arrange your own preference by selecting different options and dragging the slider.
-![](https://github.com/UofT-Box/image/blob/master/timetablebuilder2.png?raw=true)
+![](https://github.com/UofT-Box/image/blob/master/timetable_builder/timetablebuilder2.png?raw=true)
 Click on "GENERATE SCHEDULE" to generate a schedule.
-![](https://github.com/UofT-Box/image/blob/master/timetablebuilder3.png?raw=true)
+![](https://github.com/UofT-Box/image/blob/master/timetable_builder/timetablebuilder3.png?raw=true)
 You can switch between semesters by clicking on "Fall" or "Winter".
-![](https://github.com/UofT-Box/image/blob/master/timetablebuilder4.png?raw=true)
+![](https://github.com/UofT-Box/image/blob/master/timetable_builder/timetablebuilder4.png?raw=true)
 You can click on the section of the class schedule to get the section detail information.
-![](https://github.com/UofT-Box/image/blob/master/timetablebuilder5.png?raw=true)
+![](https://github.com/UofT-Box/image/blob/master/timetable_builder/timetablebuilder5.png?raw=true)
 Click on "MORE OPTIONS" to enter the thumbnail view.
-![](https://github.com/UofT-Box/image/blob/master/timetablebuilder6.png?raw=true)
+![](https://github.com/UofT-Box/image/blob/master/timetable_builder/timetablebuilder6.png?raw=true)
 Select the class schedule you want in the thumbnails
-![](https://github.com/UofT-Box/image/blob/master/timetablebuilder7.png?raw=true)
-
-## Deployment
-
-To be continue
+![](https://github.com/UofT-Box/image/blob/master/timetable_builder/timetablebuilder7.png?raw=true)
+user lock feature
+![](https://github.com/UofT-Box/image/blob/master/timetable_builder/timetablebuilder8.png?raw=true)
+custom course scheduling feature
+![](https://github.com/UofT-Box/image/blob/master/timetable_builder/timetablebuilder9.png?raw=true)
+display of travel distance & time feature
+![](https://github.com/UofT-Box/image/blob/master/timetable_builder/timetablebuilder10.png?raw=true)
 
 ## Release History
+* 2.0.0
+    * Added custom course scheduling feature
+    * Added user lock feature
+    * Added timetable export functionality
+    * Added timetable favorites feature
+    * Added display of travel distance & time feature
 * 1.1.0
     * mobile adaptation
 * 1.0.0
