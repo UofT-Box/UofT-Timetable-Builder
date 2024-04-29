@@ -123,4 +123,4 @@ display of travel distance & time feature
 
 
 ## License
-This project is protected under the MIT licence. Please refer to the Licence.txt for more information.
+This project is protected under the GNU license. Please refer to the LICENSE for more information.
