@@ -21,6 +21,9 @@ var all_saved_timetables = {};
 
 var blank_timetable = {};
 
+var fallTimetableInfo = {};
+var winterTimetableInfo = {};
+
 //************ UI Element Initialization ****************//
 var $select = $(".relevantCourses").selectize(); // 输入-下滑选择框生成
 var selectControl = $select[0].selectize;
@@ -399,6 +402,10 @@ function saveTimetable(data = null) {
             timetableFall[tempTime][day] = info;
           }
         }
+        if (!(courseInfo.course in fallCourseChoose)) {
+          fallCourseChoose[courseInfo.course] = [];
+        }
+        fallCourseChoose[courseInfo.course].push(info);
       }
     }
     // 将winter课程元素加入至winter timetable模板
@@ -419,6 +426,11 @@ function saveTimetable(data = null) {
             timetableWinter[tempTime][day] = info;
           }
         }
+        if (!(courseInfo.course in winterCourseChoose)) {
+          winterTimetableInfo[courseInfo.course] = [];
+        }
+        console.log(courseInfo.course)
+        winterTimetableInfo[courseInfo.course].push(info);
       }
     }
     received_timetables[index] = {
@@ -534,6 +546,7 @@ function displayTimetable(term, index) {
       if (timetable[time][j] !== "") {
         let info = timetable[time][j];
         var courseSectionKey = info["course"] + "<br>" + info["section"];
+        
         var isLockedFall = lockedCoursesFall.includes(courseSectionKey);
         var isLockedWinter = lockedCoursesWinter.includes(courseSectionKey);
         var lockIconClass =
@@ -1156,6 +1169,13 @@ function getTimeInfo(courseCode, sectionCode) {
   return info;
 }
 
+function getchangeCourseTimeInfo(courseCode, sectionCode) {
+  if (sectionCode === "F") {
+    return fallTimetableInfo[courseCode];
+  }
+  return winterTimetableInfo[courseCode];
+}
+
 function deleteCourse(deleteBtn) {
   let deleteId = deleteBtn.id;
 
@@ -1483,3 +1503,19 @@ function downloadPDF() {
     document.body.removeChild(link);
   });
 }
+function adjustTableSize() {
+  var container = document.querySelector('.large-view');
+  var table = container.querySelector('table');
+  var availableHeight = container.clientHeight;
+  var availableWidth = container.clientWidth;
+
+  // 调整表格的高度以适应容器
+  table.style.height = `${availableHeight}px`;
+  table.style.width = `${availableWidth}px`;
+}
+
+// 在窗口大小改变时重新调整
+window.addEventListener('resize', adjustTableSize);
+
+// 初始调整
+adjustTableSize();

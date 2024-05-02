@@ -54,10 +54,11 @@ public class CourseDataService {
         Map<String, Set<String>> courseSections = getLockedCourseSections(lockedCourses);
 
         for (String courseCode : courseCodeList) {
+            sectionCode = courseCode.substring(courseCode.length() - 1);
             String courseId = coursesRepository.findMatchCourseId(courseCode, sectionCode);
 
             // 如果courseId为空，则返回404报错
-            if (courseCode == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "COURSE NOT FOUND");
+            if (courseId == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "COURSE NOT FOUND");
             ArrayList<Integer> time_list = new ArrayList<>();
             fetchSpecialSectionsHelper(courseCode, courseId, time_list, originalCourseSchedule, courseSections);
         }

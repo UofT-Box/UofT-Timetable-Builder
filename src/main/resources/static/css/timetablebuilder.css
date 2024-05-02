@@ -1,6 +1,23 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  margin: 0;
+}
+
 .containerr {
   display: flex;
   width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 .course-choose-list {
   overflow: auto;
@@ -10,7 +27,7 @@
   overflow: auto;
   flex: 2;
   width: auto;
-  height: 670px;
+  height: 100%;
 }
 .sidebar {
   width: 33%;
@@ -46,7 +63,7 @@
 }
 
 #save-btn {
-  width:20px;
+  width: 20px;
   margin-left: 20px;
   left: 310px;
 }
@@ -59,20 +76,28 @@
 
 #share-btn:hover,
 #folder-btn:hover,
+#github-btn:hover,
 #save-btn:hover {
   transform: scale(1.2);
 }
 
 #folder-btn {
-  width:30px;
+  width: 30px;
   margin-left: 20px;
   cursor: pointer;
   left: 240px;
 }
 
 #share-btn {
-  width:30px;
-  margin-left:auto;
+  width: 30px;
+  margin-left: auto;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+#github-btn {
+  width: 30px;
+  margin-left: auto;
   margin-right: 20px;
   cursor: pointer;
 }
@@ -255,6 +280,7 @@
   align-items: center;
   padding: 0.5em 1em;
   border-radius: 0 0 10px 10px;
+  height: 55px;
 }
 
 .timetable-header h1 {
@@ -272,6 +298,21 @@
 
 .report-issue-btn:hover {
   background-color: #e8e8e8;
+}
+
+#large-view {
+  width: 100%;   /* 占满容器宽度 */
+  height: 100%;  /* 占满容器高度 */
+}
+
+#large-view table {
+  flex: 1;  /* 每个表格均等占用可用空间 */
+  width: 100%;   /* 表格宽度占满容器宽度 */
+  height: 100%;  /* 表格高度占满分配给它的空间 */
+}
+
+#large-view th, #large-view td {
+  text-align: center;
 }
 
 .title {
@@ -382,21 +423,22 @@
   .timetable {
     width: 100%;
     order: 2;
+    height: 100%;
   }
 
   .timetable-header {
     zoom: 80%;
   }
 
-  #folder-btn{
+  #folder-btn {
     left: 215px;
   }
 
-  #save-btn{
+  #save-btn {
     left: 255px;
   }
 
-  #share-btn{
+  #share-btn {
     margin-right: 5px;
   }
 }
