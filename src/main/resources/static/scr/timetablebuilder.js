@@ -15,6 +15,7 @@ var building1 = "";
 var building2 = "";
 var building_list = {};
 var current_timetable = [];
+var curidit_capacity = 3.00;
 
 var received_timetables = {};
 var all_saved_timetables = {};
@@ -156,17 +157,17 @@ function canAdd(courseCode, sectionCode) {
     alert("You have already added this course");
     return false;
   }
-  if (sectionCode === "Y" && winterCredit >= 3.0 && fallCredit >= 3.0) {
+  if (sectionCode === "Y" && winterCredit >= curidit_capacity && fallCredit >= curidit_capacity) {
     alert(
       "Failed adding the course.\nYou have reached the maximum number of credits you can earn in a both semester"
     );
     return false;
-  } else if (sectionCode === "S" && winterCredit >= 3.0) {
+  } else if (sectionCode === "S" && winterCredit >= curidit_capacity) {
     alert(
       "Failed adding the course.\nYou have reached the maximum number of credits you can earn in a Winter semester"
     );
     return false;
-  } else if (sectionCode === "F" && fallCredit >= 3.0) {
+  } else if (sectionCode === "F" && fallCredit >= curidit_capacity) {
     alert(
       "Failed adding the course.\nYou have reached the maximum number of credits you can earn in a Fall semester"
     );
@@ -821,9 +822,9 @@ function switchCridit(term) {
   let output = "";
 
   if (term === "fall") {
-    output = `Cridits: ${fallCredit.toFixed(2)} / 3.00`;
+    output = `Cridits: ${fallCredit.toFixed(2)} / ${curidit_capacity}.00`;
   } else {
-    output = `Cridits: ${winterCredit.toFixed(2)} / 3.00`;
+    output = `Cridits: ${winterCredit.toFixed(2)} / ${curidit_capacity}.00`;
   }
   cridit.forEach((cridit) => {
     cridit.innerText = output;
