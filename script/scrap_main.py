@@ -30,7 +30,7 @@ url = "https://api.easi.utoronto.ca/ttb/getPageableCourses"
 
 print("----Scraping start----")
 
-for i in range(0,395):
+for i in range(0, 406):
     headers = {
         "Accept": "application/json, text/plain, */*",
         "Content-Type": "application/json",
@@ -49,7 +49,7 @@ for i in range(0,395):
         },
         "departmentProps": [],
         "campuses": [],
-        "sessions": ["20239", "20241", "20239-20241"],
+        "sessions": ["20259", "20261", "20259-20261"],
         "requirementProps": [],
         "instructor": "",
         "courseLevels": [],
