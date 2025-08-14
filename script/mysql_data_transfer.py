@@ -60,19 +60,19 @@ for i in range(1, number_of_files + 1):
         course['division'] = ''
         course['prerequisites'] = ''
         course['exclusions'] = ''
-        if not course_data["cmCourseInfo"] == None:
-            course['description'] = course_data["cmCourseInfo"]['description']
-            course['division'] = course_data["cmCourseInfo"]['division']
-            course['prerequisites'] = course_data["cmCourseInfo"]['prerequisitesText']
-            course['exclusions'] = course_data["cmCourseInfo"]['exclusionsText']
-        course['department'] = course_data["department"]["name"]
+        if course_data.get("cmCourseInfo"):
+            course['description'] = course_data["cmCourseInfo"].get('description', '')
+            course['division'] = course_data["cmCourseInfo"].get('division', '')
+            course['prerequisites'] = course_data["cmCourseInfo"].get('prerequisitesText', '')
+            course['exclusions'] = course_data["cmCourseInfo"].get('exclusionsText', '')
+        course['department'] = course_data["department"]["name"] if course_data.get("department") else ''
         course['campus'] = course_data["campus"]
         course['sessions'] = course_data["sessions"]
-        
+
         cursor.execute('''
-            INSERT INTO courses (course_id, course_code, section_code, name, description, division, department, prerequisites, exclusions, campus, sessions)
+            INSERT IGNORE INTO courses (course_id, course_code, section_code, name, description, division, department, prerequisites, exclusions, campus, sessions)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            ''', (
+        ''', (
             course['course_id'],
             course['course_code'],
             course['section_code'],
@@ -94,20 +94,30 @@ for i in range(1, number_of_files + 1):
             meeting_section['course_code'] = course_data["code"]
             meeting_section['section_code'] = meeting_time_data['name']
             meeting_section['instructors'] = []
-            for instructor in meeting_time_data['instructors']:
-                meeting_section['instructors'].append(instructor["firstName"] + ' ' +  instructor["lastName"])
+            for instructor in meeting_time_data.get('instructors', []):
+                first = instructor.get("firstName", "")
+                last = instructor.get("lastName", "")
+                full_name = (first + ' ' + last).strip()
+                if full_name:
+                    meeting_section['instructors'].append(full_name)
+
             meeting_section['times'] = []
-            for time in meeting_time_data['meetingTimes']:
-                meeting_dic = {}
-                meeting_dic['day'] = time["start"]['day']
-                meeting_dic['start'] = time["start"]['millisofday']
-                meeting_dic['end'] = time["end"]["millisofday"]
-                meeting_dic['location'] = time["building"]["buildingCode"]
+            for time in meeting_time_data.get('meetingTimes', []):
+                meeting_dic = {
+                    'day': time["start"]['day'],
+                    'start': time["start"]['millisofday'],
+                    'end': time["end"]["millisofday"],
+                    'location': time["building"]["buildingCode"]
+                }
                 if meeting_dic not in meeting_section['times']:
                     meeting_section['times'].append(meeting_dic)
-            meeting_section['size'] = meeting_time_data['maxEnrolment']
-            meeting_section['enrolment'] = meeting_time_data['currentEnrolment']
-            meeting_section['notes'] = meeting_time_data['deliveryModes'][0]['mode']
+
+            meeting_section['size'] = meeting_time_data.get('maxEnrolment', 0)
+            meeting_section['enrolment'] = meeting_time_data.get('currentEnrolment', 0)
+            meeting_section['notes'] = [
+                {"session": d["session"], "mode": d["mode"]}
+                for d in meeting_time_data.get("deliveryModes", [])
+            ]
 
             cursor.execute('''
                 INSERT INTO meeting_sections (course_id, course_code, section_code, instructors, times, size, enrolment, notes)
@@ -116,12 +126,13 @@ for i in range(1, number_of_files + 1):
                 meeting_section['course_id'],
                 meeting_section['course_code'],
                 meeting_section['section_code'],
-                ','.join(meeting_section['instructors']),
+                ','.join(meeting_section['instructors']) if meeting_section['instructors'] else '',
                 json.dumps(meeting_section['times']),
                 meeting_section['size'],
                 meeting_section['enrolment'],
                 json.dumps(meeting_section['notes'])
             ))
+
     print(f'file{i} successfully entered the database')
 
 conn.commit()
