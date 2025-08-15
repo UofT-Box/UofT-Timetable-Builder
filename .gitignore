@@ -6,6 +6,8 @@ target/
 
 result/
 
+uoft_course_info.db
+
 ### STS ###
 .apt_generated
 .classpath
