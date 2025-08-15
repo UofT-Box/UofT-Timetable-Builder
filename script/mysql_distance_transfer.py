@@ -2,21 +2,22 @@ import pymysql
 import sqlite3
 
 conn_sqlite = sqlite3.connect("walking_distances.db")
-conn_mysql = pymysql.connect(
-    host = 'localhost', 
-    database = 'uoft_course_info', 
-    user = 'root', 
-    passwd = '123456',
-    port = 3306
-)
+# conn_mysql = pymysql.connect(
+#     host = 'localhost', 
+#     database = 'uoft_course_info', 
+#     user = 'root', 
+#     passwd = '123456',
+#     port = 3306
+# )
+conn_main = sqlite3.connect('uoft_course_info.db')
 
-cursor_mysql = conn_mysql.cursor()
-cursor_sqlite = conn_sqlite.cursor()
+cursor_main = conn_main.cursor()
+cursor_walking_dis = conn_sqlite.cursor()
 
-cursor_mysql.execute(
+cursor_main.execute(
     """
     CREATE TABLE IF NOT EXISTS distances (
-        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         origin TEXT,
         destination TEXT,
         distance INTEGER, -- distance in meters
@@ -27,7 +28,7 @@ cursor_mysql.execute(
 
 for i in range(4692):
     sql = "SELECT * FROM distances WHERE id = ?;"
-    data = cursor_sqlite.execute(sql, (i + 1,)).fetchone()
+    data = cursor_walking_dis.execute(sql, (i + 1,)).fetchone()
     origin = data[1]
     destination = data[2]
     distance, dis_unit = str(data[3]).split(" ")
@@ -39,14 +40,15 @@ for i in range(4692):
 
     distance = int(distance)
     duration = int(duration)
-    sql = "INSERT INTO distances (origin, destination, distance, duration) VALUES (%s, %s, %s, %s)"
-    cursor_mysql.execute(sql, (origin, destination, distance, duration))
+    # sql = "INSERT INTO distances (origin, destination, distance, duration) VALUES (%s, %s, %s, %s)"
+    sql = "INSERT INTO distances (origin, destination, distance, duration) VALUES (?, ?, ?, ?)"
+    cursor_main.execute(sql, (origin, destination, distance, duration))
 
     print(f"data {i+1} complete")
 
 print("finish!")
 
-conn_mysql.commit()
+conn_main.commit()
 conn_sqlite.commit()
-cursor_sqlite.close()
-cursor_mysql.close()
+cursor_walking_dis.close()
+cursor_main.close()

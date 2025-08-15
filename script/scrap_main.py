@@ -71,6 +71,6 @@ for i in range(0, 406):
     with open(f"./result/{i+1}.json", "w", encoding="utf-8") as f:
         f.write(res.text)
     print(f"{i+1} page complet")
-    time.sleep(random.uniform(0.5, 1.5))
+    # time.sleep(random.uniform(0.5, 1.5))
     
 print("finish!")

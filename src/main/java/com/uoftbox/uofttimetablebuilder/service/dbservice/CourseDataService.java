@@ -22,6 +22,9 @@ import com.uoftbox.uofttimetablebuilder.model.mysql.MeetingSections;
 import com.uoftbox.uofttimetablebuilder.repository.courses.CoursesRepository;
 import com.uoftbox.uofttimetablebuilder.repository.meetingsections.MeetingSectionsRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class CourseDataService {
 
@@ -54,8 +57,11 @@ public class CourseDataService {
         Map<String, Set<String>> courseSections = getLockedCourseSections(lockedCourses);
 
         for (String courseCode : courseCodeList) {
-            sectionCode = courseCode.substring(courseCode.length() - 1);
+            
+
             String courseId = coursesRepository.findMatchCourseId(courseCode, sectionCode);
+
+            // log.info("Fetching special sections for course: {}, courseId: {}", courseCode, courseId);
 
             // 如果courseId为空，则返回404报错
             if (courseId == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "COURSE NOT FOUND");

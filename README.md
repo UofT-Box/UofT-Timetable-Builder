@@ -42,32 +42,36 @@ Ensure you have the following installed:
   pip install pymysql requests
   ```
 
-+ **MySQL**: Version 8.X.X. 
-  + **Note**: The default MySQL username and password for this project are `root` and `123456`, respectively. If your credentials differ, please adjust them accordingly in the project configuration.
-
 ## Installation/Deployment
-OS X & Linux:
+
+To get started, follow these steps based on your operating system:
+
+**For OS X & Linux:**
 ```sh
 git clone https://github.com/UofT-Box/UofT-Timetable-Builder.git
 cd UofT-Timetable-Builder/script
 python3 scrap_main.py
 python3 mysql_data_transfer.py
 python3 mysql_distance_transfer.py
+mv ./uoft_course_info.db ../src/main/resources/database/
 cd ..
 mvn spring-boot:run
-In browser tap http://localhost:8080/
 ```
-Windows:
+
+**For Windows (Git Bash or PowerShell):**
 ```sh
 git clone https://github.com/UofT-Box/UofT-Timetable-Builder.git
-cd UofT-Timetable-Builder\script
+cd UofT-Timetable-Builder/script
 python scrap_main.py
 python mysql_data_transfer.py
 python mysql_distance_transfer.py
+mv ./uoft_course_info.db ../src/main/resources/database/
 cd ..
 mvnw spring-boot:run
-In browser tap http://localhost:8080/
 ```
+
+Once the server is running, open your browser and visit:  
+`http://localhost:8080/`
 
 ### Usage example
 Enter the first three letters of the course code in the search bar to display related available courses.
@@ -92,6 +96,9 @@ display of travel distance & time feature
 ![](https://github.com/UofT-Box/image/blob/master/timetable_builder/timetablebuilder10.png?raw=true)
 
 ## Release History
+* 3.0.0
+    * Switch from MySQL to SQLite
+    * Fix all known bugs
 * 2.0.0
     * Added custom course scheduling feature
     * Added user lock feature

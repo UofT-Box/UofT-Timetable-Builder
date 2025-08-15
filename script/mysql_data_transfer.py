@@ -1,19 +1,22 @@
-import pymysql
+import sqlite3
 import json
 import os
 
-conn = pymysql.connect(
-    host = 'localhost', 
-    database = 'uoft_course_info', 
-    user = 'root', 
-    passwd = '123456',
-    port = 3306
-)
+# conn = pymysql.connect(
+#     host = 'localhost', 
+#     database = 'uoft_course_info', 
+#     user = 'root', 
+#     passwd = '123456',
+#     port = 3306
+# )
+
+# Using SQLite database
+conn = sqlite3.connect('uoft_course_info.db')
 cursor = conn.cursor()
 
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS courses (
-        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         course_id VARCHAR(255) UNIQUE,
         course_code TEXT,
         section_code TEXT,
@@ -30,7 +33,7 @@ cursor.execute('''
 
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS meeting_sections (
-        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         course_id VARCHAR(255),
         course_code TEXT,
         section_code TEXT,
@@ -70,8 +73,8 @@ for i in range(1, number_of_files + 1):
         course['sessions'] = course_data["sessions"]
 
         cursor.execute('''
-            INSERT IGNORE INTO courses (course_id, course_code, section_code, name, description, division, department, prerequisites, exclusions, campus, sessions)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT OR IGNORE INTO courses (course_id, course_code, section_code, name, description, division, department, prerequisites, exclusions, campus, sessions)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             course['course_id'],
             course['course_code'],
@@ -114,14 +117,16 @@ for i in range(1, number_of_files + 1):
 
             meeting_section['size'] = meeting_time_data.get('maxEnrolment', 0)
             meeting_section['enrolment'] = meeting_time_data.get('currentEnrolment', 0)
-            meeting_section['notes'] = [
-                {"session": d["session"], "mode": d["mode"]}
-                for d in meeting_time_data.get("deliveryModes", [])
-            ]
 
+            delivery = meeting_time_data.get("deliveryModes", [])
+            meeting_section['notes'] = ''
+            if delivery:
+                first = delivery[0] or {}
+                meeting_section['notes'] = first.get('mode', '') or ''
+                
             cursor.execute('''
                 INSERT INTO meeting_sections (course_id, course_code, section_code, instructors, times, size, enrolment, notes)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 meeting_section['course_id'],
                 meeting_section['course_code'],
