@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS courses (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     course_id VARCHAR(255) UNIQUE,
     course_code TEXT,
     section_code TEXT,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS courses (
 );
 
 CREATE TABLE IF NOT EXISTS meeting_sections (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     course_id VARCHAR(255),
     course_code TEXT,
     section_code TEXT,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS meeting_sections (
 );
 
 CREATE TABLE IF NOT EXISTS distances (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     origin TEXT,
     destination TEXT,
     distance INTEGER, -- distance in meters
