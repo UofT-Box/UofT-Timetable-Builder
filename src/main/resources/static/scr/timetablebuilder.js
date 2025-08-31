@@ -15,7 +15,7 @@ var building1 = "";
 var building2 = "";
 var building_list = {};
 var current_timetable = [];
-var curidit_capacity = 3.00;
+var credit_capacity = 3.00;
 
 var received_timetables = {};
 var all_saved_timetables = {};
@@ -26,7 +26,28 @@ var fallTimetableInfo = {};
 var winterTimetableInfo = {};
 
 //************ UI Element Initialization ****************//
-var $select = $(".relevantCourses").selectize(); // 输入-下滑选择框生成
+var $select = $(".relevantCourses").selectize({
+  // Enable HTML rendering in options
+  render: {
+    option: function(item, escape) {
+      // Parse the course info for better formatting
+      const parts = item.text.match(/^([A-Z]+\d+[A-Z]\d+)\s+([A-Z]):\s+(.+)\s+\(([A-Z]+)\)$/);
+      if (parts) {
+        const [, courseCode, section, name, division] = parts;
+        return '<div class="course-option">' +
+          '<span class="course-code">' + escape(courseCode) + '</span> ' +
+          '<span class="section-code">' + escape(section) + '</span>: ' +
+          '<span class="course-name">' + escape(name) + '</span> ' +
+          '<span class="division-badge">' + escape(division) + '</span>' +
+        '</div>';
+      }
+      return '<div>' + escape(item.text) + '</div>';
+    },
+    item: function(item, escape) {
+      return '<div>' + escape(item.text) + '</div>';
+    }
+  }
+}); // 输入-下滑选择框生成
 var selectControl = $select[0].selectize;
 
 $(document).ready(function () {
@@ -157,17 +178,17 @@ function canAdd(courseCode, sectionCode) {
     alert("You have already added this course");
     return false;
   }
-  if (sectionCode === "Y" && winterCredit >= curidit_capacity && fallCredit >= curidit_capacity) {
+  if (sectionCode === "Y" && winterCredit >= credit_capacity && fallCredit >= credit_capacity) {
     alert(
       "Failed adding the course.\nYou have reached the maximum number of credits you can earn in a both semester"
     );
     return false;
-  } else if (sectionCode === "S" && winterCredit >= curidit_capacity) {
+  } else if (sectionCode === "S" && winterCredit >= credit_capacity) {
     alert(
       "Failed adding the course.\nYou have reached the maximum number of credits you can earn in a Winter semester"
     );
     return false;
-  } else if (sectionCode === "F" && fallCredit >= curidit_capacity) {
+  } else if (sectionCode === "F" && fallCredit >= credit_capacity) {
     alert(
       "Failed adding the course.\nYou have reached the maximum number of credits you can earn in a Fall semester"
     );
@@ -787,7 +808,12 @@ function switchButton(name) {
 }
 
 function switchTerm(term, index = 1) {
-  current_timetable = allTimeTables[index];
+  // 检查 allTimeTables 是否已初始化
+  if (allTimeTables && allTimeTables[index]) {
+    current_timetable = allTimeTables[index];
+    displayTimetable(term, index);
+  }
+  
   // 获取所有的 term 按钮和课程列表
   var termButtons = document.querySelectorAll(".term-btn");
   var coursesSections = document.querySelectorAll(".courses-section-content");
@@ -802,32 +828,37 @@ function switchTerm(term, index = 1) {
 
   // 根据选择的学期显示课程列表，并激活相应的按钮
   if (term === "fall") {
-    displayTimetable(term, index);
     document.getElementById("fall-courses").style.display = "block";
     document
       .querySelector(`button[onclick="switchTerm(\'fall\')"]`)
       .classList.add("active");
   } else {
-    displayTimetable(term, index);
     document.getElementById("winter-courses").style.display = "block";
     document
       .querySelector(`button[onclick="switchTerm(\'winter\')"]`)
       .classList.add("active");
   }
-  switchCridit(term);
+  switchCredit(term);
 }
 
-function switchCridit(term) {
-  let cridit = document.querySelectorAll(".cridit");
+function switchCredit(term) {
+  console.log("Current fallCredit:", fallCredit, "Current winterCredit:", winterCredit);
+  let credit = document.querySelectorAll(".credit");
   let output = "";
 
   if (term === "fall") {
-    output = `Cridits: ${fallCredit.toFixed(2)} / ${curidit_capacity}.00`;
+    output = `Credits: ${fallCredit.toFixed(2)} / ${credit_capacity.toFixed(2)}`;
   } else {
-    output = `Cridits: ${winterCredit.toFixed(2)} / ${curidit_capacity}.00`;
+    output = `Credits: ${winterCredit.toFixed(2)} / ${credit_capacity.toFixed(2)}`;
   }
-  cridit.forEach((cridit) => {
-    cridit.innerText = output;
+  
+  if (credit.length === 0) {
+    console.error("No elements with class 'credit' found");
+    return;
+  }
+  
+  credit.forEach((creditElement) => {
+    creditElement.innerText = output;
   });
 }
 
@@ -901,6 +932,11 @@ function generateCourses(course, term, color = null) {
   courseItem.appendChild(deleteBtn);
 
   coursesDiv.appendChild(courseItem);
+  
+  // Enhance the course item with modern UI
+  if (typeof enhanceCourseItem === 'function') {
+    enhanceCourseItem(courseItem);
+  }
 }
 
 // 展示课程时间信息
@@ -1184,7 +1220,7 @@ function deleteCourse(deleteBtn) {
     if (fallCourseChoose[i] === deleteId) {
       fallCourseChoose.splice(i, 1);
       fallCredit -= 0.5;
-      switchCridit("fall");
+      switchCredit("fall");
       break;
     }
   }
@@ -1192,7 +1228,7 @@ function deleteCourse(deleteBtn) {
     if (winterCourseChoose[i] === deleteId) {
       winterCourseChoose.splice(i, 1);
       winterCredit -= 0.5;
-      switchCridit("winter");
+      switchCredit("winter");
       break;
     }
   }
@@ -1506,13 +1542,14 @@ function downloadPDF() {
 }
 function adjustTableSize() {
   var container = document.querySelector('.large-view');
-  var table = container.querySelector('table');
+  // TODO: fix table
+  // var table = container.querySelector('table');
   var availableHeight = container.clientHeight;
   var availableWidth = container.clientWidth;
 
   // 调整表格的高度以适应容器
-  table.style.height = `${availableHeight}px`;
-  table.style.width = `${availableWidth}px`;
+  // table.style.height = `${availableHeight}px`;
+  // table.style.width = `${availableWidth}px`;
 }
 
 // 在窗口大小改变时重新调整

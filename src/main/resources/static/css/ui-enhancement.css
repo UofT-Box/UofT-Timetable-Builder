@@ -1,0 +1,356 @@
+/* ============================================
+   UI Enhancement Styles - Search Box Improvements
+   ============================================ */
+
+/* Enhanced Color System */
+:root {
+  /* UofT Brand Colors */
+  --uoft-blue: #002A5C;
+  --uoft-light-blue: #0066CC;
+  --uoft-blue-hover: #003876;
+  
+  /* Enhanced color palette */
+  --primary: #002A5C;
+  --primary-light: #E6F0FF;
+  --primary-lighter: #F0F6FF;
+  
+  /* Neutral colors */
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  
+  /* Focus shadow */
+  --focus-shadow: 0 0 0 3px rgba(0, 42, 92, 0.1);
+}
+
+/* ============================================
+   Search Box Container Styles
+   ============================================ */
+
+.sidebar .input {
+  padding: 20px;
+  background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--gray-50) 100%);
+  border-bottom: 2px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+/* Search icon decoration - Removed */
+
+/* ============================================
+   Selectize Input Enhancements
+   ============================================ */
+
+/* Main selectize control wrapper */
+.selectize-control {
+  max-width: 100%;
+}
+
+.selectize-control.single .selectize-input {
+  background: white !important;
+  border: 2px solid var(--gray-300) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: 0 20px !important;
+  min-height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  font-size: 16px !important;
+  transition: all 0.3s ease !important;
+  cursor: text !important;
+}
+
+/* Hover state */
+.selectize-control.single .selectize-input:hover {
+  border-color: var(--gray-400) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Focus state */
+.selectize-control.single .selectize-input.focus {
+  border-color: var(--uoft-blue) !important;
+  box-shadow: var(--focus-shadow), var(--shadow-md) !important;
+  background: white !important;
+  outline: none !important;
+}
+
+/* Input field inside selectize */
+.selectize-control.single .selectize-input input {
+  font-size: 16px !important;
+  color: var(--gray-800) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1.5 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Placeholder styling */
+.selectize-control.single .selectize-input input::placeholder {
+  color: var(--gray-400) !important;
+  font-size: 16px !important;
+}
+
+.selectize-control.single .selectize-input.not-full input {
+  width: 100% !important;
+}
+
+/* Remove default selectize dropdown arrow */
+.selectize-control.single .selectize-input:after {
+  display: none !important;
+}
+
+/* ============================================
+   Selectize Dropdown Enhancements
+   ============================================ */
+
+.selectize-dropdown {
+  background: white !important;
+  border: 2px solid var(--gray-200) !important;
+  border-top: none !important;
+  border-radius: 0 0 12px 12px !important;
+  box-shadow: var(--shadow-lg) !important;
+  margin-top: -2px !important;
+  max-height: 400px !important;
+  overflow-y: auto !important;
+  z-index: 1000 !important;
+}
+
+.selectize-dropdown-content {
+  padding: 8px 0 !important;
+}
+
+/* Dropdown items */
+.selectize-dropdown .option {
+  padding: 12px 20px !important;
+  font-size: 15px !important;
+  color: var(--gray-700) !important;
+  border-bottom: 1px solid var(--gray-100) !important;
+  transition: all 0.2s ease !important;
+}
+
+.selectize-dropdown .option:last-child {
+  border-bottom: none !important;
+}
+
+/* Hover state for dropdown items */
+.selectize-dropdown .option.active {
+  background: var(--primary-light) !important;
+  color: var(--uoft-blue) !important;
+}
+
+/* Selected item styling */
+.selectize-dropdown .option.selected {
+  background: var(--gray-100) !important;
+  font-weight: 600 !important;
+}
+
+/* ============================================
+   Selected Item Display
+   ============================================ */
+
+.selectize-control.single .selectize-input .item {
+  background: var(--primary-light) !important;
+  border: 1px solid var(--uoft-light-blue) !important;
+  border-radius: 8px !important;
+  color: var(--uoft-blue) !important;
+  padding: 4px 12px !important;
+  margin: 2px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* ============================================
+   Loading State
+   ============================================ */
+
+.selectize-control.loading::after {
+  content: '';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--gray-300);
+  border-top-color: var(--uoft-blue);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+/* ============================================
+   Scrollbar Styling for Dropdown
+   ============================================ */
+
+.selectize-dropdown-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.selectize-dropdown-content::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: 4px;
+}
+
+.selectize-dropdown-content::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 4px;
+}
+
+.selectize-dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+  .sidebar .input {
+    padding: 15px;
+  }
+  
+  .selectize-control.single .selectize-input {
+    min-height: 48px !important;
+    font-size: 14px !important;
+  }
+  
+  .sidebar .input::before {
+    left: 30px;
+    font-size: 16px;
+  }
+}
+
+/* ============================================
+   Animation for dropdown appearance
+   ============================================ */
+
+.selectize-dropdown {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Additional Visual Polish
+   ============================================ */
+
+/* Add subtle gradient to the input on focus */
+.selectize-control.single .selectize-input.focus {
+  background: linear-gradient(to bottom, white 0%, var(--gray-50) 100%) !important;
+}
+
+/* Course option container */
+.course-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+/* Course code styling */
+.course-option .course-code {
+  color: var(--uoft-blue);
+  font-weight: 700;
+  font-size: 14px;
+  min-width: 80px;
+}
+
+/* Section code styling */
+.course-option .section-code {
+  color: var(--gray-600);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 2px 6px;
+  background: var(--gray-100);
+  border-radius: 4px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Course name styling */
+.course-option .course-name {
+  flex: 1;
+  color: var(--gray-700);
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Division badge styling */
+.course-option .division-badge {
+  margin-left: auto;
+  padding: 3px 8px;
+  background: linear-gradient(135deg, var(--primary-light), var(--gray-100));
+  border: 1px solid var(--gray-300);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-700);
+  white-space: nowrap;
+}
+
+/* Specific division colors */
+.course-option .division-badge:contains("UTSG") {
+  background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+  border-color: #90CAF9;
+  color: #1565C0;
+}
+
+.course-option .division-badge:contains("UTSC") {
+  background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
+  border-color: #CE93D8;
+  color: #6A1B9A;
+}
+
+.course-option .division-badge:contains("UTM") {
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  border-color: #A5D6A7;
+  color: #2E7D32;
+}
+
+/* Hover effect for course options */
+.selectize-dropdown .option.active .course-option {
+  transform: translateX(4px);
+  transition: transform 0.2s ease;
+}
+
+.selectize-dropdown .option.active .course-code {
+  color: var(--uoft-blue);
+  text-shadow: 0 0 1px rgba(0, 42, 92, 0.3);
+}
+
+.selectize-dropdown .option.active .division-badge {
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,454 @@
+/* ============================================
+   Course List Enhancement Styles
+   Modern UI/UX Design for Course Selection
+   ============================================ */
+
+/* ============================================
+   Term Toggle (Semester Switch) Styles
+   ============================================ */
+
+.courses-section {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  padding: 0 !important;
+  margin: 20px !important;
+  overflow: hidden;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important; /* Take all available space in sidebar */
+  min-height: 0; /* Allow it to shrink */
+}
+
+.courses-section-title {
+  background: linear-gradient(135deg, var(--primary-lighter, #F0F6FF) 0%, var(--gray-50, #F9FAFB) 100%);
+  padding: 16px 20px !important;
+  border-bottom: 1px solid var(--gray-200, #E5E7EB);
+}
+
+.term-toggle {
+  display: flex;
+  background: white;
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.term-btn {
+  flex: 1;
+  padding: 10px 20px !important;
+  background: white !important;
+  border: 1px solid var(--gray-300, #D1D5DB) !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: var(--gray-600, #4B5563) !important;
+  cursor: pointer;
+  transition: all 0.2s ease !important;
+  margin: 0 2px;
+}
+
+.term-btn:hover {
+  background: var(--gray-50, #F9FAFB) !important;
+  border-color: var(--gray-400, #9CA3AF) !important;
+}
+
+.term-btn.active {
+  background: linear-gradient(135deg, #4A90E2, #6BA6F5) !important;
+  border-color: #4A90E2 !important;
+  color: white !important;
+  box-shadow: 0 2px 4px rgba(74, 144, 226, 0.2);
+}
+
+.term-btn.active b {
+  color: white !important;
+}
+
+.term-btn b {
+  display: block;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   Courses Title Section
+   ============================================ */
+
+.courses-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px !important;
+  background: var(--gray-50, #F9FAFB);
+  border-bottom: 1px solid var(--gray-200, #E5E7EB);
+}
+
+.courses-title h4 {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--gray-800, #1F2937) !important;
+}
+
+.courses-title .credit {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  background: white;
+  border: 1px solid var(--gray-300, #D1D5DB);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--gray-700, #374151);
+  font-weight: 600;
+  min-width: 150px; 
+  justify-content: center;
+  line-height: 20px;
+  transform: scale(0.8);
+}
+
+/* ============================================
+   Course List Container
+   ============================================ */
+
+.course-choose-list {
+  padding: 12px !important;
+  background: var(--gray-50, #F9FAFB);
+  flex: 1 !important; /* Take remaining space */
+  min-height: 200px;
+  overflow-y: auto !important;
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+.course-choose-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.course-choose-list::-webkit-scrollbar-track {
+  background: var(--gray-200, #E5E7EB);
+  border-radius: 3px;
+}
+
+.course-choose-list::-webkit-scrollbar-thumb {
+  background: var(--gray-400, #9CA3AF);
+  border-radius: 3px;
+}
+
+.course-choose-list::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500, #6B7280);
+}
+
+.courses-section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ============================================
+   Course Item Card Styles
+   ============================================ */
+
+.course-item {
+  display: flex !important;
+  align-items: center !important;
+  padding: 14px 16px !important;
+  background: white !important;
+  border: 1px solid var(--gray-200, #E5E7EB) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+/* Hover effect */
+.course-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 42, 92, 0.03), transparent);
+  transition: left 0.6s ease;
+}
+
+.course-item:hover::before {
+  left: 100%;
+}
+
+.course-item:hover {
+  border-color: var(--gray-300, #D1D5DB) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-2px);
+}
+
+/* Color indicator */
+.course-item .color-indicator {
+  width: 6px !important;
+  height: 40px !important;
+  border-radius: 3px !important;
+  margin-right: 14px !important;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.course-item:hover .color-indicator {
+  height: 44px !important;
+  width: 8px !important;
+}
+
+/* Course name */
+.course-item .course-name {
+  flex: 1 !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: var(--gray-800, #1F2937) !important;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Course code formatting */
+.course-item .course-name::after {
+  content: attr(data-credits);
+  font-size: 11px;
+  padding: 2px 6px;
+  background: var(--gray-100, #F3F4F6);
+  border-radius: 4px;
+  color: var(--gray-500, #6B7280);
+  font-weight: 500;
+}
+
+/* ============================================
+   Action Buttons Styles
+   ============================================ */
+
+.course-item .edit-btn,
+.course-item .delete-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border: none !important;
+  background: var(--gray-100, #F3F4F6) !important;
+  border-radius: 8px !important;
+  margin-left: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  opacity: 0.7;
+}
+
+.course-item:hover .edit-btn,
+.course-item:hover .delete-btn {
+  opacity: 1;
+}
+
+/* Edit button */
+.course-item .edit-btn:hover {
+  background: var(--primary-light, #E6F0FF) !important;
+  transform: scale(1.1);
+}
+
+.course-item .edit-btn:active {
+  transform: scale(0.95);
+}
+
+/* Delete button */
+.course-item .delete-btn:hover {
+  background: #FEE2E2 !important;
+  transform: scale(1.1);
+}
+
+.course-item .delete-btn:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+
+.courses-section-content:empty::after {
+  content: "No courses added yet. Search and add courses above.";
+  display: block;
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--gray-400, #9CA3AF);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* ============================================
+   Animation for new course addition
+   ============================================ */
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.course-item {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* ============================================
+   Locked Course Style
+   ============================================ */
+
+.course-item.locked {
+  background: linear-gradient(135deg, var(--primary-lighter, #F0F6FF), white) !important;
+  border-color: var(--uoft-light-blue, #0066CC) !important;
+  position: relative;
+}
+
+.course-item.locked::after {
+  content: "🔒";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+/* ============================================
+   Course item loading state
+   ============================================ */
+
+.course-item.loading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.course-item.loading .course-name::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--gray-300, #D1D5DB);
+  border-top-color: var(--uoft-blue, #002A5C);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 8px;
+}
+
+/* ============================================
+   Responsive adjustments
+   ============================================ */
+
+@media (max-width: 768px) {
+  .courses-section {
+    margin: 10px !important;
+  }
+  
+  .course-item {
+    padding: 12px !important;
+  }
+  
+  .course-item .course-name {
+    font-size: 14px !important;
+  }
+  
+  .course-item .edit-btn,
+  .course-item .delete-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 14px !important;
+  }
+  
+  .course-choose-list {
+    max-height: 250px !important;
+  }
+}
+
+/* ============================================
+   Sidebar Layout Fixes
+   ============================================ */
+
+.sidebar .input {
+  flex-shrink: 0; /* Don't shrink */
+}
+
+.sidebar .preference {
+  flex-shrink: 0; /* Don't shrink */
+}
+
+.sidebar .interface-buttons {
+  flex-shrink: 0; /* Don't shrink */
+  margin-top: auto; /* Push to bottom */
+}
+
+/* ============================================
+   Additional Visual Polish
+   ============================================ */
+
+/* Subtle gradient on section headers */
+.courses-section-title,
+.courses-title {
+  position: relative;
+}
+
+.courses-section-title::after,
+.courses-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--gray-300, #D1D5DB) 20%, 
+    var(--gray-300, #D1D5DB) 80%, 
+    transparent);
+}
+
+/* Year-long course indicator */
+.course-item[data-term="Y"] .color-indicator {
+  background: linear-gradient(180deg, var(--color) 48%, white 48%, white 52%, var(--color) 52%) !important;
+}
+
+/* Course count badge animation */
+.courses-title .credit {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add gradient background for visual interest */
+.courses-title .credit {
+  background: linear-gradient(135deg, white 0%, var(--gray-50, #F9FAFB) 100%);
+}
+
+.courses-title .credit:hover {
+  transform: scale(0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  background: white;
+  border-color: var(--uoft-light-blue, #0066CC);
+}
+
+/* Credit update animation */
+.credit.credit-update {
+  animation: creditPulse 0.3s ease;
+}
+
+@keyframes creditPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(0, 102, 204, 0.3);
+  }
+}
+
+/* Removed ::before to avoid duplicate text - the text comes from elsewhere */

@@ -1,0 +1,351 @@
+/* ============================================
+   Search Input Enhancement Styles
+   Modern UI/UX Design for Course Search
+   Matching the Overall Design Language
+   ============================================ */
+
+/* ============================================
+   Main Input Container
+   ============================================ */
+
+.input {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  padding: 20px !important;
+  margin: 20px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ============================================
+   Selectize Control Styling
+   ============================================ */
+
+.selectize-control {
+  margin: 0 !important;
+}
+
+.selectize-control.single .selectize-input {
+  background: var(--gray-50, #F9FAFB) !important;
+  border: 2px solid var(--gray-200, #E5E7EB) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  min-height: 48px !important;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  box-shadow: none !important;
+  font-size: 15px !important;
+}
+
+.selectize-control.single .selectize-input:hover {
+  border-color: var(--gray-300, #D1D5DB) !important;
+  background: white !important;
+}
+
+.selectize-control.single .selectize-input.focus {
+  border-color: var(--uoft-blue, #002A5C) !important;
+  background: white !important;
+  box-shadow: 0 0 0 3px rgba(0, 42, 92, 0.1) !important;
+}
+
+.selectize-control.single .selectize-input.dropdown-active {
+  border-radius: 12px 12px 0 0 !important;
+  border-color: var(--uoft-blue, #002A5C) !important;
+}
+
+/* Input text styling */
+.selectize-control.single .selectize-input > input {
+  font-size: 15px !important;
+  color: var(--gray-800, #1F2937) !important;
+  font-weight: 500 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  line-height: 1.5 !important;
+}
+
+.selectize-control.single .selectize-input > input::placeholder {
+  color: var(--gray-400, #9CA3AF) !important;
+  font-weight: 400 !important;
+}
+
+/* Selected item styling */
+.selectize-control.single .selectize-input > .item {
+  background: linear-gradient(135deg, var(--uoft-blue, #002A5C), var(--uoft-light-blue, #0066CC)) !important;
+  color: white !important;
+  padding: 4px 12px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+}
+
+/* ============================================
+   Dropdown Menu Styling
+   ============================================ */
+
+.selectize-dropdown {
+  background: white !important;
+  border: 2px solid var(--uoft-blue, #002A5C) !important;
+  border-top: none !important;
+  border-radius: 0 0 12px 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  margin-top: -2px !important;
+  padding: 8px !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+}
+
+/* Custom scrollbar for dropdown */
+.selectize-dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.selectize-dropdown::-webkit-scrollbar-track {
+  background: var(--gray-100, #F3F4F6);
+  border-radius: 4px;
+}
+
+.selectize-dropdown::-webkit-scrollbar-thumb {
+  background: var(--gray-400, #9CA3AF);
+  border-radius: 4px;
+}
+
+.selectize-dropdown::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500, #6B7280);
+}
+
+/* Dropdown items */
+.selectize-dropdown .option {
+  padding: 10px 14px !important;
+  margin: 4px 0 !important;
+  border-radius: 8px !important;
+  color: var(--gray-700, #374151) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid transparent !important;
+  cursor: pointer !important;
+}
+
+.selectize-dropdown .option:hover {
+  background: var(--gray-50, #F9FAFB) !important;
+  border-color: var(--gray-200, #E5E7EB) !important;
+  transform: translateX(4px);
+}
+
+.selectize-dropdown .option.active {
+  background: linear-gradient(135deg, var(--primary-lighter, #F0F6FF) 0%, white 100%) !important;
+  border-color: var(--uoft-light-blue, #0066CC) !important;
+  color: var(--uoft-blue, #002A5C) !important;
+  font-weight: 600 !important;
+}
+
+/* Course code highlight in dropdown */
+.selectize-dropdown .option .highlight {
+  background: rgba(0, 102, 204, 0.15) !important;
+  color: var(--uoft-blue, #002A5C) !important;
+  font-weight: 600 !important;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* ============================================
+   Search Icon Enhancement - Removed emoji
+   ============================================ */
+
+/* ============================================
+   No Results Message
+   ============================================ */
+
+.selectize-dropdown .no-results {
+  padding: 20px !important;
+  text-align: center !important;
+  color: var(--gray-500, #6B7280) !important;
+  font-size: 14px !important;
+  font-style: italic !important;
+}
+
+/* Removed emoji from no-results */
+
+/* ============================================
+   Loading State
+   ============================================ */
+
+.selectize-control.loading .selectize-input::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--gray-300, #D1D5DB);
+  border-top-color: var(--uoft-blue, #002A5C);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* ============================================
+   Course Info Formatting in Dropdown
+   ============================================ */
+
+.selectize-dropdown .option {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.selectize-dropdown .option .course-code {
+  font-weight: 600;
+  color: var(--gray-800, #1F2937);
+  font-size: 14px;
+}
+
+.selectize-dropdown .option .course-name {
+  font-weight: 400;
+  color: var(--gray-600, #4B5563);
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.selectize-dropdown .option .course-division {
+  display: inline-block;
+  padding: 2px 6px;
+  background: var(--gray-100, #F3F4F6);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--gray-500, #6B7280);
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+/* Division specific colors */
+.selectize-dropdown .option .course-division.utsg {
+  background: #E0F2FE;
+  color: #0369A1;
+}
+
+.selectize-dropdown .option .course-division.utsc {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.selectize-dropdown .option .course-division.utm {
+  background: #FEF3C7;
+  color: #B45309;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+  .input {
+    margin: 10px !important;
+    padding: 15px !important;
+  }
+  
+  .selectize-control.single .selectize-input {
+    padding: 10px 14px !important;
+    min-height: 44px !important;
+    font-size: 14px !important;
+  }
+  
+  .selectize-dropdown {
+    max-height: 250px !important;
+  }
+  
+  .selectize-dropdown .option {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* ============================================
+   Animation for Input Focus
+   ============================================ */
+
+@keyframes inputPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 42, 92, 0.2);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(0, 42, 92, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 42, 92, 0);
+  }
+}
+
+.selectize-control.single .selectize-input.focus {
+  animation: inputPulse 1.5s ease-out;
+}
+
+/* ============================================
+   Clear Button Styling
+   ============================================ */
+
+.selectize-control.single .selectize-input > .remove {
+  color: var(--gray-400, #9CA3AF) !important;
+  font-size: 18px !important;
+  padding: 0 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.selectize-control.single .selectize-input > .remove:hover {
+  color: #EF4444 !important;
+  transform: scale(1.2);
+}
+
+/* ============================================
+   Create Option (if enabled)
+   ============================================ */
+
+.selectize-dropdown .create {
+  padding: 10px 14px !important;
+  background: linear-gradient(135deg, var(--primary-lighter, #F0F6FF) 0%, white 100%) !important;
+  border: 1px dashed var(--uoft-light-blue, #0066CC) !important;
+  border-radius: 8px !important;
+  color: var(--uoft-blue, #002A5C) !important;
+  font-weight: 600 !important;
+  margin: 4px 0 !important;
+}
+
+.selectize-dropdown .create:hover {
+  background: white !important;
+  border-style: solid !important;
+}
+
+/* ============================================
+   Dropdown Animation
+   ============================================ */
+
+.selectize-dropdown {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Visual Polish - Removed blue underline on hover
+   ============================================ */

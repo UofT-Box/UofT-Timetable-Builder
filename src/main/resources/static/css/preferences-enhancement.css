@@ -1,0 +1,434 @@
+/* ============================================
+   Preferences Enhancement Styles
+   Modern UI/UX Design for User Preferences
+   Matching the Course List Enhancement Design Language
+   ============================================ */
+
+/* ============================================
+   Main Preferences Container
+   ============================================ */
+
+#preferences-section {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  padding: 0 !important;
+  margin: 20px !important;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#preferences-section:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ============================================
+   Preferences Header
+   ============================================ */
+
+#preferences-section > h4 {
+  margin: 0 !important;
+  padding: 16px 20px !important;
+  background: linear-gradient(135deg, var(--primary-lighter, #F0F6FF) 0%, var(--gray-50, #F9FAFB) 100%);
+  border-bottom: 1px solid var(--gray-200, #E5E7EB);
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--gray-800, #1F2937) !important;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Removed gear icon before title */
+
+/* Add subtle helper text */
+#preferences-section > h4::after {
+  content: "Drag to reorder";
+  font-size: 11px;
+  color: var(--gray-500, #6B7280);
+  font-weight: 400;
+  padding: 4px 8px;
+  background: white;
+  border-radius: 12px;
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+/* ============================================
+   Preference List Container
+   ============================================ */
+
+.preference-list {
+  padding: 12px !important;
+  background: var(--gray-50, #F9FAFB);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ============================================
+   Individual Preference Item
+   ============================================ */
+
+.preference-list .preference {
+  display: flex !important;
+  align-items: center !important;
+  padding: 14px 16px !important;
+  background: white !important;
+  border: 1px solid var(--gray-200, #E5E7EB) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: move;
+  position: relative;
+  overflow: hidden;
+  gap: 12px;
+}
+
+/* Hover effect with sliding gradient */
+.preference-list .preference::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 42, 92, 0.03), transparent);
+  transition: left 0.6s ease;
+}
+
+.preference-list .preference:hover::before {
+  left: 100%;
+}
+
+.preference-list .preference:hover {
+  border-color: var(--gray-300, #D1D5DB) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, white 0%, var(--gray-50, #F9FAFB) 100%) !important;
+}
+
+/* Dragging state */
+.preference-list .preference[draggable="true"]:active {
+  cursor: grabbing !important;
+  opacity: 0.8;
+  transform: scale(0.98);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ============================================
+   Drag Handle Icon
+   ============================================ */
+
+.preference-list .preference .svg {
+  width: 20px !important;
+  height: 20px !important;
+  color: var(--gray-400, #9CA3AF) !important;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  cursor: grab;
+}
+
+.preference-list .preference:hover .svg {
+  color: var(--gray-600, #4B5563) !important;
+  transform: scale(1.1);
+}
+
+.preference-list .preference:active .svg {
+  cursor: grabbing;
+  color: var(--uoft-blue, #002A5C) !important;
+}
+
+/* ============================================
+   Preference Name/Label
+   ============================================ */
+
+.preference-list .preference #weight-name {
+  flex: 1 !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: var(--gray-800, #1F2937) !important;
+  letter-spacing: 0.3px;
+  min-width: 180px;
+  position: relative;
+}
+
+/* Add subtle indicator for importance */
+.preference-list .preference:first-child #weight-name::after {
+  content: "High Priority";
+  position: absolute;
+  right: 0;
+  font-size: 10px;
+  padding: 2px 6px;
+  background: linear-gradient(135deg, var(--primary-lighter, #E6F0FF), white);
+  border: 1px solid var(--primary-light, #B3D1FF);
+  border-radius: 10px;
+  color: var(--uoft-blue, #002A5C);
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.preference-list .preference:first-child:hover #weight-name::after {
+  opacity: 1;
+}
+
+/* ============================================
+   Radio Button Options Container
+   ============================================ */
+
+.preference-list .preference .options {
+  display: flex !important;
+  gap: 6px !important;
+  align-items: center !important;
+  padding: 4px !important;
+  background: var(--gray-100, #F3F4F6) !important;
+  border-radius: 10px !important;
+  position: relative;
+}
+
+/* ============================================
+   Custom Radio Button Styles
+   ============================================ */
+
+.preference-list .preference input[type="radio"] {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.preference-list .preference label {
+  padding: 8px 16px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--gray-600, #4B5563) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  position: relative;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.preference-list .preference label:hover {
+  background: white !important;
+  border-color: var(--gray-300, #D1D5DB) !important;
+  color: var(--gray-700, #374151) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Checked state - lighter blue gradient */
+.preference-list .preference input[type="radio"]:checked + label {
+  background: linear-gradient(135deg, #5BA0F2, #7DB8F8) !important;
+  border-color: #5BA0F2 !important;
+  color: white !important;
+  box-shadow: 0 2px 4px rgba(91, 160, 242, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+.preference-list .preference input[type="radio"]:checked + label:hover {
+  transform: translateY(0);
+  box-shadow: 0 3px 6px rgba(0, 42, 92, 0.25) !important;
+}
+
+/* ============================================
+   Special Styling for Walking Time Preference - Removed
+   ============================================ */
+
+/* ============================================
+   Preference Order Indicators - Removed/Hidden
+   ============================================ */
+
+/* ============================================
+   Drag and Drop Visual Feedback
+   ============================================ */
+
+.preference-list .preference.dragging {
+  opacity: 0.4;
+  transform: scale(0.95);
+}
+
+.preference-list .preference.drag-over {
+  border-color: var(--uoft-light-blue, #0066CC) !important;
+  background: linear-gradient(135deg, var(--primary-lighter, #F0F6FF) 0%, white 100%) !important;
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2) !important;
+}
+
+/* ============================================
+   Animation for preference changes
+   ============================================ */
+
+@keyframes preferenceUpdate {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.preference-list .preference.updated {
+  animation: preferenceUpdate 0.3s ease-out;
+}
+
+/* ============================================
+   Tooltip for walking time - Removed
+   ============================================ */
+
+/* ============================================
+   Loading State for Preferences
+   ============================================ */
+
+.preference-list.loading {
+  pointer-events: none;
+  opacity: 0.6;
+  position: relative;
+}
+
+.preference-list.loading::after {
+  content: "Updating preferences...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 12px 24px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  color: var(--gray-600, #4B5563);
+  font-weight: 500;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+  #preferences-section {
+    margin: 10px !important;
+  }
+  
+  .preference-list .preference {
+    padding: 12px !important;
+    flex-wrap: wrap;
+  }
+  
+  .preference-list .preference #weight-name {
+    min-width: 100%;
+    margin-bottom: 8px;
+  }
+  
+  .preference-list .preference .options {
+    width: 100%;
+    justify-content: space-around;
+  }
+  
+  .preference-list .preference label {
+    flex: 1;
+    text-align: center;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+  
+  #preferences-section > h4::after {
+    display: none;
+  }
+}
+
+/* ============================================
+   Accessibility Improvements
+   ============================================ */
+
+.preference-list .preference:focus-within {
+  outline: 2px solid var(--uoft-light-blue, #0066CC);
+  outline-offset: 2px;
+}
+
+.preference-list .preference input[type="radio"]:focus + label {
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.2);
+}
+
+/* ============================================
+   Smooth Transitions
+   ============================================ */
+
+.preference-list,
+.preference-list .preference,
+.preference-list .preference * {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   Visual Polish - Gradient Overlays
+   ============================================ */
+
+#preferences-section {
+  position: relative;
+}
+
+#preferences-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--uoft-light-blue, #0066CC) 20%, 
+    var(--uoft-light-blue, #0066CC) 80%, 
+    transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#preferences-section:hover::before {
+  opacity: 0.5;
+}
+
+/* ============================================
+   Preference Badge Animation
+   ============================================ */
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.preference-list .preference.preference-changed {
+  animation: badgePulse 0.5s ease;
+}
+
+/* ============================================
+   Enhanced Visual Feedback - Checkmark removed
+   ============================================ */
+
+/* ============================================
+   Subtle Background Pattern
+   ============================================ */
+
+.preference-list {
+  position: relative;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 35px,
+      rgba(0, 42, 92, 0.01) 35px,
+      rgba(0, 42, 92, 0.01) 70px
+    );
+}
