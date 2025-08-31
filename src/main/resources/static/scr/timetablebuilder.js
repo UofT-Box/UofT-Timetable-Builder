@@ -1507,11 +1507,11 @@ function changeFolder() {
   const folderBtn = document.getElementById("folder-btn");
   const src = folderBtn.getAttribute("src");
 
-  if (src === "./lib/folder-oepn.svg") {
+  if (src === "./lib/open-folder.svg") {
     folderBtn.src = "./lib/folder.svg";
     allTimeTables = received_timetables;
   } else {
-    folderBtn.src = "./lib/folder-oepn.svg";
+    folderBtn.src = "./lib/open-folder.svg";
     allTimeTables = all_saved_timetables;
   }
 

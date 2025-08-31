@@ -9,7 +9,7 @@
    ============================================ */
 
 .interface-buttons {
-  padding: 20px !important;
+  padding: 20px 8px 20px 28px !important;
   background: white;
   border-top: 1px solid var(--gray-200, #E5E7EB);
   display: flex;
