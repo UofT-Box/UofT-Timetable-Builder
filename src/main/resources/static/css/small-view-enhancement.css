@@ -1,0 +1,261 @@
+/* ============================================
+   Small View Enhancement Styles
+   Grid Layout for Timetable Thumbnails
+   ============================================ */
+
+/* ============================================
+   Small View Container - Using CSS Grid
+   ============================================ */
+
+#small-view {
+  padding: 20px !important;
+  background: #F9FAFB !important;
+  border-radius: 12px !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  align-content: start !important;
+  grid-auto-rows: min-content !important;
+}
+
+/* Override row containers - make them transparent */
+#small-view > .row {
+  display: contents !important; /* This makes row divs act as if they don't exist */
+  width: 100% !important;
+}
+
+/* ============================================
+   Thumbnail Cards
+   ============================================ */
+
+#small-view .timetable-thumbnail {
+  background: white !important;
+  border: 2px solid #E5E7EB !important;
+  border-radius: 12px !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  width: 100% !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+  display: block !important;
+}
+
+.timetable-thumbnail:hover {
+  border-color: #5BA0F2 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-4px) !important;
+}
+
+/* Selected state */
+.timetable-thumbnail.selected {
+  border-color: #5BA0F2 !important;
+  background: linear-gradient(135deg, white 0%, #F0F6FF 100%) !important;
+  box-shadow: 0 0 0 3px rgba(91, 160, 242, 0.2) !important;
+}
+
+/* Top accent bar */
+.timetable-thumbnail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #5BA0F2 0%, #7DB8F8 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.timetable-thumbnail:hover::before {
+  transform: scaleX(1);
+}
+
+/* ============================================
+   Thumbnail Header
+   ============================================ */
+
+.thumbnail-header {
+  background: linear-gradient(135deg, #A5CCFB 0%, #7DB8F8 100%) !important;
+  color: white !important;
+  padding: 12px !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ============================================
+   Thumbnail Content Area
+   ============================================ */
+
+.thumbnail-content {
+  padding: 12px !important;
+  display: flex !important;
+  gap: 10px !important;
+  justify-content: space-between !important;
+}
+
+/* ============================================
+   Semester Buttons
+   ============================================ */
+
+.thumbnail-content .semester {
+  flex: 1 !important;
+  background: #F9FAFB !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 8px !important;
+  padding: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  overflow: hidden !important;
+}
+
+.thumbnail-content .semester:hover {
+  background: white !important;
+  border-color: #5BA0F2 !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 2px 8px rgba(91, 160, 242, 0.15) !important;
+}
+
+.thumbnail-content .semesterName {
+  text-align: center !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #4B5563 !important;
+  margin-bottom: 6px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ============================================
+   Mini Timetable Tables
+   ============================================ */
+
+.thumbnail-content table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+}
+
+.thumbnail-content table td {
+  border: 0.5px solid #F3F4F6 !important;
+  height: 6px !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+
+/* Ensure course colors are visible */
+.thumbnail-content table td[style*="background-color"] {
+  opacity: 0.9 !important;
+}
+
+/* Empty cells */
+.thumbnail-content table td:not([style*="background-color"]) {
+  background: white !important;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 1200px) {
+  #small-view {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #small-view {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ============================================
+   Custom Scrollbar
+   ============================================ */
+
+#small-view::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+#small-view::-webkit-scrollbar-track {
+  background: #F3F4F6 !important;
+  border-radius: 4px !important;
+}
+
+#small-view::-webkit-scrollbar-thumb {
+  background: #9CA3AF !important;
+  border-radius: 4px !important;
+}
+
+#small-view::-webkit-scrollbar-thumb:hover {
+  background: #6B7280 !important;
+}
+
+/* ============================================
+   Loading Animation
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timetable-thumbnail {
+  animation: fadeIn 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+/* Stagger animation for thumbnails */
+.timetable-thumbnail:nth-child(1) { animation-delay: 0.05s; }
+.timetable-thumbnail:nth-child(2) { animation-delay: 0.1s; }
+.timetable-thumbnail:nth-child(3) { animation-delay: 0.15s; }
+
+/* ============================================
+   Zoom Override Fix
+   ============================================ */
+
+#small-view .timetable-thumbnail[style*="zoom"] {
+  zoom: 1 !important; /* Override inline zoom */
+}
+
+/* Scale the content for smaller display */
+#small-view .thumbnail-content {
+  transform: scale(0.85);
+  transform-origin: center top;
+}
+
+/* ============================================
+   Number Badge
+   ============================================ */
+
+.thumbnail-header::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  display: none; /* Can be enabled if needed */
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: #5BA0F2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

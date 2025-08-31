@@ -34,7 +34,8 @@ body {
 }
 .course-choose-list {
   overflow: auto;
-  height: 150px;
+  flex: 1;
+  min-height: 0;
 }
 .timetable {
   overflow: auto;
@@ -43,10 +44,11 @@ body {
   height: 100%;
 }
 .sidebar {
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
   width: 33%;
   height: 100%;
+  overflow: hidden;
 }
 
 .timetable-view {
@@ -81,7 +83,7 @@ body {
 #save-btn {
   width: 20px;
   margin-left: 20px;
-  left: 310px;
+  left: 340px;
 }
 
 #save-btn,
@@ -101,7 +103,7 @@ body {
   width: 30px;
   margin-left: 20px;
   cursor: pointer;
-  left: 240px;
+  left: 270px;
 }
 
 #share-btn {
@@ -376,7 +378,7 @@ body {
   align-items: flex-end;
 }
 
-.cridit {
+.credit {
   font-family: "Arial", sans-serif;
   text-align: right;
   transform: scale(0.7);

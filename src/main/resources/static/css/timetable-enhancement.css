@@ -1,0 +1,577 @@
+/* ============================================
+   Timetable Enhancement Styles
+   Modern UI/UX Design for Course Schedule Display
+   Matching the Overall Design Language
+   ============================================ */
+
+/* ============================================
+   CSS Variables for Consistent Theming
+   ============================================ */
+
+:root {
+  --tt-primary: #5BA0F2;
+  --tt-primary-light: #7DB8F8;
+  --tt-primary-lighter: #A5CCFB;
+  --tt-secondary: #6BA6F5;
+  --tt-bg-light: #F9FAFB;
+  --tt-bg-white: #FFFFFF;
+  --tt-border: #E5E7EB;
+  --tt-border-light: #F3F4F6;
+  --tt-text-primary: #1F2937;
+  --tt-text-secondary: #6B7280;
+  --tt-text-light: #9CA3AF;
+  --tt-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --tt-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --tt-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --tt-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   Main Timetable Container
+   ============================================ */
+
+.timetable {
+  background: var(--tt-bg-white) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--tt-shadow-md) !important;
+  padding: 20px !important;
+  margin: 20px !important;
+  overflow: auto !important;
+  transition: var(--tt-transition) !important;
+  height: calc(100vh - 100px) !important;
+  max-height: calc(100vh - 100px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.timetable:hover {
+  box-shadow: var(--tt-shadow-lg) !important;
+}
+
+/* ============================================
+   Timetable Header Redesign
+   ============================================ */
+
+.timetable-header {
+  background: linear-gradient(135deg, var(--tt-bg-white) 0%, var(--tt-bg-light) 100%) !important;
+  border-bottom: 2px solid var(--tt-border) !important;
+  border-radius: 0 !important;
+  padding: 16px 24px !important;
+  height: auto !important;
+  min-height: 60px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Title styling */
+.timetable-header .title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+}
+
+.title-main {
+  background: linear-gradient(135deg, var(--tt-primary) 0%, var(--tt-primary-light) 100%) !important;
+  color: white !important;
+  padding: 8px 16px !important;
+  border-radius: 10px 0 0 10px !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.5px !important;
+}
+
+.title-sub {
+  background: white !important;
+  color: var(--tt-primary) !important;
+  border: 2px solid var(--tt-primary) !important;
+  border-left: none !important;
+  padding: 6px 16px 6px 14px !important;
+  border-radius: 0 10px 10px 0 !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+}
+
+/* Header buttons */
+.timetable-header img {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 8px !important;
+  background: white !important;
+  border: 1px solid var(--tt-border) !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  transition: var(--tt-transition) !important;
+}
+
+.timetable-header img:hover {
+  background: var(--tt-primary-lighter) !important;
+  border-color: var(--tt-primary) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--tt-shadow-md) !important;
+}
+
+.report-issue-btn {
+  background: linear-gradient(135deg, white 0%, var(--tt-bg-light) 100%) !important;
+  color: var(--tt-primary) !important;
+  border: 2px solid var(--tt-border) !important;
+  padding: 8px 20px !important;
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  transition: var(--tt-transition) !important;
+}
+
+.report-issue-btn:hover {
+  background: var(--tt-primary) !important;
+  color: white !important;
+  border-color: var(--tt-primary) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--tt-shadow-md) !important;
+}
+
+/* ============================================
+   Table Structure Enhancement
+   ============================================ */
+
+#table-body {
+  width: 100% !important;
+  background: white !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: var(--tt-shadow-sm) !important;
+  table-layout: fixed !important;
+}
+
+/* Table header */
+#timetable-head {
+  background: linear-gradient(135deg, var(--tt-primary-lighter) 0%, var(--tt-primary-light) 100%) !important;
+}
+
+#timetable-head th {
+  padding: 16px 12px !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  letter-spacing: 1px !important;
+  color: rgb(0, 0, 0) !important;
+  text-align: center !important;
+  border: none !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+#timetable-head th:first-child {
+  background: linear-gradient(135deg, var(--tt-primary) 0%, var(--tt-secondary) 100%) !important;
+  width: 80px !important;
+}
+
+/* Table body cells */
+#timetable-output td {
+  padding: 4px !important;
+  border: 1px solid var(--tt-border-light) !important;
+  /* background: var(--tt-bg-white) !important; */
+  height: 45px !important;
+  min-height: 45px !important;
+  max-height: 45px !important;
+  position: relative !important;
+  transition: var(--tt-transition) !important;
+}
+
+/* Time column (first column) */
+#timetable-output td:first-child {
+  background: var(--tt-bg-light) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: var(--tt-text-secondary) !important;
+  text-align: center !important;
+  width: 80px !important;
+  border-right: 2px solid var(--tt-border) !important;
+}
+
+/* Empty cells hover effect */
+#timetable-output td:not(.timetableTd):not(:first-child):hover {
+  background: linear-gradient(135deg, var(--tt-bg-light) 0%, white 100%) !important;
+  cursor: pointer !important;
+}
+
+/* ============================================
+   Course Block (timetableTd) Redesign
+   ============================================ */
+
+.timetableTd {
+  /* Background color will be set inline by JavaScript */
+  border-radius: 8px !important;
+  padding: 8px 6px !important;
+  margin: 2px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  transition: var(--tt-transition) !important;
+  border: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.timetableTd::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 8px 8px 0 0;
+}
+
+.timetableTd:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+  z-index: 100 !important;
+  filter: brightness(1.05) !important;
+}
+
+/* Course text styling */
+.timetableTd b {
+  display: block !important;
+  color: #2c3e50 !important;
+  text-shadow: none !important;
+  line-height: 1.1 !important;
+}
+
+.timetableTd br {
+  line-height: 0.1 !important;
+}
+
+.timetableTd b:first-child {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  margin-bottom: 1px !important;
+  margin-top: 8px !important;
+  letter-spacing: 0.5px !important;
+}
+
+.timetableTd b:nth-child(2) {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  opacity: 0.85 !important;
+}
+
+/* Lock icon styling */
+.timetableTd .lock-icon {
+  position: absolute !important;
+  top: 6px !important;
+  right: 6px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 50% !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0 !important;
+  transition: var(--tt-transition) !important;
+  cursor: pointer !important;
+}
+
+.timetableTd:hover .lock-icon {
+  opacity: 1 !important;
+}
+
+.timetableTd .lock-icon:hover {
+  background: white !important;
+  transform: scale(1.1) !important;
+}
+
+.timetableTd .lock-icon i {
+  font-size: 12px !important;
+  color: var(--tt-primary) !important;
+}
+
+/* Locked state */
+.timetableTd.locked {
+  background: linear-gradient(135deg, var(--course-color, #5BA0F2) 0%, var(--course-color-dark, #4A90E2) 100%) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Locked indicator removed emoji */
+
+/* ============================================
+   Small View / Thumbnail Grid
+   ============================================ */
+
+#small-view {
+  padding: 20px !important;
+  background: var(--tt-bg-light) !important;
+  border-radius: 12px !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+  gap: 20px !important;
+  max-height: calc(100vh - 200px) !important;
+  overflow-y: auto !important;
+}
+
+.timetable-thumbnail {
+  background: white !important;
+  border: 2px solid var(--tt-border) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  cursor: pointer !important;
+  transition: var(--tt-transition) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.timetable-thumbnail:hover {
+  border-color: var(--tt-primary) !important;
+  box-shadow: var(--tt-shadow-lg) !important;
+  transform: translateY(-4px) !important;
+}
+
+.timetable-thumbnail.selected {
+  border-color: var(--tt-primary) !important;
+  background: linear-gradient(135deg, white 0%, var(--tt-primary-lighter) 100%) !important;
+  box-shadow: 0 0 0 3px rgba(91, 160, 242, 0.2) !important;
+}
+
+.timetable-thumbnail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--tt-primary) 0%, var(--tt-primary-light) 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.timetable-thumbnail:hover::before {
+  transform: scaleX(1);
+}
+
+/* ============================================
+   Custom Scrollbar
+   ============================================ */
+
+.timetable::-webkit-scrollbar,
+#small-view::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.timetable::-webkit-scrollbar-track,
+#small-view::-webkit-scrollbar-track {
+  background: var(--tt-border-light) !important;
+  border-radius: 4px !important;
+}
+
+.timetable::-webkit-scrollbar-thumb,
+#small-view::-webkit-scrollbar-thumb {
+  background: var(--tt-text-light) !important;
+  border-radius: 4px !important;
+}
+
+.timetable::-webkit-scrollbar-thumb:hover,
+#small-view::-webkit-scrollbar-thumb:hover {
+  background: var(--tt-text-secondary) !important;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timetableTd {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.timetableTd.just-added {
+  animation: pulse 0.5s ease-out;
+}
+
+/* ============================================
+   Loading State
+   ============================================ */
+
+.timetable.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.timetable.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--tt-border);
+  border-top-color: var(--tt-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+  .timetable {
+    margin: 10px !important;
+    padding: 10px !important;
+    border-radius: 12px !important;
+  }
+  
+  #table-body {
+    font-size: 12px !important;
+  }
+  
+  #timetable-head th {
+    padding: 12px 8px !important;
+    font-size: 12px !important;
+  }
+  
+  .timetableTd b:first-child {
+    font-size: 12px !important;
+  }
+  
+  .timetableTd b:nth-child(2) {
+    font-size: 10px !important;
+  }
+  
+  .timetable-header {
+    padding: 12px 16px !important;
+  }
+  
+  .title-main,
+  .title-sub {
+    font-size: 14px !important;
+    padding: 6px 12px !important;
+  }
+  
+  #small-view {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+  }
+}
+
+/* ============================================
+   Color Palette for Courses
+   ============================================ */
+
+.course-color-1 { --course-color: #60A5FA; --course-color-light: #93BBFC; --course-color-dark: #3B82F6; }
+.course-color-2 { --course-color: #A78BFA; --course-color-light: #C4B5FD; --course-color-dark: #8B5CF6; }
+.course-color-3 { --course-color: #F472B6; --course-color-light: #F9A8D4; --course-color-dark: #EC4899; }
+.course-color-4 { --course-color: #FB923C; --course-color-light: #FDB47E; --course-color-dark: #F97316; }
+.course-color-5 { --course-color: #A3E635; --course-color-light: #BEF264; --course-color-dark: #84CC16; }
+.course-color-6 { --course-color: #4ADE80; --course-color-light: #86EFAC; --course-color-dark: #22C55E; }
+.course-color-7 { --course-color: #2DD4BF; --course-color-light: #6EE7DB; --course-color-dark: #14B8A6; }
+.course-color-8 { --course-color: #FBBF24; --course-color-light: #FCD34D; --course-color-dark: #F59E0B; }
+
+/* ============================================
+   Modal and Overlay Improvements
+   ============================================ */
+
+#loading-overlay {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+#loading-overlay img {
+  border-radius: 12px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ============================================
+   View Toggle Animation
+   ============================================ */
+
+.timetable-view {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.timetable-view:not(.active) {
+  opacity: 0;
+  transform: translateY(20px);
+  position: absolute;
+  pointer-events: none;
+  display: none !important;
+}
+
+.timetable-view.active {
+  opacity: 1;
+  transform: translateY(0);
+  position: relative;
+  display: flex !important;
+}
+
+/* ============================================
+   Course Details Hover Card
+   ============================================ */
+
+.timetableTd[title] {
+  position: relative;
+}
+
+.timetableTd::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--tt-text-primary);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.timetableTd:hover::after {
+  opacity: 0;  /* Disabled for now, can enable if needed */
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+
+#timetable-output:empty::after {
+  content: "No schedule generated yet. Select courses and click 'Generate Schedule'.";
+  display: block;
+  padding: 40px;
+  text-align: center;
+  color: var(--tt-text-light);
+  font-size: 16px;
+  font-style: italic;
+  grid-column: 1 / -1;
+}
