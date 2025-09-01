@@ -25,7 +25,11 @@ cursor.execute('''
         division TEXT,
         department TEXT,
         prerequisites TEXT,
+        corequisites TEXT,
         exclusions TEXT,
+        recommended_preparation TEXT,
+        breadth_requirements TEXT,  -- Storing array as a comma-separated string
+        distribution_requirements TEXT,  -- Storing array as a comma-separated string
         campus TEXT,
         sessions TEXT  -- Storing array as a comma-separated string
     )
@@ -62,19 +66,27 @@ for i in range(1, number_of_files + 1):
         course['description'] = ''
         course['division'] = ''
         course['prerequisites'] = ''
+        course['corequisites'] = ''
         course['exclusions'] = ''
+        course['recommended_preparation'] = ''
+        course['breadth_requirements'] = []
+        course['distribution_requirements'] = []
         if course_data.get("cmCourseInfo"):
             course['description'] = course_data["cmCourseInfo"].get('description', '')
             course['division'] = course_data["cmCourseInfo"].get('division', '')
             course['prerequisites'] = course_data["cmCourseInfo"].get('prerequisitesText', '')
+            course['corequisites'] = course_data["cmCourseInfo"].get('corequisitesText', '')
             course['exclusions'] = course_data["cmCourseInfo"].get('exclusionsText', '')
+            course['recommended_preparation'] = course_data["cmCourseInfo"].get('recommendedPreparation', '')
+            course['breadth_requirements'] = course_data["cmCourseInfo"].get('breadthRequirements', [])
+            course['distribution_requirements'] = course_data["cmCourseInfo"].get('distributionRequirements', [])
         course['department'] = course_data["department"]["name"] if course_data.get("department") else ''
         course['campus'] = course_data["campus"]
         course['sessions'] = course_data["sessions"]
 
         cursor.execute('''
-            INSERT OR IGNORE INTO courses (course_id, course_code, section_code, name, description, division, department, prerequisites, exclusions, campus, sessions)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT OR IGNORE INTO courses (course_id, course_code, section_code, name, description, division, department, prerequisites, corequisites, exclusions, recommended_preparation, breadth_requirements, distribution_requirements, campus, sessions)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             course['course_id'],
             course['course_code'],
@@ -84,7 +96,11 @@ for i in range(1, number_of_files + 1):
             course['division'],
             course['department'],
             course['prerequisites'],
+            course['corequisites'],
             course['exclusions'],
+            course['recommended_preparation'],
+            ', '.join(course['breadth_requirements']) if course['breadth_requirements'] else '',
+            ', '.join(course['distribution_requirements']) if course['distribution_requirements'] else '',
             course['campus'],
             ','.join(course['sessions'])
         ))

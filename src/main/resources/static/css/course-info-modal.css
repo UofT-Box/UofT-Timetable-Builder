@@ -1,0 +1,308 @@
+/* ============================================
+   Course Information Modal Styles
+   Modern UI/UX Design for Course Details
+   ============================================ */
+
+/* Modal Content Enhancement */
+#courseInfoModal .modal-content {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* Modal Header */
+#courseInfoModal .modal-header {
+  background: linear-gradient(135deg, #002A5C 0%, #0066CC 100%);
+  color: white;
+  padding: 20px 24px;
+  border-bottom: none;
+}
+
+#courseInfoModal .modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+#courseInfoModal .btn-close {
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+}
+
+#courseInfoModal .btn-close:hover {
+  opacity: 1;
+}
+
+/* Modal Body */
+#courseInfoModal .modal-body {
+  padding: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Course Info Content Layout */
+.course-info-container {
+  padding: 24px;
+}
+
+.course-info-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #E5E7EB;
+}
+
+.course-code-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #002A5C;
+  margin-bottom: 8px;
+}
+
+.course-name-title {
+  font-size: 18px;
+  color: #4B5563;
+  font-weight: 500;
+}
+
+/* Info Sections */
+.info-section {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+  transition: all 0.3s ease;
+}
+
+.info-section:hover {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.info-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #002A5C;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-section-title::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  background: linear-gradient(135deg, #002A5C, #0066CC);
+  border-radius: 2px;
+}
+
+.info-section-content {
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* Special styling for empty content */
+.info-section-content:empty::after {
+  content: "Not specified";
+  color: #9CA3AF;
+  font-style: italic;
+}
+
+/* Department and Division */
+.meta-info {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+}
+
+.meta-label {
+  font-size: 12px;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.meta-value {
+  font-size: 14px;
+  color: #1F2937;
+  font-weight: 600;
+}
+
+/* Breadth and Distribution Requirements */
+.requirements-container {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.requirement-badge {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #E6F0FF, white);
+  border: 1px solid #B3D1FF;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #002A5C;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.requirement-badge:hover {
+  background: linear-gradient(135deg, #002A5C, #0066CC);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 42, 92, 0.2);
+}
+
+/* Prerequisites, Exclusions, etc. */
+.course-requirements {
+  background: #FFF9F0;
+  border: 1px solid #FFE4B5;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.course-requirements .info-section-title {
+  color: #B45309;
+}
+
+.course-exclusions {
+  background: #FFF0F0;
+  border: 1px solid #FFCCCC;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.course-exclusions .info-section-title {
+  color: #DC2626;
+}
+
+/* Campus Badge */
+.campus-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #002A5C;
+  color: white;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 12px;
+}
+
+/* Loading State */
+.course-info-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  color: #6B7280;
+}
+
+.spinner {
+  border: 3px solid #E5E7EB;
+  border-top: 3px solid #002A5C;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error State */
+.course-info-error {
+  padding: 40px;
+  text-align: center;
+  color: #DC2626;
+}
+
+/* Scrollbar Styling */
+#courseInfoModal .modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+#courseInfoModal .modal-body::-webkit-scrollbar-track {
+  background: #F3F4F6;
+  border-radius: 4px;
+}
+
+#courseInfoModal .modal-body::-webkit-scrollbar-thumb {
+  background: #9CA3AF;
+  border-radius: 4px;
+}
+
+#courseInfoModal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: #6B7280;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .course-info-container {
+    padding: 16px;
+  }
+  
+  .course-code-title {
+    font-size: 24px;
+  }
+  
+  .course-name-title {
+    font-size: 16px;
+  }
+  
+  .meta-info {
+    flex-direction: column;
+  }
+  
+  .meta-item {
+    min-width: 100%;
+  }
+  
+  #courseInfoModal .modal-dialog {
+    margin: 10px;
+  }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.info-section {
+  animation: fadeInUp 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+.info-section:nth-child(1) { animation-delay: 0.1s; }
+.info-section:nth-child(2) { animation-delay: 0.15s; }
+.info-section:nth-child(3) { animation-delay: 0.2s; }
+.info-section:nth-child(4) { animation-delay: 0.25s; }
+.info-section:nth-child(5) { animation-delay: 0.3s; }

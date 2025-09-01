@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,6 +56,10 @@ public class TimetableContoller {
         return courseDataService.fethCourseTimes(courseCode, sectionCode);
     }
     
+    @GetMapping("/getCourseInfo")
+    public Object getCourseInfo(@RequestParam("courseCode") String courseCode, @RequestParam("sectionCode") String sectionCode) {
+        return courseDataService.getCourseDetailInfo(courseCode, sectionCode);
+    }
 
     @PostMapping("/generateTimetable")
     public TimetableResult generateTimetable(@RequestBody UserInput userInput) throws InterruptedException, ExecutionException{
