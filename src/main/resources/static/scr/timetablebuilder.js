@@ -55,7 +55,7 @@ $(document).ready(function () {
 
 var times = [];
 $(document).ready(function () {
-  for (var i = 9; i <= 21; i++) {
+  for (var i = 8; i <= 21; i++) {
     if (i < 10) {
       times.push("0" + i + ":00");
       times.push("0" + i + ":30");
@@ -456,7 +456,7 @@ function initTimetableTemplat(timetableFall, timetableWinter) {
     5: "",
   };
   // 生成课表模板
-  for (var i = 9; i <= 21; i++) {
+  for (var i = 8; i <= 21; i++) {
     if (i < 10) {
       timetableFall["0" + i + ":00"] = Object.assign({}, dayTemplate);
       timetableWinter["0" + i + ":00"] = Object.assign({}, dayTemplate);
