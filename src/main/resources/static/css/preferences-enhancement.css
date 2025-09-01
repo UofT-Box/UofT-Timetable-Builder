@@ -326,6 +326,11 @@
     margin-bottom: 8px;
   }
   
+  /* Hide "High Priority" text on narrow screens */
+  .preference-list .preference:first-child #weight-name::after {
+    display: none !important;
+  }
+  
   .preference-list .preference .options {
     width: 100%;
     justify-content: space-around;
@@ -340,6 +345,28 @@
   
   #preferences-section > h4::after {
     display: none;
+  }
+}
+
+/* Hide "High Priority" when buttons might overflow */
+@media (max-width: 1700px) {
+  .preference-list .preference:first-child #weight-name::after {
+    display: none !important;
+  }
+  
+  /* Reduce space between weight-name and options */
+  .preference-list .preference {
+    justify-content: space-between !important;
+  }
+  
+  .preference-list .preference #weight-name {
+    flex: 0 0 auto !important;
+    min-width: auto !important;
+    margin-right: 12px !important;
+  }
+  
+  .preference-list .preference .options {
+    margin-left: auto !important;
   }
 }
 
