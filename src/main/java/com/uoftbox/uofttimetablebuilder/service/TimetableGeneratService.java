@@ -18,6 +18,9 @@ import com.uoftbox.uofttimetablebuilder.model.frontend.UserPreferences;
 import com.uoftbox.uofttimetablebuilder.service.dbservice.CourseDataService;
 import com.uoftbox.uofttimetablebuilder.service.dbservice.DistanceService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class TimetableGeneratService {
 
@@ -26,25 +29,29 @@ public class TimetableGeneratService {
     @Autowired
     private DistanceService distanceService;
 
+    // private final int START_TIME = 32400000; // Start time in milliseconds (9:00 AM)
+    private final int START_TIME = 28800000; // Start time in milliseconds (8:00 AM)
+
     public TimetableResultInfo generateAllTimetables(Map<String, Map<String, Map<String, List<CourseInfo>>>> courses,
             UserPreferences userPreferences, Map<String, Map<String, CourseInfo>> lockedSections, boolean isUpdate) {
         Queue<TimetableWithScore> queue = new PriorityQueue<>();
         TimetableMetrics metrics = new TimetableMetrics();
 
         List<CourseInfo> currentTimetable = new ArrayList<>();
-        CourseInfo[][] timetable = new CourseInfo[5][26];
+        // CourseInfo[][] timetable = new CourseInfo[5][26];
+        CourseInfo[][] timetable = new CourseInfo[5][28];
 
         for (Map<String, CourseInfo> courseSections : lockedSections.values()) {
             for (CourseInfo courseInfo : courseSections.values()) {
                 for (TimeAndPlace timeAndPlace : courseInfo.getTimeAndPlaceList()) {
                     int dayIndex = timeAndPlace.getDay() - 1;
-                    int startSlot = (int) ((timeAndPlace.getStart() - 32400000) / 1800000);
+                    int startSlot = (int) ((timeAndPlace.getStart() - START_TIME) / 1800000);
                     timetable[dayIndex][startSlot] = courseInfo;
                 }
                 currentTimetable.add(courseInfo);
             }
         }
-
+        
         long timeStart = System.currentTimeMillis();
         generateTimetables(timetable, queue, metrics, courses, currentTimetable, userPreferences, 0, 0, timeStart, isUpdate);
 
@@ -74,7 +81,8 @@ public class TimetableGeneratService {
 
         if (courseIndex == courses.size()) {
             double score = metrics.calculateScore(userPreferences);
-            if (score > userPreferences.getScoreThreshold() && enoughWalkingTime(timetable)) {
+            // if (score > userPreferences.getScoreThreshold() && enoughWalkingTime(timetable)) {
+            if (enoughWalkingTime(timetable)) {
                 queue.add(new TimetableWithScore(new ArrayList<>(currentTimetable), score));
             }
             return;
@@ -151,13 +159,23 @@ public class TimetableGeneratService {
         List<TimeAndPlace> times = course.getTimeAndPlaceList();
         for (int i = 0; i < times.size(); i++) {
             int dayIndex = times.get(i).getDay() - 1;
-            int startSlot = (int) ((times.get(i).getStart() - 32400000) / 1800000);
-            int endSlot = (int) ((times.get(i).getEnd() - 32400000) / 1800000);
+            int startSlot = (int) ((times.get(i).getStart() - START_TIME) / 1800000);
+            int endSlot = (int) ((times.get(i).getEnd() - START_TIME) / 1800000);
 
             // 检查是否有冲突
+            
+            // TODO: 有早八的课，需要处理。。。
+            // if (startSlot < 0) {
+            //     log.info("Time slot index out of bounds: " + startSlot + " for course: " + course.getCourse() + " on day: " + (dayIndex + 1));
+            //     // continue;
+            // }
+
             if (dayIndex <= 4) {
                 for (int j = startSlot; j < endSlot; j++) {
                     if (timetable[dayIndex][j] != null) {
+                        // log.info("Conflict detected for course: " + course.getCourse() + " on day: " + (dayIndex + 1) + " at slot: " + j);
+                        // log.info("section: " + course.getSection());
+                        // log.info(times.toString());
                         return true; // 存在冲突
                     }
                 }
@@ -179,8 +197,8 @@ public class TimetableGeneratService {
         // System.out.println("\n\n------AFTER-------\n\n");
         for (int i = 0; i < times.size(); i++) {
             int dayIndex = times.get(i).getDay() - 1;
-            int startSlot = (int) ((times.get(i).getStart() - 32400000) / 1800000);
-            int endSlot = (int) ((times.get(i).getEnd() - 32400000) / 1800000);
+            int startSlot = (int) ((times.get(i).getStart() - START_TIME) / 1800000);
+            int endSlot = (int) ((times.get(i).getEnd() - START_TIME) / 1800000);
             if (dayIndex <= 4) {
                 for (int j = startSlot; j < endSlot; j++) {
                     List<TimeAndPlace> singleTime = new ArrayList<>();
