@@ -330,7 +330,7 @@
   .preference-list .preference:first-child #weight-name::after {
     display: none !important;
   }
-  
+
   .preference-list .preference .options {
     width: 100%;
     justify-content: space-around;
