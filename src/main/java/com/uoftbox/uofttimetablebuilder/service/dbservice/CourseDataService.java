@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseInfo;
 import com.uoftbox.uofttimetablebuilder.model.backend.CourseTime;
 import com.uoftbox.uofttimetablebuilder.model.backend.TimeAndPlace;
+import com.uoftbox.uofttimetablebuilder.model.mysql.Courses;
 import com.uoftbox.uofttimetablebuilder.model.mysql.MeetingSections;
 import com.uoftbox.uofttimetablebuilder.repository.courses.CoursesRepository;
 import com.uoftbox.uofttimetablebuilder.repository.meetingsections.MeetingSectionsRepository;
@@ -49,6 +50,48 @@ public class CourseDataService {
             courseTimes.add(tempCourseTime);
         }
         return courseTimes;
+    }
+    
+    public Map<String, Object> getCourseDetailInfo(String courseCode, String sectionCode) {
+        // Log the incoming request
+        log.info("Getting course info for: {} {}", courseCode, sectionCode);
+        
+        // Find the course by code and section
+        Courses course = coursesRepository.findCourseByCodeAndSection(courseCode, sectionCode);
+        
+        if (course == null) {
+            log.warn("Course not found: {} {}", courseCode, sectionCode);
+            // Try to find any course with this code to provide a better error message
+            String courseId = coursesRepository.findMatchCourseId(courseCode, sectionCode);
+            if (courseId != null) {
+                log.info("Found course with different section: {}", courseId);
+                // If we found a course ID, let's try to get it by ID
+                // For now, we'll return a more helpful error
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, 
+                    "Course " + courseCode + " found but not with section " + sectionCode);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found: " + courseCode);
+        }
+        
+        // Create a map to return course details
+        Map<String, Object> courseDetails = new HashMap<>();
+        courseDetails.put("course_code", course.getCourseCode());
+        courseDetails.put("section_code", course.getSectionCode());
+        courseDetails.put("name", course.getName());
+        courseDetails.put("description", course.getDescription());
+        courseDetails.put("division", course.getDivision());
+        courseDetails.put("department", course.getDepartment());
+        courseDetails.put("prerequisites", course.getPrerequisites());
+        courseDetails.put("corequisites", course.getCorequisites());
+        courseDetails.put("exclusions", course.getExclusions());
+        courseDetails.put("recommended_preparation", course.getRecommendedPreparation());
+        courseDetails.put("breadth_requirements", course.getBreadthRequirements());
+        courseDetails.put("distribution_requirements", course.getDistributionRequirements());
+        courseDetails.put("campus", course.getCampus());
+        courseDetails.put("sessions", course.getSessions());
+        
+        log.info("Successfully retrieved course info for: {} {}", courseCode, sectionCode);
+        return courseDetails;
     }
 
     public Map<String, Map<String, Map<String, List<CourseInfo>>>> fetchSpecialSections(List<String> courseCodeList, String sectionCode, List<String> lockedCourses){

@@ -17,4 +17,7 @@ public interface CoursesRepository extends JpaRepository<Courses, Integer>{
     @Query("SELECT c.courseId FROM Courses c WHERE c.courseCode = ?1 AND (c.sectionCode LIKE %?2% OR c.sectionCode LIKE '%Y%')")
     String findMatchCourseId(String CourseCode, String SectionCode);
 
+    @Query("SELECT c FROM Courses c WHERE c.courseCode = ?1 AND c.sectionCode = ?2")
+    Courses findCourseByCodeAndSection(String courseCode, String sectionCode);
+
 }

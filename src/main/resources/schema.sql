@@ -8,7 +8,11 @@ CREATE TABLE IF NOT EXISTS courses (
     division TEXT,
     department TEXT,
     prerequisites TEXT,
+    corequisites TEXT,
     exclusions TEXT,
+    recommended_preparation TEXT,
+    breadth_requirements TEXT,  -- Storing array as a comma-separated string
+    distribution_requirements TEXT,  -- Storing array as a comma-separated string
     campus TEXT,
     sessions TEXT  -- Storing array as a comma-separated string
 );

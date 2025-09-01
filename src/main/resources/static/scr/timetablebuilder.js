@@ -908,6 +908,10 @@ function generateCourses(course, term, color = null) {
   const courseName = document.createElement("span");
   courseName.className = "course-name";
   courseName.textContent = course.slice(0, -1) + " " + course.slice(-1); // 设置课程名称
+  // Add click event to show course info
+  courseName.style.cursor = "pointer";
+  courseName.setAttribute("onclick", `showCourseInfo('${course}')`);
+  courseName.title = "Click for course details";
 
   // 编辑按钮
   const editBtn = document.createElement("button");
@@ -1557,3 +1561,120 @@ window.addEventListener('resize', adjustTableSize);
 
 // 初始调整
 adjustTableSize();
+
+// Show course information in modal
+function showCourseInfo(courseCode) {
+  // Extract the actual course code (remove the last character which is F/S/Y)
+  const baseCourseCode = courseCode.slice(0, -1);
+  const sectionCode = courseCode.slice(-1);
+  
+  // Show loading state
+  const modalContent = document.getElementById('courseInfoContent');
+  modalContent.innerHTML = '<div class="course-info-loading"><div class="spinner"></div><p>Loading course information...</p></div>';
+  
+  // Show the modal
+  const modal = new bootstrap.Modal(document.getElementById('courseInfoModal'));
+  modal.show();
+  
+  // Update modal title
+  document.getElementById('courseInfoModalLabel').textContent = `${baseCourseCode} ${sectionCode} - Course Information`;
+  
+  // Fetch course information from API
+  fetch(`/getCourseInfo?courseCode=${baseCourseCode}&sectionCode=${sectionCode}`)
+    .then(response => response.json())
+    .then(data => {
+      displayCourseInfo(data);
+    })
+    .catch(error => {
+      console.error('Error fetching course info:', error);
+      modalContent.innerHTML = '<div class="course-info-error">Failed to load course information. Please try again.</div>';
+    });
+}
+
+// Display course information in the modal
+function displayCourseInfo(courseData) {
+  const modalContent = document.getElementById('courseInfoContent');
+  
+  // Parse breadth and distribution requirements
+  const breadthReqs = courseData.breadth_requirements ? courseData.breadth_requirements.split(', ') : [];
+  const distReqs = courseData.distribution_requirements ? courseData.distribution_requirements.split(', ') : [];
+  
+  // Build the HTML content
+  let html = `
+    <div class="course-info-container">
+      <div class="course-info-header">
+        <div class="course-code-title">
+          ${courseData.course_code || 'N/A'}
+          <span class="campus-badge">${courseData.campus || 'N/A'}</span>
+        </div>
+        <div class="course-name-title">${courseData.name || 'Course Name Not Available'}</div>
+      </div>
+      
+      <div class="meta-info">
+        <div class="meta-item">
+          <div class="meta-label">Department</div>
+          <div class="meta-value">${courseData.department || 'Not specified'}</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Division</div>
+          <div class="meta-value">${courseData.division || 'Not specified'}</div>
+        </div>
+      </div>
+      
+      ${courseData.description ? `
+        <div class="info-section">
+          <div class="info-section-title">Description</div>
+          <div class="info-section-content">${courseData.description}</div>
+        </div>
+      ` : ''}
+      
+      ${courseData.prerequisites ? `
+        <div class="info-section course-requirements">
+          <div class="info-section-title">Prerequisites</div>
+          <div class="info-section-content">${courseData.prerequisites}</div>
+        </div>
+      ` : ''}
+      
+      ${courseData.corequisites ? `
+        <div class="info-section course-requirements">
+          <div class="info-section-title">Corequisites</div>
+          <div class="info-section-content">${courseData.corequisites}</div>
+        </div>
+      ` : ''}
+      
+      ${courseData.exclusions ? `
+        <div class="info-section course-exclusions">
+          <div class="info-section-title">Exclusions</div>
+          <div class="info-section-content">${courseData.exclusions}</div>
+        </div>
+      ` : ''}
+      
+      ${courseData.recommended_preparation ? `
+        <div class="info-section">
+          <div class="info-section-title">Recommended Preparation</div>
+          <div class="info-section-content">${courseData.recommended_preparation}</div>
+        </div>
+      ` : ''}
+      
+      ${breadthReqs.length > 0 ? `
+        <div class="info-section">
+          <div class="info-section-title">Breadth Requirements</div>
+          <div class="requirements-container">
+            ${breadthReqs.map(req => `<span class="requirement-badge">${req}</span>`).join('')}
+          </div>
+        </div>
+      ` : ''}
+      
+      ${distReqs.length > 0 ? `
+        <div class="info-section">
+          <div class="info-section-title">Distribution Requirements</div>
+          <div class="requirements-container">
+            ${distReqs.map(req => `<span class="requirement-badge">${req}</span>`).join('')}
+          </div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+  
+  modalContent.innerHTML = html;
+}
